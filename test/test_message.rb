@@ -8,6 +8,14 @@ class MessageTest < Test::Unit::TestCase
     assert m.body  == "body"
   end
   
+  def test_creation
+    t = Time.now
+    m = Message.new(:title => "title", :body => "body", :time => t)
+    assert m.title == "title"
+    assert m.body  == "body"
+    assert m.time  == t
+  end
+  
   def test_creation_title_only
     m = Message.new(:title => "title")
     assert m.title == "title"
@@ -19,4 +27,32 @@ class MessageTest < Test::Unit::TestCase
     assert m.title == ""
     assert m.body  == "body"
   end
+  
+  def test_format
+    t = Time.now
+    m = Message.new(:title => "title", :body => "body", :time => t)
+    assert m.format == <<EOF
+Date: #{t}
+Subject: title
+From:
+To:
+
+body
+EOF
+  end
+  
+  def test_format_multiline
+    t = Time.now
+    m = Message.new(:title => "title", :body => "body\nsecond", :time => t)
+    assert m.format == <<EOF
+Date: #{t}
+Subject: title
+From:
+To:
+
+body
+second
+EOF
+  end
+  
 end
