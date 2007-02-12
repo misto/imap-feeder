@@ -33,7 +33,7 @@ class Server
     imap_header = @connection.fetch([found], "BODY[HEADER.FIELDS (SUBJECT)]")
     retr_title = imap_header.first.attr["BODY[HEADER.FIELDS (SUBJECT)]"].gsub(/(^Subject: )|[\n\r]/, "")
     
-    Message.new(:title => retr_title)
+    Message.new(:title => retr_title, :id => found)
   end
   
   def has?(title, folder)
@@ -46,5 +46,25 @@ class Server
     false
   else 
     true
+  end
+  
+  def create_folder(folder)
+    @connection.create(folder)
+  rescue Net::IMAP::NoResponseError
+    throw :cannot_create
+  end
+  
+  def delete_folder(folder)
+    #Switch to root so we can delete the folder
+    @connection.examine("INBOX")
+    @connection.delete(folder)
+  rescue Net::IMAP::NoResponseError
+    throw :cannot_delete
+  end
+  
+  def delete(message, folder)
+    @connection.select(folder)
+    @connection.store(message.id, "+FLAGS", [:Deleted])
+    @connection.expunge
   end
 end
