@@ -2,34 +2,34 @@ require 'rexml/document'
 require 'rexml/parsers/sax2parser'
 require 'rexml/sax2listener'
 
-class FeedUrl
-  attr_accessor :name, :children
-  
-  def initialize(name)
-    @name = name
-    @children = []
-  end
-end
-
 class FeedFolder
-  attr_accessor :name, :children
+  attr_accessor :name, :children, :urls
   
   def initialize(name)
     @name = name
     @children = []
+    @urls = []
   end
   
-  def add(child)
+  def add_sub(child)
     @children << child
+  end
+  
+  def add_url(url)
+    @urls << url
+  end
+  
+  def [](index)
+    @children[index]
   end
 end
 
 class OpmlParser 
 
-  attr_reader :root
+  attr_reader :root_element
 
   def initialize
-    @root = FeedFolder.new("/")
+    @root_element = FeedFolder.new "/"
     @last_element_was_folder = []
     @folder_stack = []
   end
@@ -41,15 +41,15 @@ class OpmlParser
   
     if attributes['isOpen'] != nil
     
-      @folder_stack.push @root
+      @folder_stack.push @root_element
       folder = FeedFolder.new(attributes['text'])
-      @root.add(folder)
-      @root = folder
+      @root_element.add_sub folder
+      @root_element = folder
       
       @last_element_was_folder.push true
       
     elsif attributes['xmlUrl'] != nil
-      @root.add(FeedUrl.new(attributes['xmlUrl']))
+      @root_element.add_url(attributes['xmlUrl'])
       @last_element_was_folder.push false
     end
   end
@@ -58,22 +58,18 @@ class OpmlParser
     return unless localname == "outline"
     
     if(@last_element_was_folder.pop)
-      @root = @folder_stack.pop
+      @root_element = @folder_stack.pop
     end
   end
 end
 
 class OpmlReader
-  def initialize(file)
-    @doc = file
-  end
-  
-  def get
-    parser = REXML::Parsers::SAX2Parser.new(REXML::SourceFactory.create_from(File.new(@doc)))
+  def self.get(file)
+    parser = REXML::Parsers::SAX2Parser.new(REXML::SourceFactory.create_from(file))
     listener = OpmlParser.new
     parser.listen(listener)
     parser.parse
-    listener.root
+    listener.root_element
   end
 end
 
@@ -83,9 +79,9 @@ if __FILE__ == $0
     puts ' ' * indent + element.name
     element.children.each do |folder|
         print_all(folder, indent + 2) 
+        puts folder.urls
     end
   end
 
-  parser = OpmlReader.new("/home/misto/feeds.opml")
-  print_all(parser.get)
+  print_all(OpmlReader.get(File.new("/home/misto/feeds.opml")))
 end
