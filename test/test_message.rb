@@ -8,7 +8,7 @@ class MessageTest < Test::Unit::TestCase
     assert m.body  == "body"
   end
   
-  def test_creation
+  def test_creation_with_time
     t = Time.now
     m = Message.new(:title => "title", :body => "body", :time => t)
     assert m.title == "title"
@@ -19,7 +19,7 @@ class MessageTest < Test::Unit::TestCase
   def test_creation_title_only
     m = Message.new(:title => "title")
     assert m.title == "title"
-    assert m.body  == ""
+    assert m.body  == "[body]"
   end
   
   def test_creation_body_only

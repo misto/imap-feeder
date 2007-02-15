@@ -4,7 +4,7 @@ class Message
 
   def initialize(params)
     @title = params[:title] || ""
-    @body = params[:body] || ""
+    @body = params[:body] || "[body]"
     @id = params[:id] || 0
     @time = params[:time] || Time.now
   end

@@ -2,9 +2,11 @@ require 'rexml/document'
 require 'rexml/parsers/sax2parser'
 require 'rexml/sax2listener'
 
+FeedUrl = Struct.new(:name, :url)
+
 class FeedFolder
   attr_accessor :name, :children, :urls
-  
+    
   def initialize(name)
     @name = name
     @children = []
@@ -29,7 +31,7 @@ class OpmlParser
   attr_reader :root_element
 
   def initialize
-    @root_element = FeedFolder.new "/"
+    @root_element = FeedFolder.new ""
     @last_element_was_folder = []
     @folder_stack = []
   end
@@ -42,14 +44,14 @@ class OpmlParser
     if attributes['isOpen'] != nil
     
       @folder_stack.push @root_element
-      folder = FeedFolder.new(attributes['text'])
+      folder = FeedFolder.new(attributes['text'].gsub(/[^\w]+/, "_"))
       @root_element.add_sub folder
       @root_element = folder
       
       @last_element_was_folder.push true
       
     elsif attributes['xmlUrl'] != nil
-      @root_element.add_url(attributes['xmlUrl'])
+      @root_element.add_url(FeedUrl.new(attributes['title'].gsub(/[^\w]+/, "_"), attributes['xmlUrl']))
       @last_element_was_folder.push false
     end
   end

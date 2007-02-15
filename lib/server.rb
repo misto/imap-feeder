@@ -1,5 +1,5 @@
 require 'net/imap'
-require 'message'
+require 'lib/message'
 
 class Server
 
@@ -23,6 +23,7 @@ class Server
   end
   
   def send(message, folder)
+    @connection.select folder
     @connection.append(folder, message.format.gsub(/\n/, "\r\n"), nil, Time.now)
   end
   

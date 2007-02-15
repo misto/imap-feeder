@@ -90,4 +90,5 @@ class ServerTest < Test::Unit::TestCase
     assert_nothing_thrown { @server.delete_folder "INBOX.test_dir" }
     assert ! @server.has_folder?("INBOX.test_dir")
   end
+
 end
