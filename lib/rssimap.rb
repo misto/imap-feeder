@@ -17,7 +17,7 @@ def create_folders(folder, path)
   complete_path = path + folder.name
 
   unless $server.has_folder? complete_path
-    #$server.create_folder complete_path  
+    $server.create_folder complete_path  
   end
   
   if folder.class == FeedUrl

@@ -26,57 +26,28 @@ class FeedFolder
   end
 end
 
-class OpmlParser 
-
-  attr_reader :root_element
-
-  def initialize
-    @root_element = FeedFolder.new ""
-    @last_element_was_folder = []
-    @folder_stack = []
-  end
-
-  include REXML::SAX2Listener
-
-  def start_element(uri, localname, qname, attributes)
-    return unless localname == "outline"
-  
-    if attributes['isOpen'] != nil
-    
-      @folder_stack.push @root_element
-      folder = FeedFolder.new(attributes['text'].gsub(/[^\w]+/, "_"))
-      @root_element.add_sub folder
-      @root_element = folder
-      
-      @last_element_was_folder.push true
-      
-    elsif attributes['xmlUrl'] != nil
-      @root_element.add_url(FeedUrl.new(attributes['title'].gsub(/[^\w]+/, "_"), attributes['xmlUrl']))
-      @last_element_was_folder.push false
-    end
-  end
-  
-  def end_element(uri, localname, qname)
-    return unless localname == "outline"
-    
-    if(@last_element_was_folder.pop)
-      @root_element = @folder_stack.pop
-    end
-  end
-end
-
 class OpmlReader
+  
+  def self.parse_opml(opml_node, folder = FeedFolder.new(""))
+    opml_node.elements.each('outline') do |el|
+      if el.attributes['isOpen'] != nil
+        child_folder = FeedFolder.new(el.attributes['text'].gsub(/[^\w]+/, "_"))
+        folder.add_sub(child_folder)
+        self.parse_opml(el, child_folder)
+      else
+        folder.add_url(FeedUrl.new(el.attributes['title'].gsub(/[^\w]+/, "_"), el.attributes['xmlUrl']))
+      end 
+    end
+    folder
+  end
+  
   def self.get(file)
-    parser = REXML::Parsers::SAX2Parser.new(REXML::SourceFactory.create_from(file))
-    listener = OpmlParser.new
-    parser.listen(listener)
-    parser.parse
-    listener.root_element
+    opml = REXML::Document.new(file)
+    parse_opml(opml.elements['opml/body'])
   end
 end
 
 if __FILE__ == $0
-
   def print_all element, indent = 0
     puts ' ' * indent + element.name
     element.children.each do |folder|
