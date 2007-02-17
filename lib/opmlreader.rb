@@ -27,15 +27,19 @@ class FeedFolder
 end
 
 class OpmlReader
+
+  def self.replace_bad_chars name
+    name.gsub(/[^\w:,\-= ]+/, "_")
+  end
   
   def self.parse_opml(opml_node, folder = FeedFolder.new(""))
     opml_node.elements.each('outline') do |el|
       if el.attributes['isOpen'] != nil
-        child_folder = FeedFolder.new(el.attributes['text'].gsub(/[^\w]+/, "_"))
+        child_folder = FeedFolder.new(replace_bad_chars(el.attributes['text']))
         folder.add_sub(child_folder)
         self.parse_opml(el, child_folder)
       else
-        folder.add_url(FeedUrl.new(el.attributes['title'].gsub(/[^\w]+/, "_"), el.attributes['xmlUrl']))
+        folder.add_url(FeedUrl.new(replace_bad_chars(el.attributes['title']), el.attributes['xmlUrl']))
       end 
     end
     folder
