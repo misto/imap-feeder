@@ -22,12 +22,12 @@ class Server
     @connection.disconnect if @connection
   end
   
-  def send(message, folder)
+  def send(message, folder = "INBOX")
     @connection.select folder
     @connection.append(folder, message.format.gsub(/\n/, "\r\n"), nil, Time.now)
   end
   
-  def retrieve(title, folder)
+  def retrieve(title, folder = "INBOX")
     @connection.examine folder
     found = @connection.search(["SUBJECT", title]).first || return
     
@@ -63,9 +63,17 @@ class Server
     throw :cannot_delete
   end
   
-  def delete(message, folder)
+  def delete(message, folder = "INBOX")
     @connection.select(folder)
     @connection.store(message.id, "+FLAGS", [:Deleted])
     @connection.expunge
+  end
+    
+  def get_latest_in(folder = "INBOX")
+    @connection.select(folder)
+    latest = @connection.search(["ALL"]).first
+    return [] unless latest
+    envelope = @connection.fetch(latest, "ENVELOPE")[0].attr["ENVELOPE"]
+    envelope.subject
   end
 end
