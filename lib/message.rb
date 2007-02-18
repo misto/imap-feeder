@@ -1,3 +1,5 @@
+require 'base64'
+
 class Message
 
   attr_reader :title, :body, :time, :id
@@ -12,7 +14,7 @@ class Message
   def format
     return <<-EOF
 Date: #{@time}
-Subject: #{@title}
+Subject: =?utf-8?b?#{Base64.encode64(@title).gsub(/\n/, '')}?=
 From:
 To:
 

@@ -1,5 +1,9 @@
+require 'base64'
+
 require 'net/imap'
 require 'lib/message'
+
+$KCODE="U"
 
 class Server
 
@@ -34,8 +38,15 @@ class Server
     imap_header = @connection.fetch([found], "BODY[HEADER.FIELDS (SUBJECT)]")
     retr_title = imap_header.first.attr["BODY[HEADER.FIELDS (SUBJECT)]"].gsub(/(^Subject: )|[\n\r]/, "")
     
-    Message.new(:title => retr_title, :id => found)
+    Message.new(:title => base64decode(retr_title), :id => found)
   end
+  
+  def base64decode subject
+    if subject =~ /^=\?utf-8\?b\?(.*?)\?=$/
+      return Base64.decode64($1)
+    end
+  end
+  private :base64decode
   
   def has?(title, folder)
     retrieve(title, folder) != nil
@@ -74,6 +85,6 @@ class Server
     latest = @connection.search(["ALL"]).first
     return [] unless latest
     envelope = @connection.fetch(latest, "ENVELOPE")[0].attr["ENVELOPE"]
-    envelope.subject
+    Message.new :title => base64decode(envelope.subject)
   end
 end

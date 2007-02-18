@@ -11,7 +11,13 @@ require 'open-uri'
 
 
 $server = Server.new :host => "misto.ch", :user => "rss", :pass => "qaysedc"
-root = OpmlReader.get File.new("/home/misto/feeds.opml")
+
+m = Message.new(:title => "äöüèéà", :body => "body")
+$server.send(m, "INBOX")
+
+
+
+#root = OpmlReader.get File.new("/home/misto/feeds.opml")
 
 def create_folders(folder, path)
 
@@ -42,4 +48,4 @@ def create_folders(folder, path)
   end  
 end
 
-create_folders(root, "INBOX")
+#create_folders(root, "INBOX")

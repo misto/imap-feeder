@@ -38,7 +38,7 @@ class ServerTest < Test::Unit::TestCase
     assert @server.send(m, "INBOX")
     assert @server.has?("test-message", "INBOX")
     m = @server.retrieve("test-message", "INBOX")
-    assert_equal(m.title, "test-message")
+    assert_equal("test-message", m.title)
   ensure
     @server.delete(m, "INBOX")
   end
@@ -95,7 +95,7 @@ class ServerTest < Test::Unit::TestCase
 
   def test_get_single
     @server.send(Message.new(:title => "title", :body => "body"))
-    assert_equal("title", @server.get_latest_in)
+    assert_equal("title", @server.get_latest_in.title)
   ensure
     @server.delete(@server.retrieve("title"))
   end
@@ -103,7 +103,7 @@ class ServerTest < Test::Unit::TestCase
   def test_get_latest_of_two
     @server.send(Message.new(:title => "title", :body => "body"))
     @server.send(Message.new(:title => "title2", :body => "body"))
-    assert_equal("title", @server.get_latest_in)
+    assert_equal("title", @server.get_latest_in.title)
   ensure
     @server.delete(@server.retrieve("title"))
     @server.delete(@server.retrieve("title2"))
@@ -114,7 +114,7 @@ class ServerTest < Test::Unit::TestCase
     @server.create_folder "INBOX.test"
     @server.send(Message.new(:title => "title2", :body => "body"), "INBOX.test")
     
-    assert_equal("title", @server.get_latest_in)
+    assert_equal("title", @server.get_latest_in.title)
   ensure
     @server.delete(@server.retrieve("title"))
     @server.delete(@server.retrieve("title2", "INBOX.test"), "INBOX.test")
@@ -127,5 +127,4 @@ class ServerTest < Test::Unit::TestCase
   ensure
     @server.delete_folder "INBOX.empty_folder"
   end
-
 end
