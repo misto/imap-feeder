@@ -31,9 +31,9 @@ class MessageTest < Test::Unit::TestCase
   def test_format
     t = Time.now
     m = Message.new(:title => "title", :body => "body", :time => t)
-    assert m.format == <<EOF
+    assert_equal(m.format, <<EOF)
 Date: #{t}
-Subject: title
+Subject: =?utf-8?b?dGl0bGU=?=
 From:
 To:
 
@@ -44,9 +44,9 @@ EOF
   def test_format_multiline
     t = Time.now
     m = Message.new(:title => "title", :body => "body\nsecond", :time => t)
-    assert m.format == <<EOF
+    assert_equal(m.format, <<EOF)
 Date: #{t}
-Subject: title
+Subject: =?utf-8?b?dGl0bGU=?=
 From:
 To:
 

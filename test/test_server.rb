@@ -92,39 +92,4 @@ class ServerTest < Test::Unit::TestCase
     assert_nothing_thrown { @server.delete_folder "INBOX.test_dir" }
     assert ! @server.has_folder?("INBOX.test_dir")
   end
-
-  def test_get_single
-    @server.send(Message.new(:title => "title", :body => "body"))
-    assert_equal("title", @server.get_latest_in.title)
-  ensure
-    @server.delete(@server.retrieve("title"))
-  end
-  
-  def test_get_latest_of_two
-    @server.send(Message.new(:title => "title", :body => "body"))
-    @server.send(Message.new(:title => "title2", :body => "body"))
-    assert_equal("title", @server.get_latest_in.title)
-  ensure
-    @server.delete(@server.retrieve("title"))
-    @server.delete(@server.retrieve("title2"))
-  end
-  
-  def test_get_latest_with_subfolder
-    @server.send(Message.new(:title => "title", :body => "body"))
-    @server.create_folder "INBOX.test"
-    @server.send(Message.new(:title => "title2", :body => "body"), "INBOX.test")
-    
-    assert_equal("title", @server.get_latest_in.title)
-  ensure
-    @server.delete(@server.retrieve("title"))
-    @server.delete(@server.retrieve("title2", "INBOX.test"), "INBOX.test")
-    @server.delete_folder "INBOX.test"
-  end
-  
-  def test_latest_from_nothing
-    @server.create_folder "INBOX.empty_folder"
-    assert_equal([], @server.get_latest_in("INBOX.empty_folder"))
-  ensure
-    @server.delete_folder "INBOX.empty_folder"
-  end
 end

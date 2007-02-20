@@ -79,12 +79,4 @@ class Server
     @connection.store(message.id, "+FLAGS", [:Deleted])
     @connection.expunge
   end
-    
-  def get_latest_in(folder = "INBOX")
-    @connection.select(folder)
-    latest = @connection.search(["ALL"]).first
-    return [] unless latest
-    envelope = @connection.fetch(latest, "ENVELOPE")[0].attr["ENVELOPE"]
-    Message.new :title => base64decode(envelope.subject)
-  end
 end
