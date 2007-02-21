@@ -1,3 +1,5 @@
+require 'yaml'
+
 class MessageStore
 
   def initialize(file)

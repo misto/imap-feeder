@@ -34,15 +34,15 @@ class Server
   def retrieve(title, folder = "INBOX")
     @connection.examine folder
     found = @connection.search(["SUBJECT", title]).first || return
-    
+
     imap_header = @connection.fetch([found], "BODY[HEADER.FIELDS (SUBJECT)]")
     retr_title = imap_header.first.attr["BODY[HEADER.FIELDS (SUBJECT)]"].gsub(/(^Subject: )|[\n\r]/, "")
-    
+
     Message.new(:title => base64decode(retr_title), :id => found)
   end
   
   def base64decode subject
-    if subject =~ /^=\?utf-8\?b\?(.*?)\?=$/
+    if subject =~ /^=\?utf-8\?b\?(.*?)$/
       return Base64.decode64($1)
     end
   end
