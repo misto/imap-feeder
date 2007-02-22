@@ -3,8 +3,12 @@ require 'lib/message'
 
 class TestFeedReader < Test::Unit::TestCase
   
+  RSS20_ONE_ENTRY    = "#{File.dirname(__FILE__)}/data/rss20_one_entry.xml"
+  RSS20_TWO_ENTRIES  = "#{File.dirname(__FILE__)}/data/rss20_two_entries.xml"
+  RSS20_WITH_AUTHORS = "#{File.dirname(__FILE__)}/data/rss20_with_authors.xml"
+  
   def test_reading_first_feed
-    messages = FeedReader.new(FIRST_FEED).messages
+    messages = FeedReader.new(RSS20_ONE_ENTRY).messages
     assert_equal(1, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages.first.time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages.first.title)
@@ -12,7 +16,7 @@ class TestFeedReader < Test::Unit::TestCase
   end  
   
   def test_reading_second_feed
-    messages = FeedReader.new(SECOND_FEED).messages 
+    messages = FeedReader.new(RSS20_TWO_ENTRIES).messages 
     assert_equal(2, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages[0].time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages[0].title)
@@ -24,7 +28,7 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_latest
-    reader = FeedReader.new(SECOND_FEED)
+    reader = FeedReader.new(RSS20_TWO_ENTRIES)
     messages = reader.messages
     new_messages = reader.get_newer_than(messages.last.title)
     
@@ -33,7 +37,7 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_latest_or_all
-    reader = FeedReader.new(SECOND_FEED)
+    reader = FeedReader.new(RSS20_TWO_ENTRIES)
     new_messages = reader.get_newer_than("Mirko Stocker: ")
     
     assert_equal(2, new_messages.size)
@@ -41,50 +45,24 @@ class TestFeedReader < Test::Unit::TestCase
     assert_equal("Thomas Marti: Highlights 2006 (TV)", new_messages[1].title)
   end
   
+  def test_get_authors
+    messages = FeedReader.new(RSS20_WITH_AUTHORS).messages
+    assert_equal(2, messages.size)
+    assert_equal("PeterSommerlad", messages.first.from)
+    assert_equal("MirkoStocker", messages.last.from)
+  end
+  
   def test_get_nothing
-    reader = FeedReader.new(SECOND_FEED)
+    reader = FeedReader.new(RSS20_TWO_ENTRIES)
     messages = reader.messages
     new_messages = reader.get_newer_than(messages.first.title)
     assert new_messages.empty?
   end
-end
-
-FIRST_FEED = `mktemp`.chomp
-File.open(FIRST_FEED, "w") do |file|
-  file.write <<-EOS
-      <?xml version="1.0"?>
-        <rss version="2.0">
-          <channel>
-            <item>
-              <title>Mirko Stocker: KDE in Heroes!</title>
-              <link>http://blog.misto.ch/archives/324</link>
-              <description>24 und Alias</description>
-              <pubDate>Wed, 15 Feb 2007 00:05 +0100</pubDate>
-            </item>
-          </channel>
-        </rss>
-EOS
-end
-
-SECOND_FEED = `mktemp`.chomp
-File.open(SECOND_FEED, "w") do |file|
-  file.write <<-EOS
-      <?xml version="1.0"?>
-        <rss version="2.0">
-          <channel>
-            <item>
-              <title>Mirko Stocker: KDE in Heroes!</title>
-              <link>http://blog.misto.ch/archives/324</link>
-              <description>24 und Alias</description>
-              <pubDate>Wed, 15 Feb 2007 00:05 +0100</pubDate>
-            </item>
-            <item>
-              <title>Thomas Marti: Highlights 2006 (TV)</title>
-              <link>http://blog.zones.ch/2007_02_12-highlights-2006-tv</link>
-              <description>Empty</description>
-              <pubDate>Monday 12 February 2007 17:09</pubDate>
-            </item>
-          </channel>
-        </rss>
-EOS
+  
+  def test_get_all
+    reader = FeedReader.new(RSS20_TWO_ENTRIES)
+    messages = reader.messages
+    new_messages = reader.get_newer_than(nil)
+    assert_equal(2, new_messages.size)
+  end
 end

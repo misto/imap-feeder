@@ -1,29 +1,34 @@
-require 'opmlreader'
-require 'messagestore'
 require 'yaml'
 
-class MockMessageStore < MessageStore
+require 'lib/opmlreader'
+require 'lib/messagestore'
+
+class TestingMessageStore < MessageStore
   def initialize(file)
     @file = file
-    File.open(@file,  "w+") do |f|
+    File.open(@file, "w") do |f|
       YAML.dump({"INBOX.Planets.Planet KDE" => "Boudewijn Rempt (boud): New toy!", 
                  "INBOX.Planets.Planet Gentoo" => "", 
                  "INBOX.Blog.Mirko" => ""}, f)
     end
     super
   end
+  
+  def clean
+    File.open(@file, "w").close
+  end
 end
 
 class TestMessageStore < Test::Unit::TestCase
 
-  FILE_NAME = "test_temp_store.yaml"
+  FILE_NAME = "#{File.dirname(__FILE__)}/data/last_messages.yaml"
 
   def setup
-    @store = MockMessageStore.new(FILE_NAME)
+    @store = TestingMessageStore.new(FILE_NAME)
   end
   
   def teardown
-    #`rm "test_temp_store.yaml"`
+    @store.clean
   end
 
   def test_get_latest

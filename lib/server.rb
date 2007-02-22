@@ -1,5 +1,4 @@
 require 'base64'
-
 require 'net/imap'
 require 'lib/message'
 

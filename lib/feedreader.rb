@@ -1,7 +1,3 @@
-require 'rss/0.9'
-require 'rss/1.0'
-require 'rss/2.0'
-require 'rss/parser'
 require 'open-uri'
 require 'feed_tools'
 
@@ -15,7 +11,11 @@ class FeedReader
   def read_content(url)
     feed = FeedTools::Feed.open(url)
     feed.items.each do |item|
-      @messages << Message.new(:title => item.title, :time => item.published, :body => item.description)
+      @messages << Message.new(
+        :title => item.title, 
+        :time => item.published, 
+        :body => item.description,
+        :from => item.author && item.author.name)
     end
   end
   

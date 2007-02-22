@@ -1,4 +1,4 @@
-require 'message'
+require 'lib/message'
 
 class MessageTest < Test::Unit::TestCase
 
@@ -19,7 +19,7 @@ class MessageTest < Test::Unit::TestCase
   def test_creation_title_only
     m = Message.new(:title => "title")
     assert m.title == "title"
-    assert m.body  == "[body]"
+    assert m.body  == ""
   end
   
   def test_creation_body_only
@@ -33,9 +33,8 @@ class MessageTest < Test::Unit::TestCase
     m = Message.new(:title => "title", :body => "body", :time => t)
     assert_equal(m.format, <<EOF)
 Date: #{t}
-Subject: =?utf-8?b?dGl0bGU=?=
-From:
-To:
+Subject: title
+From: 
 
 body
 EOF
@@ -46,9 +45,21 @@ EOF
     m = Message.new(:title => "title", :body => "body\nsecond", :time => t)
     assert_equal(m.format, <<EOF)
 Date: #{t}
-Subject: =?utf-8?b?dGl0bGU=?=
-From:
-To:
+Subject: title
+From: 
+
+body
+second
+EOF
+  end
+  
+  def test_format_encoded
+    t = Time.now
+    m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
+    assert_equal(m.format, <<EOF)
+Date: #{t}
+Subject: =?utf-8?b?QWxleGFuZGVyIEguIEbDpnLDuHk6IE1lZXRpbmcgZnJpZW5kcyBmb3IgdGhlIGZpcnN0IHRpbWXigKY=?=
+From: 
 
 body
 second

@@ -1,7 +1,7 @@
 require 'server'
 require 'message'
 
-class ServerConnectionTest# < Test::Unit::TestCase
+class ServerConnectionTest < Test::Unit::TestCase
   
   def test_server_host_not_found
     assert_throws :host_not_found do
@@ -17,7 +17,7 @@ class ServerConnectionTest# < Test::Unit::TestCase
   
   def test_server_creation
     assert_nothing_thrown do
-      @server = Server.new :host => "misto.ch", :user => "rss", :pass => "qaysedc"
+      @server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
       assert @server.connected
     end
   end
@@ -26,7 +26,7 @@ end
 class ServerTest < Test::Unit::TestCase
   
   def setup
-    @server = Server.new :host => "misto.ch", :user => "rss", :pass => "qaysedc"
+    @server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
   end
   
   def teardown

@@ -4,12 +4,11 @@ class MessageStore
 
   def initialize(file)
     @file = file
+    @root = {}
     if File.exists? @file
       File.open(@file, "r") do |f|
         @root = YAML.load(f)
       end
-    else
-      @root = {}
     end
   end
   
