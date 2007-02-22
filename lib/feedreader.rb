@@ -3,22 +3,20 @@ require 'rss/1.0'
 require 'rss/2.0'
 require 'rss/parser'
 require 'open-uri'
+require 'feed_tools'
 
 class FeedReader
-
+  attr_reader :messages
   def initialize(feed_url)
-     open(feed_url) do |url|
-      read_content url.read
-    end
+    @messages = []
+    read_content(feed_url)
   end
 
-  def read_content(feed)
-    result = RSS::Parser.parse(feed, false)
-    @messages = []
-    result.items.each do |item|
-      @messages << Message.new(:title => item.title, :time => item.pubDate, :body => item.description)
+  def read_content(url)
+    feed = FeedTools::Feed.open(url)
+    feed.items.each do |item|
+      @messages << Message.new(:title => item.title, :time => item.published, :body => item.description)
     end
-    @messages
   end
   
   def get_newer_than(title)
@@ -28,5 +26,4 @@ class FeedReader
       new_messages << message
     end
   end
-
 end

@@ -6,10 +6,10 @@ require 'lib/opmlreader'
 require 'lib/feedreader'
 require 'lib/messagestore'
 
-include Log4r
-$log = Logger.new 'rssimap'
-$log.outputters = Outputter.stdout
-$log.level = DEBUG
+
+$log = Log4r::Logger.new 'rssimap'
+$log.outputters = Log4r::Outputter.stdout
+$log.level = Log4r::DEBUG
 
 class RssImap
   def initialize

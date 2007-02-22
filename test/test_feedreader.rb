@@ -1,19 +1,10 @@
 require 'lib/feedreader'
 require 'lib/message'
 
-class MockFeedReader < FeedReader
-  def initialize; end
-end
-
 class TestFeedReader < Test::Unit::TestCase
   
-  def setup
-    @reader = MockFeedReader.new
-  end
-  
   def test_reading_first_feed
-    messages = @reader.read_content(FIRST_FEED)
-    
+    messages = FeedReader.new(FIRST_FEED).messages
     assert_equal(1, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages.first.time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages.first.title)
@@ -21,8 +12,7 @@ class TestFeedReader < Test::Unit::TestCase
   end  
   
   def test_reading_second_feed
-    messages = @reader.read_content(SECOND_FEED)
-    
+    messages = FeedReader.new(SECOND_FEED).messages 
     assert_equal(2, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages[0].time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages[0].title)
@@ -34,16 +24,17 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_latest
-    messages = @reader.read_content(SECOND_FEED)
-    new_messages = @reader.get_newer_than(messages.last.title)
+    reader = FeedReader.new(SECOND_FEED)
+    messages = reader.messages
+    new_messages = reader.get_newer_than(messages.last.title)
     
     assert_equal(1, new_messages.size)
     assert_equal("Mirko Stocker: KDE in Heroes!", new_messages.first.title)
   end
   
   def test_get_latest_or_all
-    messages = @reader.read_content(SECOND_FEED)
-    new_messages = @reader.get_newer_than("Mirko Stocker: ")
+    reader = FeedReader.new(SECOND_FEED)
+    new_messages = reader.get_newer_than("Mirko Stocker: ")
     
     assert_equal(2, new_messages.size)
     assert_equal("Mirko Stocker: KDE in Heroes!", new_messages.first.title)
@@ -51,13 +42,16 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_nothing
-    messages = @reader.read_content(SECOND_FEED)
-    new_messages = @reader.get_newer_than(messages.first.title)
+    reader = FeedReader.new(SECOND_FEED)
+    messages = reader.messages
+    new_messages = reader.get_newer_than(messages.first.title)
     assert new_messages.empty?
   end
 end
 
-FIRST_FEED = <<-EOS
+FIRST_FEED = `mktemp`.chomp
+File.open(FIRST_FEED, "w") do |file|
+  file.write <<-EOS
       <?xml version="1.0"?>
         <rss version="2.0">
           <channel>
@@ -70,8 +64,11 @@ FIRST_FEED = <<-EOS
           </channel>
         </rss>
 EOS
+end
 
-SECOND_FEED = <<-EOS
+SECOND_FEED = `mktemp`.chomp
+File.open(SECOND_FEED, "w") do |file|
+  file.write <<-EOS
       <?xml version="1.0"?>
         <rss version="2.0">
           <channel>
@@ -90,3 +87,4 @@ SECOND_FEED = <<-EOS
           </channel>
         </rss>
 EOS
+end
