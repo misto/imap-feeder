@@ -1,4 +1,4 @@
-require 'opmlreader'
+require 'lib/opmlreader'
 
 class OpmlReaderTest < Test::Unit::TestCase
   
