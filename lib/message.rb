@@ -25,7 +25,7 @@ EOF
   private
   def format_title
     #what don't we need to escape? everything in 7 bit?
-    if @title =~ /^[\w\d\s\.:-]+$/
+    if @title =~ /^[\w\s:-]+$/
       @title
     else
       "=?utf-8?b?#{Base64.encode64(@title).gsub(/\n/, '')}?="

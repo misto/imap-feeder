@@ -1,5 +1,5 @@
-require 'server'
-require 'message'
+require 'lib/server'
+require 'lib/message'
 
 class ServerConnectionTest < Test::Unit::TestCase
   

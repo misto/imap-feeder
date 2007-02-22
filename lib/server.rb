@@ -42,7 +42,9 @@ class Server
   
   def base64decode subject
     if subject =~ /^=\?utf-8\?b\?(.*?)$/
-      return Base64.decode64($1)
+      Base64.decode64($1)
+    else
+      subject
     end
   end
   private :base64decode

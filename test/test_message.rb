@@ -56,7 +56,7 @@ EOF
   def test_format_encoded
     t = Time.now
     m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
-    assert_equal(m.format, <<EOF)
+    assert_equal(<<EOF, m.format)
 Date: #{t}
 Subject: =?utf-8?b?QWxleGFuZGVyIEguIEbDpnLDuHk6IE1lZXRpbmcgZnJpZW5kcyBmb3IgdGhlIGZpcnN0IHRpbWXigKY=?=
 From: 
