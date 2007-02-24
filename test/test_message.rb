@@ -30,38 +30,57 @@ class MessageTest < Test::Unit::TestCase
   
   def test_creation_name_with_url
     m = Message.new(:from => "Mirko Stocker", :url => "http://www.url.ch")
-    assert_equal("Mirko Stocker <http://www.url.ch>", m.from)
+    assert_equal("Mirko Stocker", m.from)
   end
   
   def test_format
     t = Time.now
     m = Message.new(:title => "title", :body => "body", :time => t)
-    assert_equal(m.format, <<EOF)
+    assert_equal(<<EOF, m.format)
 Date: #{t}
 Subject: title
 From: 
 Content-Type: text/plain;
-  charset=UTF-8;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 body
+EOF
+
+  end  
+  def test_format_with_url
+    t = Time.now
+    m = Message.new(:title => "title", :body => "body", :time => t, :url => "http://www.misto.ch")
+    assert_equal(<<EOF, m.format)
+Date: #{t}
+Subject: title
+From: 
+Content-Type: text/plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+body
+
+http://www.misto.ch
 EOF
   end
   
   def test_format_multiline
     t = Time.now
     m = Message.new(:title => "title", :body => "body\nsecond", :time => t)
-    assert_equal(m.format, <<EOF)
+    assert_equal(<<EOF, m.format)
 Date: #{t}
 Subject: title
 From: 
 Content-Type: text/plain;
-  charset=UTF-8;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 body
 second
 EOF
   end
-  
+
   def test_format_encoded
     t = Time.now
     m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
@@ -70,7 +89,8 @@ Date: #{t}
 Subject: =?UTF-8?Q?Alexander_H=2e_F=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
 From: 
 Content-Type: text/plain;
-  charset=UTF-8;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 body
 second
@@ -140,17 +160,38 @@ class MessageFormatterTest < Test::Unit::TestCase
   end    
   
   #
+  # Italic
+  #
+  def test_italic
+    m = create_message "<i>yeah</i>"
+    assert_equal("yeah", m.body)
+  end
+  
+  #
   # Strong
   #
   def test_strong
-    m = create_message "<strong >g</strong>"
-    assert_equal("*g*", m.body)
-  end    
+    m = create_message "<strong >g</strong> or <em>s</em>"
+    assert_equal("*g* or *s*", m.body)
+  end
   
   def test_bold
     m = create_message "<b >g</b >"
     assert_equal("*g*", m.body)
-  end    
+  end
+  
+  #
+  # Images
+  #
+  def test_img
+    m = create_message "Juhu <img src='files/smiley.png' alt=':-)' />."
+    assert_equal("Juhu :-).", m.body)
+  end
+  
+  def test_img_without_alt
+    m = create_message "Juhu <img src='files/smiley.png'/>."
+    assert_equal("Juhu .", m.body)
+  end
   
   #
   # HTML Entities

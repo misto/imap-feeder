@@ -3,6 +3,8 @@ require 'action_mailer'
 require 'hpricot'
 require 'htmlentities'
 
+$KCODE="U"
+
 class Message
 
   include ActionMailer::Quoting
@@ -15,7 +17,7 @@ class Message
     @body  = strip_html(params[:body]  || params[:url] || "")
     @id    = params[:id]    || 0
     @time  = params[:time]  || Time.now
-    @from << " <#{params[:url]}>" if params[:url]
+    @url   = params[:url]
   end
   
   def format
@@ -24,16 +26,19 @@ Date: #{@time}
 Subject: #{quote_if_necessary(@title, "UTF-8")}
 From: #{quote_if_necessary(@from, "UTF-8")}
 Content-Type: text/plain;
-  charset=UTF-8;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-#{@body}
+#{@body}#{"\n\n" + @url if @url}
 EOF
   end
   
   private
   
   def replace(doc, element)
-    doc.search(element) {|found| found.swap(yield(found)) }
+    doc.search(element) do |found|
+      found.swap( block_given? ? yield(found) : found.innerHTML)
+    end
   end
   
   def strip_html(body)
@@ -42,8 +47,12 @@ EOF
     
     replace(doc, 'p')      {|paragraph| "\n#{paragraph.innerHTML}\n"}
     replace(doc, 'strong') {|strong| "*#{strong.innerHTML}*"}
-    replace(doc, 'b')      {|strong| "*#{strong.innerHTML}*"}
+    replace(doc, 'b')      {|bold| "*#{bold.innerHTML}*"}
+    replace(doc, 'em')     {|em| "*#{em.innerHTML}*"}
+    replace(doc, 'i')
+    replace(doc, 'abr')
     replace(doc, 'br')     {|br| "\n"}
+    replace(doc, 'img')    {|img| img.attributes['alt'] || ""}
 
     urls = gather_urls(doc)
 
