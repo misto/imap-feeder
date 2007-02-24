@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0" >
+ <body>
+  <outline isOpen="false" text="Planets">
+    <outline title="Planet KDE" xmlUrl="http://planetkde.org/rss20.xml"/>
+    <outline xmlUrl="http://planet.gentoo.org/rss20.xml" title="Planet Gentoo"/>
+  </outline>
+ </body>
+</opml>

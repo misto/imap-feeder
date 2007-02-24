@@ -1,0 +1,7 @@
+---
+- feed:
+    url: http://misto.chh
+    path: "INBOX.Planets.Planet KDE's"
+- feed:
+    url: http://misto.ch/invalid.html
+    path: INBOX.Planets.Planet Gentoo

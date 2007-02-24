@@ -68,7 +68,7 @@ EOF
     #sanitize newlines
     body.gsub!(/\n{3,}/, "\n\n")
     
-    HTMLEntities.decode_entities(body.reverse.chomp.reverse.chomp)
+    HTMLEntities.decode_entities(body.strip)
   end
   
   def gather_urls doc
@@ -77,7 +77,7 @@ EOF
       href = URI link.attributes['href'] rescue nil
       next unless href && href.host
       urls << href
-      link.swap link.innerHTML.reverse.chomp.reverse.chomp + "[#{urls.length}]"
+      link.swap link.innerHTML.strip + "[#{urls.length}]"
     end
     urls
   end
