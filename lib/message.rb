@@ -1,5 +1,7 @@
 require 'base64'
 require 'action_mailer'
+require 'hpricot'
+require 'htmlentities'
 
 class Message
 
@@ -10,9 +12,10 @@ class Message
   def initialize(params)
     @title = params[:title] || ""
     @from  = params[:from]  || ""
-    @body  = strip_html(params[:body]  || "")
+    @body  = strip_html(params[:body]  || params[:url] || "")
     @id    = params[:id]    || 0
     @time  = params[:time]  || Time.now
+    @from << " <#{params[:url]}>" if params[:url]
   end
   
   def format
@@ -29,34 +32,44 @@ EOF
   
   private
   
+  def replace(doc, element)
+    doc.search(element) {|found| found.swap(yield(found)) }
+  end
+  
   def strip_html(body)
-    #replace <p>
-    body.gsub!(/^<\s*p\s*>/, '')
-    body.gsub!(/<\s*\/\s*p\s*>$/, '')
-    body.gsub!(/<\s*p\s*>|<\s*\/\s*p\s*>/, "\n")
+       
+    doc = Hpricot(body)
     
-    #replace <br>
-    body.gsub!(/<\s*br\s*\/?\s*>/, "\n")
-    
-    #replace <strong>
-    body.gsub!(/<\s*\/?\s*strong\s*>/, "*")
-    
-    #sanitize newlines
-    body.gsub!(/\n{3,}/, "\n\n")
-    
-    urls = []
-    body.gsub!(/<a.*?href=\"(.*?)\".*?>(.*?)<\s*\/\s*a\s*>/) do 
-      urls << $1
-      "#{$2}[#{urls.length}]"
-    end
-    
+    replace(doc, 'p')      {|paragraph| "\n#{paragraph.innerHTML}\n"}
+    replace(doc, 'strong') {|strong| "*#{strong.innerHTML}*"}
+    replace(doc, 'br')     {|br| "\n"}
+
+    urls = gather_urls(doc)
+
+    body = doc.to_html
+         
     unless urls.empty?
       body << "\n"
       urls.each_with_index do |url, i|
-        body << "\n[#{(i+1).to_s}] #{url}"
+        body << "\n[#{i + 1}] #{url}"
       end
     end
 
-    body
+    #sanitize newlines
+    body.gsub!(/\n{3,}/, "\n\n")
+    
+    HTMLEntities.decode_entities(body.reverse.chomp.reverse.chomp)
   end
+  
+  def gather_urls doc
+    urls = []
+    doc.search('a') do |link|
+      href = URI link.attributes['href'] rescue nil
+      next unless href && href.host
+      urls << href
+      link.swap link.innerHTML.reverse.chomp.reverse.chomp + "[#{urls.length}]"
+    end
+    urls
+  end
+  
 end

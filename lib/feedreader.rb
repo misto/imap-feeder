@@ -15,7 +15,8 @@ class FeedReader
         :title => item.title, 
         :time => item.published, 
         :body => item.description,
-        :from => item.author && item.author.name)
+        :from => item.author && item.author.name,
+        :url => item.link)
     end
   end
   

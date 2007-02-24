@@ -4,28 +4,33 @@ class MessageTest < Test::Unit::TestCase
 
   def test_creation
     m = Message.new(:title => "title", :body => "body")
-    assert m.title == "title"
-    assert m.body  == "body"
+    assert_equal("title", m.title)
+    assert_equal("body", m.body)
   end
   
   def test_creation_with_time
     t = Time.now
     m = Message.new(:title => "title", :body => "body", :time => t)
-    assert m.title == "title"
-    assert m.body  == "body"
-    assert m.time  == t
+    assert_equal("title", m.title)
+    assert_equal("body", m.body)
+    assert_equal(t, m.time)
   end
   
   def test_creation_title_only
     m = Message.new(:title => "title")
-    assert m.title == "title"
-    assert m.body  == ""
+    assert_equal("title", m.title)
+    assert_equal("", m.body)
   end
   
   def test_creation_body_only
     m = Message.new(:body => "body")
-    assert m.title == ""
-    assert m.body  == "body"
+    assert_equal("", m.title)
+    assert_equal("body", m.body)
+  end
+  
+  def test_creation_name_with_url
+    m = Message.new(:from => "Mirko Stocker", :url => "http://www.url.ch")
+    assert_equal("Mirko Stocker <http://www.url.ch>", m.from)
   end
   
   def test_format
@@ -89,7 +94,7 @@ class MessageFormatterTest < Test::Unit::TestCase
   end
   
   def test_one_p_with_space
-    m = create_message "<  p >X<  /  p  >"
+    m = create_message "<p >X</p  >"
     assert_equal("X", m.body)
   end
   
@@ -99,7 +104,7 @@ class MessageFormatterTest < Test::Unit::TestCase
   end
   
   def test_p_with_spaces
-    m = create_message "X<p >Y< / p >Z"
+    m = create_message "X<p >Y</p >Z"
     assert_equal("X\nY\nZ", m.body)
   end
   
@@ -138,8 +143,16 @@ class MessageFormatterTest < Test::Unit::TestCase
   # Strong
   #
   def test_multi_lines
-    m = create_message "< strong >g<  / strong>"
+    m = create_message "<strong >g</strong>"
     assert_equal("*g*", m.body)
+  end    
+  
+  #
+  # HTML Entities
+  #
+  def test_html_entity
+    m = create_message "&#8230;"
+    assert_equal("…", m.body)
   end  
   
   #
@@ -150,8 +163,17 @@ class MessageFormatterTest < Test::Unit::TestCase
     assert_equal("Kuck mal hier[1]!\n\n[1] http://da.da", m.body)
   end
   
+  def test_href_single_quotes
+    m = create_message "Kuck mal <a href='http://da.da'>hier</a>!"
+    assert_equal(<<EOS.chomp, m.body)
+Kuck mal hier[1]!
+
+[1] http://da.da
+EOS
+  end
+  
   def test_hrefs
-    m = create_message "Kuck mal <a href=\"http://da.da\">hier</a> und <a   href=\"http://namal.da\">da</ a>!"
+    m = create_message "Kuck mal <a href=\"http://da.da\">hier\n</a> und <a  href=\"http://namal.da\">da</a >!"
     assert_equal(<<EOS.chomp, m.body)
 Kuck mal hier[1] und da[2]!
 

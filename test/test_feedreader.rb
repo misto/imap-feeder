@@ -6,6 +6,7 @@ class TestFeedReader < Test::Unit::TestCase
   RSS20_ONE_ENTRY    = "#{File.dirname(__FILE__)}/data/rss20_one_entry.xml"
   RSS20_TWO_ENTRIES  = "#{File.dirname(__FILE__)}/data/rss20_two_entries.xml"
   RSS20_WITH_AUTHORS = "#{File.dirname(__FILE__)}/data/rss20_with_authors.xml"
+  RSS20_NO_BODY      = "#{File.dirname(__FILE__)}/data/rss20_no_body.xml"
   
   def test_reading_first_feed
     messages = FeedReader.new(RSS20_ONE_ENTRY).messages
@@ -50,6 +51,12 @@ class TestFeedReader < Test::Unit::TestCase
     assert_equal(2, messages.size)
     assert_equal("PeterSommerlad", messages.first.from)
     assert_equal("MirkoStocker", messages.last.from)
+  end  
+  
+  def test_no_body
+    messages = FeedReader.new(RSS20_NO_BODY).messages
+    assert_equal(1, messages.size)
+    assert_equal("http://blog.misto.ch/archives/324", messages.first.body)
   end
   
   def test_get_nothing
