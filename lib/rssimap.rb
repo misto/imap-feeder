@@ -5,6 +5,8 @@ require 'lib/message'
 require 'lib/feedreader'
 require 'lib/messagestore'
 
+require 'settings'
+
 class RssImap
   def initialize(server, store, config)
     @server = server
@@ -73,12 +75,13 @@ class RssImap
 end
 
 if __FILE__ == $0
-  $log = Log4r::Logger.new 'rssimap'
-  $log.outputters = Log4r::Outputter.stdout
-  $log.level = Log4r::DEBUG
+  unless $host and $user and $pass and $temp and $config
+    $stderr.print "Please review you settings in settings.rb."
+    exit 1
+  end
 
-  server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
-  store = MessageStore.new("processed_feeds.yaml")
-  config = ARGF
+  server = Server.new :host => $host, :user => $user, :pass => $pass
+  store = MessageStore.new($temp)
+  config = File.open($config)
   RssImap.new(server, store, config).run
 end

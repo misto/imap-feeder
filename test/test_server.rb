@@ -11,13 +11,13 @@ class ServerConnectionTest < Test::Unit::TestCase
   
   def test_server_login_failed
     assert_throws :login_failed do
-      @server = Server.new(:host => "misto.ch", :user => "rss", :pass => "a")
+      @server = Server.new(:host => $host, :user => $user, :pass => "a")
     end
   end
   
   def test_server_creation
     assert_nothing_thrown do
-      @server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
+      @server = Server.new :host => $host, :user => $user, :pass => $pass
       assert @server.connected
     end
   end
@@ -26,7 +26,7 @@ end
 class ServerTest < Test::Unit::TestCase
   
   def setup
-    @server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
+    @server = Server.new :host => $host, :user => $user, :pass => $pass
   end
   
   def teardown
