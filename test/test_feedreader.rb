@@ -49,8 +49,8 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_authors
     messages = FeedReader.new(RSS20_WITH_AUTHORS).messages
     assert_equal(2, messages.size)
-    assert_equal("PeterSommerlad", messages.first.from)
-    assert_equal("MirkoStocker", messages.last.from)
+    assert_equal("PeterSommerlad <http://wiki.hsr.ch/HSRWiki/wiki.cgi?WikifeatureUpdates>", messages.first.from)
+    assert_equal("MirkoStocker <http://wiki.hsr.ch/HSRWiki/wiki.cgi?WikiInput>", messages.last.from)
   end  
   
   def test_no_body
