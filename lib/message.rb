@@ -10,7 +10,7 @@ class Message
   attr_reader :title, :body, :time, :id, :from
 
   def initialize(params)
-    @title = params[:title] || ""
+    @title = HTMLEntities.decode_entities(params[:title] || "")
     @from  = params[:from]  || ""
     @body  = strip_html(params[:body]  || params[:url] || "")
     @id    = params[:id]    || 0
@@ -42,6 +42,7 @@ EOF
     
     replace(doc, 'p')      {|paragraph| "\n#{paragraph.innerHTML}\n"}
     replace(doc, 'strong') {|strong| "*#{strong.innerHTML}*"}
+    replace(doc, 'b')      {|strong| "*#{strong.innerHTML}*"}
     replace(doc, 'br')     {|br| "\n"}
 
     urls = gather_urls(doc)

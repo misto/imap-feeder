@@ -142,8 +142,13 @@ class MessageFormatterTest < Test::Unit::TestCase
   #
   # Strong
   #
-  def test_multi_lines
+  def test_strong
     m = create_message "<strong >g</strong>"
+    assert_equal("*g*", m.body)
+  end    
+  
+  def test_bold
+    m = create_message "<b >g</b >"
     assert_equal("*g*", m.body)
   end    
   
@@ -153,6 +158,11 @@ class MessageFormatterTest < Test::Unit::TestCase
   def test_html_entity
     m = create_message "&#8230;"
     assert_equal("…", m.body)
+  end  
+  
+  def test_html_entity_title
+    m = Message.new :title => "&gt;01&lt;"
+    assert_equal(">01<", m.title)
   end  
   
   #
