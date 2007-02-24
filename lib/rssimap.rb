@@ -2,47 +2,34 @@ require 'log4r'
 
 require 'lib/server'
 require 'lib/message'
-require 'lib/opmlreader'
 require 'lib/feedreader'
 require 'lib/messagestore'
 
-
-$log = Log4r::Logger.new 'rssimap'
-$log.outputters = Log4r::Outputter.stdout
-$log.level = Log4r::DEBUG
-
 class RssImap
-  def initialize
-    @server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
-    @root = OpmlReader.get File.new("/home/misto/feeds.opml")
-    @store = MessageStore.new("processed_feeds.yaml")
+  def initialize(server, store, config)
+    @server = server
+    @store = store
+    @config = config
   end
 
-  def process(folder, parent_path)
-    path = parent_path + folder.name
-    
-    create_folder(path) unless check_folder_exists(path)
-    
-    if folder.class == FeedUrl
+  def run
+    $log.info "Starting"
+    feeds = YAML.load(@config)
+
+    feeds.each do |feed|
+      url = feed['feed']['url']
+      path = feed['feed']['path']
+
+      create_folder(path) unless check_folder_exists(path)
       last = get_last(path)
-      messages = get_new_messages(folder, last)
+      messages = get_new_messages(url, last)
       unless messages.empty?
         messages.each do |msg|
           send_message(msg, path)
         end
         messages_sent(path, messages)
       end
-      return
     end
-    
-    (folder.children + folder.urls).each do |child|
-      process(child, path + '.')
-    end
-  end
-    
-  def go
-    $log.info "Starting"
-    process(@root, "INBOX")
     $log.info "Finished"
     @store.save
   end
@@ -58,12 +45,12 @@ class RssImap
     $log.info "Found new: #{msg.title}"
   end
   
-  def get_new_messages(folder, last)
+  def get_new_messages(url, last)
     $log.debug "last message was #{last}"
     begin
-      messages = FeedReader.new(folder.url).get_newer_than(last)[0..3]
+      messages = FeedReader.new(url).get_newer_than(last)[0..3]
     rescue FeedTools::FeedAccessError
-      $log.warn "Timeout while receiving #{folder.name} (#{folder.url})"
+      $log.warn "Timeout while receiving #{url}"
       return []
     end
     $log.debug "#{messages.size} new messages"
@@ -83,9 +70,15 @@ class RssImap
     $log.debug "Checking #{path}"
     @server.has_folder? path
   end
-
 end
 
 if __FILE__ == $0
-  RssImap.new.go
+  $log = Log4r::Logger.new 'rssimap'
+  $log.outputters = Log4r::Outputter.stdout
+  $log.level = Log4r::DEBUG
+
+  server = Server.new :host => "misto.ch", :user => "rss", :pass => "for_imap"
+  store = MessageStore.new("processed_feeds.yaml")
+  config = ARGF
+  RssImap.new(server, store, config).run
 end

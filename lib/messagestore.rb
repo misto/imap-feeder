@@ -7,7 +7,7 @@ class MessageStore
     @root = {}
     if File.exists? @file
       File.open(@file) do |f|
-        @root = YAML.load(f)
+        @root = YAML.load(f) || {}
       end
     end
   end
