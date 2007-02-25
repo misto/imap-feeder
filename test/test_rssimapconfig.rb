@@ -22,8 +22,8 @@ class RssImapConfigTest < Test::Unit::TestCase
     assert_equal("http://planet.gentoo.org/rss20.xml", result.last['feed']['url'])
     assert_equal("INBOX.Planets.Planet Gentoo", result.last['feed']['path'])
     
-    assert_equal([], $log.error_msg)
-    assert_equal([], $log.warn_msg)
+    assert($log.error_msg.empty?)
+    assert($log.warn_msg.empty?)
     assert_equal(2, $log.debug_msg.length)
   end
   

@@ -6,7 +6,7 @@ require 'lib/feedfolder'
 
 class OpmlReader
 
-  def self.replace_bad_chars name
+  def self.replace_bad_chars(name)
     name.gsub(/[^\w:,\-= ]+/, "_")
   end
   

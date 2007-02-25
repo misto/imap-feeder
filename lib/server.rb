@@ -62,7 +62,11 @@ class Server
   end
   
   def create_folder(folder)
-    @connection.create(folder)
+    folder.split(/\./).inject("") do |last, cur|
+      path = last + cur
+      @connection.create(path) unless has_folder?(path)
+      path + '.'
+    end
   rescue Net::IMAP::NoResponseError
     throw :cannot_create
   end

@@ -13,10 +13,10 @@ class Message
 
   def initialize(params)
     @title = HTMLEntities.decode_entities(params[:title] || "")
-    @from  = params[:from]  || ""
-    @body  = strip_html(params[:body]  || params[:url] || "")
-    @id    = params[:id]    || 0
-    @time  = params[:time]  || Time.now
+    @from  = params[:from] || ""
+    @body  = strip_html(params[:body] || params[:url] || "")
+    @id    = params[:id] || 0
+    @time  = params[:time] || Time.now
     @url   = params[:url]
   end
   

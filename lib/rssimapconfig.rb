@@ -12,10 +12,10 @@ class RssImapConfig
     YAML.dump(items, output)
   end
 
-  def self.check(file)
-    YAML.load(file).each do |feed_item|
-      check_url_connection(feed_item)
-      check_path_name(feed_item)
+  def self.check(configuration)
+    YAML.load(configuration).each do |conf_item|
+      check_url_connection(conf_item['feed']['url'])
+      check_path_name(conf_item['feed']['path'])
     end
   end
    
@@ -36,11 +36,12 @@ class RssImapConfig
     items
   end
   
-  def self.check_url_connection(feed_item)
+  def self.check_url_connection(url)
     begin
-      url = feed_item['feed']['url']
       uri = URI.parse url
-      response = Net::HTTP.new(uri.host, uri.port).head(uri.path == "" ? "/" : uri.path, nil)
+      uri.path = "/" if uri.path == ""
+      
+      response = Net::HTTP.new(uri.host, uri.port).head(uri.path, nil)
       if response.code =~ /^[45]\d/
         $log.warn "Problem connecting to #{url}: #{response.message}"
       end
@@ -49,8 +50,7 @@ class RssImapConfig
     end
   end
   
-  def self.check_path_name(feed_item)
-    path = feed_item['feed']['path']
+  def self.check_path_name(path)
     path.scan(/[^\w:,\-= \.]+/) do |char|
       $log.error "Invalid character found in \'#{path}\': #{char}"
     end

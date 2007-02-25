@@ -22,11 +22,11 @@ $pass = "for_imap"
 
 #
 # RssImap needs a file to store the last message for each feed 
-# so it doesn't fetch old entries.
+# so it doesn't fetch old entries. Where should that file be?
 #
 $temp = "processed_feeds.yaml"
 
 #
-# The configuration file that was generate using rssimapconfig.rb
+# The configuration file that was generated using rssimapconfig.rb
 #
 $config = "config.yml"
