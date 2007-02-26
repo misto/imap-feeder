@@ -6,6 +6,8 @@ version="0.1.0"
 
 file "pkg/rssimap-#{version}.gem" => [:prepare_gem]
 
+task :default => ["gem"]
+
 spec = Gem::Specification.new do |s|
   s.name	= "RssImap"
   s.version	= version
