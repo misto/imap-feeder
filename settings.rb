@@ -29,4 +29,4 @@ $temp = "processed_feeds.yaml"
 #
 # The configuration file that was generated using rssimapconfig.rb
 #
-$config = "config.yml"
+$config = ARGV.first || "config.yml"
