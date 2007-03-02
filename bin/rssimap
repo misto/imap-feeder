@@ -4,13 +4,24 @@ $:.unshift File.expand_path(File.join(File.dirname(__FILE__), ".."))
 
 require 'rubygems'
 require 'lib/rssimap'
+require 'lib/createconfigparser'
+require 'lib/rssimapconfig'
 
-unless $host and $user and $pass and $temp and $config
-  $stderr.print "Please review you settings in settings.rb."
+opts = CreateConfigParser.parse(ARGV)
+  
+if opts.create
+  $log.info "Creating new configuration from #{opts.create}"
+  RssImapConfig.create(File.open(opts.create), opts.out ? File.open(opts.out, "w") : $stdout)
+elsif opts.check
+  $log.info "Checking configuration #{opts.check}"
+  RssImapConfig.check(File.open(opts.check))
+elsif not [$host, $user, $pass, $temp, $config].all?
+  $stderr.print "Your settings are incomplete, please review settings.rb."
   exit 1
+else
+  server = Server.new :host => $host, :user => $user, :pass => $pass
+  store = MessageStore.new($temp)
+  config = File.open($config)
+  RssImap.new(server, store, config).run
 end
-
-server = Server.new :host => $host, :user => $user, :pass => $pass
-store = MessageStore.new($temp)
-config = File.open($config)
-RssImap.new(server, store, config).run
+	

@@ -73,15 +73,3 @@ class RssImap
     @server.has_folder? path
   end
 end
-
-if __FILE__ == $0
-  unless $host and $user and $pass and $temp and $config
-    $stderr.print "Please review you settings in settings.rb."
-    exit 1
-  end
-
-  server = Server.new :host => $host, :user => $user, :pass => $pass
-  store = MessageStore.new($temp)
-  config = File.open($config)
-  RssImap.new(server, store, config).run
-end

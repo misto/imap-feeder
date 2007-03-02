@@ -6,7 +6,6 @@ require 'uri'
 require 'net/http'
 
 require 'lib/opmlreader'
-require 'lib/createconfigparser'
 
 class RssImapConfig
   def self.create(opml_file, output)
@@ -41,7 +40,7 @@ class RssImapConfig
   def self.check_url_connection(url)
     begin
       uri = URI.parse url
-      uri.path = "/" if uri.path == ""
+      uri.path = "/" if uri.path.empty?
       
       response = Net::HTTP.new(uri.host, uri.port).head(uri.path, nil)
       if response.code =~ /^[45]\d/
@@ -53,24 +52,8 @@ class RssImapConfig
   end
   
   def self.check_path_name(path)
-    path.scan(/[^\w:,\-= \.]+/) do |char|
+    path.scan(/[^#{IMAP_CHARS}\.]+/) do |char|
       $log.error "Invalid character found in \'#{path}\': #{char}"
     end
-  end
-end
-
-if __FILE__ == $0
-  $log = Log4r::Logger.new 'config'
-  $log.outputters = Log4r::Outputter.stdout
-  $log.level = Log4r::DEBUG
-
-  opts = CreateConfigParser.parse(ARGV)
-  
-  if opts.create
-    $log.info "Creating new configuration from #{opts.create}"
-    RssImapConfig.create(File.open(opts.create), opts.out ? File.open( opts.out, "w") : $stdout)
-  elsif opts.check
-    $log.info "Checking configuration #{opts.check}"
-    RssImapConfig.check(File.open(opts.check))
   end
 end

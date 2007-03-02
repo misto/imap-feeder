@@ -6,7 +6,10 @@ class CreateConfigParser
     options = OpenStruct.new
 
     opts = OptionParser.new do |opts|
-      opts.banner = "Usage: #{$0} [options]"
+      opts.banner = <<EOF
+Usage: #{$0} [options] to create or check your configuration
+or     #{$0} to run the script
+EOF
   
       opts.on("-c", "--check-config CONFIG_FILE", "Check an existing configuration") do |file|
         options.check = file
@@ -22,14 +25,6 @@ class CreateConfigParser
     end
     opts.parse!(args)
     
-    unless options.check or options.create
-      $stderr.print <<EOS
-You must specify one of the `-cn' options
-Try `tar --help' for more information.
-EOS
-      exit 1
-    end
-
     options
   end
 end
