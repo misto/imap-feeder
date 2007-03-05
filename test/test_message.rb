@@ -207,11 +207,37 @@ class MessageFormatterTest < Test::Unit::TestCase
   end  
   
   #
+  # Abbreviations
+  #
+  def test_abbr
+    m = create_message '<abbr title="Ruby Development Tool">RDT</abbr>'
+    assert_equal("RDT (Ruby Development Tool)", m.body)
+  end
+
+  #
+  # span
+  #
+  def test_span
+    m = create_message 'Thema <span class="caps">REST</span>'
+    assert_equal("Thema REST", m.body)
+  end
+
+  #
   # URLs
   #
   def test_href
     m = create_message "Kuck mal <a href=\"http://da.da\">hier</a>!"
     assert_equal("Kuck mal hier[1]!\n\n[1] http://da.da", m.body)
+  end
+
+  def test_href_empty
+    m = create_message "Kuck mal <a href=\"http://da.da\"></a>!"
+    assert_equal("Kuck mal !", m.body)
+  end
+
+  def test_href_with_equal_content
+    m = create_message "Kuck mal <a href=\"http://da.da\">http://da.da</a>!"
+    assert_equal("Kuck mal http://da.da!", m.body)
   end
   
   def test_href_single_quotes
