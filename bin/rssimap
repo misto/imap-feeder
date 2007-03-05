@@ -18,7 +18,7 @@ elsif opts.check
 elsif not [$host, $user, $pass, $temp, $config].all?
   $stderr.print "Your settings are incomplete, please review settings.rb."
   exit 1
-else
+elsif require ARGV.first
   server = Server.new :host => $host, :user => $user, :pass => $pass
   store = MessageStore.new($temp)
   config = File.open($config)

@@ -22,7 +22,7 @@ class Message
   
   def format
     return <<-EOF
-Date: #{@time}
+Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
 Subject: #{quote_if_necessary(@title, "UTF-8")}
 From: #{quote_if_necessary(@from, "UTF-8")}
 Content-Type: text/plain;

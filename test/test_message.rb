@@ -34,10 +34,10 @@ class MessageTest < Test::Unit::TestCase
   end
   
   def test_format
-    t = Time.now
+    t = Time.parse("Mon, Mar 05 2007 15:24:12 +0100")
     m = Message.new(:title => "title", :body => "body", :time => t)
     assert_equal(<<EOF, m.format)
-Date: #{t}
+Date: Mon Mar 05 15:24:12 +0100 2007
 Subject: title
 From: 
 Content-Type: text/plain;
@@ -49,10 +49,10 @@ EOF
 
   end  
   def test_format_with_url
-    t = Time.now
+    t = Time.parse("Mon, Mar 05 2007 15:26:49 +0100")
     m = Message.new(:title => "title", :body => "body", :time => t, :url => "http://www.misto.ch")
     assert_equal(<<EOF, m.format)
-Date: #{t}
+Date: Mon Mar 05 15:26:49 +0100 2007
 Subject: title
 From: 
 Content-Type: text/plain;
@@ -66,10 +66,10 @@ EOF
   end
   
   def test_format_multiline
-    t = Time.now
+    t = Time.parse("Mon, Mar 05 2007 15:26:49 +0100")
     m = Message.new(:title => "title", :body => "body\nsecond", :time => t)
     assert_equal(<<EOF, m.format)
-Date: #{t}
+Date: Mon Mar 05 15:26:49 +0100 2007
 Subject: title
 From: 
 Content-Type: text/plain;
@@ -82,10 +82,10 @@ EOF
   end
 
   def test_format_encoded
-    t = Time.now
+    t = Time.parse("Mon, Mar 05 2007 15:26:16 +0100")
     m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
     assert_equal(<<-EOF, m.format)
-Date: #{t}
+Date: Mon Mar 05 15:26:16 +0100 2007
 Subject: =?UTF-8?Q?Alexander_H=2e_F=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
 From: 
 Content-Type: text/plain;
