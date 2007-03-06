@@ -10,15 +10,15 @@ $log.outputters = Log4r::Outputter.stdout
 #
 # The level can be set to: DEBUG < INFO < WARN < ERROR < FATAL
 # 
-$log.level = Log4r::DEBUG
+$log.level = Log4r::INFO
 
 #
 # IMAP connection settings. You shouldn't use an existing account 
 # because the script might overwrite existing emails.
 #
-$host = "misto.ch"
-$user = "rss"
-$pass = "for_imap"
+$host = ""
+$user = ""
+$pass = ""
 
 #
 # RssImap needs a file to store the last message for each feed 
