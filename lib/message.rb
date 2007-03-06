@@ -51,8 +51,10 @@ EOF
     replace(doc, 'em')     {|em| "*#{em.innerHTML}*"}
     replace(doc, 'i')
     replace(doc, 'abr')
+    replace(doc, 'span')
     replace(doc, 'br')     {|br| "\n"}
     replace(doc, 'img')    {|img| img.attributes['alt'] || ""}
+    replace(doc, 'abbr')   {|abbr| abbr.innerHTML + (" (#{abbr.attributes['title']})" || "")}
 
     urls = gather_urls(doc)
 
@@ -65,6 +67,10 @@ EOF
       end
     end
 
+    doc = Hpricot(body)
+    replace(doc, 'a')
+    body = doc.to_html
+    
     #sanitize newlines
     body.gsub!(/\n{3,}/, "\n\n")
     
@@ -75,7 +81,8 @@ EOF
     urls = []
     doc.search('a') do |link|
       href = URI link.attributes['href'] rescue nil
-      next unless href && href.host
+      next if not href && href.host
+      next if link.innerHTML.strip == href.to_s.strip
       urls << href
       link.swap link.innerHTML.strip + "[#{urls.length}]"
     end

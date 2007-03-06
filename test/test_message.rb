@@ -230,11 +230,6 @@ class MessageFormatterTest < Test::Unit::TestCase
     assert_equal("Kuck mal hier[1]!\n\n[1] http://da.da", m.body)
   end
 
-  def test_href_empty
-    m = create_message "Kuck mal <a href=\"http://da.da\"></a>!"
-    assert_equal("Kuck mal !", m.body)
-  end
-
   def test_href_with_equal_content
     m = create_message "Kuck mal <a href=\"http://da.da\">http://da.da</a>!"
     assert_equal("Kuck mal http://da.da!", m.body)
