@@ -39,7 +39,7 @@ class MessageTest < Test::Unit::TestCase
     assert_equal(<<EOF, m.format)
 Date: Mon Mar 05 15:24:12 +0100 2007
 Subject: title
-From: 
+From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -54,7 +54,7 @@ EOF
     assert_equal(<<EOF, m.format)
 Date: Mon Mar 05 15:26:49 +0100 2007
 Subject: title
-From: 
+From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -71,7 +71,7 @@ EOF
     assert_equal(<<EOF, m.format)
 Date: Mon Mar 05 15:26:49 +0100 2007
 Subject: title
-From: 
+From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -87,7 +87,7 @@ EOF
     assert_equal(<<-EOF, m.format)
 Date: Mon Mar 05 15:26:16 +0100 2007
 Subject: =?UTF-8?Q?Alexander_H=2e_F=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
-From: 
+From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit

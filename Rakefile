@@ -16,7 +16,7 @@ spec = Gem::Specification.new do |s|
   s.homepage	= ""
   s.platform	= Gem::Platform::RUBY
   s.summary	= "RssImap publishes your favorite feeds to an IMAP server so you can read them with your mail program."
-  candidates	= Dir.glob("{test,lib}/**/*") + ["README", "COPYING", "settings.rb"]
+  candidates	= Dir.glob("{test,lib}/**/*") + ["README", "COPYING", "settings.rb.example"]
   s.files	= candidates.delete_if do |item|
   			item.include?(".svn")
 		  end

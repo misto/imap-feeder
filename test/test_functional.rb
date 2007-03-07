@@ -6,8 +6,8 @@ require 'test/unit'
 # The server tests needs to access an IMAP-Server with these following parameters.
 # Do not use an account that already contains messages, they might get lost.
 #
-$host = "misto.ch"
-$user = "rss"
+$host = "dnd.ch"
+$user = "feeds@dnd.ch"
 $pass = "for_imap"
 
 require 'test/test_server'

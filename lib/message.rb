@@ -13,7 +13,7 @@ class Message
 
   def initialize(params)
     @title = HTMLEntities.decode_entities(params[:title] || "")
-    @from  = params[:from] || ""
+    @from  = params[:from]
     @body  = strip_html(params[:body] || params[:url] || "")
     @id    = params[:id] || 0
     @time  = params[:time] || Time.now
@@ -24,7 +24,7 @@ class Message
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
 Subject: #{quote_if_necessary(@title, "UTF-8")}
-From: #{quote_if_necessary(@from, "UTF-8")}
+From: #{quote_if_necessary((@from || "Unknown") + " <spam@example.org>", "UTF-8")}
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit

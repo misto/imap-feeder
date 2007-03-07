@@ -9,19 +9,22 @@ require 'lib/rssimapconfig'
 
 opts = CreateConfigParser.parse(ARGV)
   
+
 if opts.create
   $log.info "Creating new configuration from #{opts.create}"
   RssImapConfig.create(File.open(opts.create), opts.out ? File.open(opts.out, "w") : $stdout)
 elsif opts.check
   $log.info "Checking configuration #{opts.check}"
   RssImapConfig.check(File.open(opts.check))
-elsif not [$host, $user, $pass, $temp, $config].all?
-  $stderr.print "Your settings are incomplete, please review settings.rb."
-  exit 1
 elsif require ARGV.first
+  configuration = [$host, $user, $pass, $temp, $config]
+  if not configuration.all?
+    $stderr.print "Your settings are incomplete, please review settings.rb:\n#{configuration.inspect}\n"
+    exit 1
+  end
   server = Server.new :host => $host, :user => $user, :pass => $pass
   store = MessageStore.new($temp)
   config = File.open($config)
   RssImap.new(server, store, config).run
 end
-	
+

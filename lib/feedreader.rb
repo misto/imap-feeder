@@ -9,7 +9,7 @@ class FeedReader
   end
 
   def read_content(url)
-    feed = FeedTools::Feed.open(url)
+    feed = FeedTools::Feed.open(url, :entry_sorting_property => "time")
     feed.items.each do |item|
       @messages << Message.new(
         :title => item.title, 

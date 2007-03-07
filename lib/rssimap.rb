@@ -5,7 +5,7 @@ require 'lib/message'
 require 'lib/feedreader'
 require 'lib/messagestore'
 
-require 'settings'
+#require 'settings'
 
 class RssImap
   def initialize(server, store, config)
