@@ -8,7 +8,10 @@ require 'lib/createconfigparser'
 require 'lib/rssimapconfig'
 
 opts = CreateConfigParser.parse(ARGV)
-  
+ 
+$log = Log4r::Logger.new 'rssimap'
+$log.outputters = Log4r::Outputter.stdout
+$log.level = Log4r::INFO
 
 if opts.create
   $log.info "Creating new configuration from #{opts.create}"
