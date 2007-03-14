@@ -25,7 +25,7 @@ class RssImap
       create_folder(path) unless check_folder_exists(path)
       last = get_last(path)
       messages = get_new_messages(url, last)
-      unless messages.empty?
+      if not messages.empty?
         messages.each do |msg|
           send_message(msg, path)
         end
@@ -55,7 +55,7 @@ class RssImap
       $log.warn "Timeout while receiving #{url}"
       return []
     end
-    $log.debug "#{messages.size} new messages"
+    $log.debug "#{messages.size} new messages" if messages.size > 0
     messages
   end
   
