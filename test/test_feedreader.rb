@@ -9,7 +9,7 @@ class TestFeedReader < Test::Unit::TestCase
   RSS20_NO_BODY      = "#{File.dirname(__FILE__)}/data/rss20_no_body.xml"
   
   def test_reading_first_feed
-    messages = FeedReader.new(RSS20_ONE_ENTRY).messages
+    messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than ""
     assert_equal(1, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages.first.time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages.first.title)
@@ -17,7 +17,7 @@ class TestFeedReader < Test::Unit::TestCase
   end  
   
   def test_reading_second_feed
-    messages = FeedReader.new(RSS20_TWO_ENTRIES).messages 
+    messages = FeedReader.new(RSS20_TWO_ENTRIES).get_newer_than ""
     assert_equal(2, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages[0].time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages[0].title)
@@ -30,7 +30,7 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_latest
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    messages = reader.messages
+    messages = reader.get_newer_than ""
     new_messages = reader.get_newer_than(messages.last.title)
     
     assert_equal(1, new_messages.size)
@@ -47,22 +47,22 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_authors
-    messages = FeedReader.new(RSS20_WITH_AUTHORS).messages
+    messages = FeedReader.new(RSS20_WITH_AUTHORS).get_newer_than ""
     assert_equal(2, messages.size)
     assert_equal("PeterSommerlad", messages.first.from)
     assert_equal("MirkoStocker", messages.last.from)
   end  
   
   def test_no_body
-    messages = FeedReader.new(RSS20_NO_BODY).messages
+    messages = FeedReader.new(RSS20_NO_BODY).get_newer_than ""
     assert_equal(1, messages.size)
     assert_equal("http://blog.misto.ch/archives/324", messages.first.body)
   end
   
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    messages = reader.messages
-    new_messages = reader.get_newer_than(messages.first.title)
+    new_messages = reader.get_newer_than("Mirko Stocker: KDE in Heroes!")
+    p new_messages
     assert new_messages.empty?
   end
   

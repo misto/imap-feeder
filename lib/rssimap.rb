@@ -19,44 +19,60 @@ class RssImap
     feeds = YAML.load(@config)
 
     feeds.each do |feed|
-      url = feed['feed']['url']
       path = feed['feed']['path']
-
       create_folder(path) unless check_folder_exists(path)
-      last = get_last(path)
-      messages = get_new_messages(url, last)
-      if not messages.empty?
-        messages.each do |msg|
-          send_message(msg, path)
+    end
+
+    outgoing_messages = []
+    threads = []
+
+    feeds.each do |feed|
+      threads << Thread.new(feed) do |feed_to_fetch|
+        url  = feed_to_fetch['feed']['url']
+        path = feed_to_fetch['feed']['path']
+        Thread.current[:path] = path
+        Thread.current[:last] = get_last(path)
+        begin
+          Thread.current[:reader] = FeedReader.new(url)
+        rescue FeedTools::FeedAccessError => e
+          $log.warn "Error retrieving #{url}: #{e.message}"
         end
-        messages_sent(path, messages)
       end
     end
+
+    threads.each {|t| t.join }
+
+    threads.each do |thread|
+      $log.debug "last message was #{thread[:last]}"
+      messages = thread[:reader].get_newer_than(thread[:last])[0..3]
+      $log.debug "#{messages.size} new messages" if messages.size > 0
+
+      if not messages.empty?
+        messages.each do |msg|
+          outgoing_messages << {:msg => msg, :path => thread[:path]}
+        end
+      end
+    end
+
+    outgoing_messages.flatten.each do |message|
+      puts "sent #{message[:msg]}"
+      #send_message(message[:msg], message[:path])
+      #message_sent([:msg], message[:path])
+    end
+
     $log.info "Finished"
     @store.save
   end
   
   private
   
-  def messages_sent(path, messages)
-    @store.add_new(path, messages.first.title)
+  def messages_sent(message, path)
+    @store.add_new(path, message.title)
   end
   
   def send_message msg, complete_path
     @server.send(msg, complete_path)
     $log.info "Found new: #{msg.title}"
-  end
-  
-  def get_new_messages(url, last)
-    $log.debug "last message was #{last}"
-    begin
-      messages = FeedReader.new(url).get_newer_than(last)[0..3]
-    rescue FeedTools::FeedAccessError
-      $log.warn "Timeout while receiving #{url}"
-      return []
-    end
-    $log.debug "#{messages.size} new messages" if messages.size > 0
-    messages
   end
   
   def get_last path

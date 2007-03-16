@@ -4,27 +4,20 @@ require 'feed_tools'
 class FeedReader
   attr_reader :messages
   def initialize(feed_url)
-    @messages = []
-    read_content(feed_url)
+    @feed = FeedTools::Feed.open(feed_url, :entry_sorting_property => "time")
   end
 
-  def read_content(url)
-    feed = FeedTools::Feed.open(url, :entry_sorting_property => "time")
-    feed.items.each do |item|
-      @messages << Message.new(
-        :title => item.title, 
-        :time => item.published, 
+  def get_newer_than(title)
+    messages = []
+    @feed.items.each do |item|
+      break if item.title == title
+      messages << Message.new(
+        :title => item.title,
+        :time => item.published,
         :body => item.description,
         :from => item.author && item.author.name,
         :url => item.link)
     end
-  end
-  
-  def get_newer_than(title)
-    new_messages = []
-    @messages.each do |message|
-      return new_messages if message.title == title
-      new_messages << message
-    end
+    messages
   end
 end
