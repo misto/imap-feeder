@@ -62,7 +62,6 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
     new_messages = reader.get_newer_than("Mirko Stocker: KDE in Heroes!")
-    p new_messages
     assert new_messages.empty?
   end
   

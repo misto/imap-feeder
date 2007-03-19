@@ -5,7 +5,7 @@ require 'lib/message'
 require 'lib/feedreader'
 require 'lib/messagestore'
 
-#require 'settings'
+$KCODE="U"
 
 class RssImap
   def initialize(server, store, config)
@@ -23,7 +23,6 @@ class RssImap
       create_folder(path) unless check_folder_exists(path)
     end
 
-    outgoing_messages = []
     threads = []
 
     feeds.each do |feed|
@@ -43,21 +42,16 @@ class RssImap
     threads.each {|t| t.join }
 
     threads.each do |thread|
-      $log.debug "last message was #{thread[:last]}"
       messages = thread[:reader].get_newer_than(thread[:last])[0..3]
+      $log.debug "last message was #{thread[:last]}" if messages.size > 0
       $log.debug "#{messages.size} new messages" if messages.size > 0
 
       if not messages.empty?
         messages.each do |msg|
-          outgoing_messages << {:msg => msg, :path => thread[:path]}
+          send_message(msg, thread[:path])
         end
+        messages_sent(messages.first, thread[:path])
       end
-    end
-
-    outgoing_messages.flatten.each do |message|
-      puts "sent #{message[:msg]}"
-      #send_message(message[:msg], message[:path])
-      #message_sent([:msg], message[:path])
     end
 
     $log.info "Finished"
