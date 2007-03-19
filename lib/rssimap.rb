@@ -42,6 +42,7 @@ class RssImap
     threads.each {|t| t.join }
 
     threads.each do |thread|
+      next if not thread[:reader]
       messages = thread[:reader].get_newer_than(thread[:last])[0..3]
       $log.debug "last message was #{thread[:last]}" if messages.size > 0
       $log.debug "#{messages.size} new messages" if messages.size > 0
