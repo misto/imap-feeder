@@ -55,13 +55,13 @@ class RssImap
     end
 
     $log.info "Finished"
-    @store.save
   end
   
   private
   
   def messages_sent(message, path)
     @store.add_new(path, message.title)
+    @store.save
   end
   
   def send_message msg, complete_path
