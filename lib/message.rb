@@ -1,7 +1,6 @@
 require 'base64'
 require 'action_mailer'
 require 'hpricot'
-require 'htmlentities'
 
 $KCODE="U"
 
@@ -12,7 +11,7 @@ class Message
   attr_reader :title, :body, :time, :id, :from
 
   def initialize(params)
-    @title = HTMLEntities.decode_entities(params[:title] || "")
+    @title = params[:title] || ""
     @from  = params[:from]
     @body  = strip_html(params[:body] || params[:url] || "")
     @id    = params[:id] || 0
@@ -20,6 +19,7 @@ class Message
     @url   = params[:url]
   end
   
+  # FIXME: @body.unpack("C*").pack("U*") ?
   def format
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
@@ -27,7 +27,6 @@ Subject: #{quote_if_necessary(@title, "UTF-8")}
 From: #{quote_if_necessary((@from || "Unknown") + " <spam@example.org>", "UTF-8")}
 Content-Type: text/plain;
   charset="utf-8"
-Content-Transfer-Encoding: 8bit
 
 #{@body}#{"\n\n" + @url if @url}
 EOF
@@ -42,7 +41,7 @@ EOF
   end
   
   def strip_html(body)
-       
+
     doc = Hpricot(body)
     
     replace(doc, 'p')      {|paragraph| "\n#{paragraph.innerHTML}\n"}
@@ -73,8 +72,7 @@ EOF
     
     #sanitize newlines
     body.gsub!(/\n{3,}/, "\n\n")
-    
-    HTMLEntities.decode_entities(body.strip)
+    body.strip
   end
   
   def gather_urls doc

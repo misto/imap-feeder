@@ -1,5 +1,8 @@
 require 'open-uri'
 require 'feed_tools'
+require 'htmlentities'
+
+$KCODE="U"
 
 class FeedReader
   attr_reader :messages
@@ -7,15 +10,20 @@ class FeedReader
     @feed = FeedTools::Feed.open(feed_url, :entry_sorting_property => "time")
   end
 
+  def dec str
+    HTMLEntities.decode_entities(str) if str
+  end
+
   def get_newer_than(title)
     messages = []
     @feed.items.each do |item|
-      break if item.title == title
+      break if dec(item.title) == title
+
       messages << Message.new(
-        :title => item.title,
+        :title => dec(item.title),
         :time => item.published,
-        :body => item.description,
-        :from => item.author && item.author.name,
+        :body => dec(item.description),
+        :from => dec(item.author && item.author.name),
         :url => item.link)
     end
     messages
