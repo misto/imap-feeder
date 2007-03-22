@@ -14,10 +14,16 @@ class FeedReader
     HTMLEntities.decode_entities(str) if str
   end
 
+  # we only compare \w\d characters to avoid problems 
+  # with special chars and different encodings
+  def equal(left, right)
+    left.gsub(/[^\w\d]/, '') == right.(/[^\w\d]/, '')
+  end
+
   def get_newer_than(title)
     messages = []
     @feed.items.each do |item|
-      break if dec(item.title) == title
+      break if equal(dec(item.title), title)
 
       messages << Message.new(
         :title => dec(item.title),
