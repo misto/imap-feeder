@@ -18,15 +18,24 @@ class Message
     @time  = params[:time] || Time.now
     @url   = params[:url]
   end
+
+  #
+  # Quote characters in the string using ActionMailer's quote_if_necessary.
+  #
+  def quote(str)
+    str =~ /([\w\d ]*)(.*)/
+    $1 + quote_if_necessary($2, "UTF-8")
+  end
   
   # FIXME: @body.unpack("C*").pack("U*") ?
   def format
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
-Subject: #{quote_if_necessary(@title, "UTF-8")}
-From: #{quote_if_necessary((@from || "Unknown") + " <spam@example.org>", "UTF-8")}
+Subject: #{quote(@title)}
+From: #{quote((@from || "Unknown") + " <spam@example.org>")}
 Content-Type: text/plain;
   charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 #{@body}#{"\n\n" + @url if @url}
 EOF
@@ -71,7 +80,7 @@ EOF
     body = doc.to_html
     
     #sanitize newlines
-    body.gsub!(/\n{3,}/, "\n\n")
+    body.gsub!(/(\n\s*){3,}/, "\n\n")
     body.strip
   end
   

@@ -11,13 +11,18 @@ class FeedReader
   end
 
   def dec str
+    #feedtools decode? reduce dependency
     HTMLEntities.decode_entities(str) if str
   end
 
   # we only compare \w\d characters to avoid problems 
   # with special chars and different encodings
   def equal(left, right)
-    left.gsub(/[^\w\d]/, '') == right.(/[^\w\d]/, '')
+    if left and right
+      left.gsub(/[^\w\d]/, '') == right.gsub(/[^\w\d]/, '') 
+    else
+      false
+    end
   end
 
   def get_newer_than(title)

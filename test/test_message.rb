@@ -21,7 +21,7 @@ class MessageTest < Test::Unit::TestCase
     assert_equal("title", m.title)
     assert_equal("", m.body)
   end
-  
+
   def test_creation_body_only
     m = Message.new(:body => "body")
     assert_equal("", m.title)
@@ -86,7 +86,7 @@ EOF
     m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
     assert_equal(<<-EOF, m.format)
 Date: Mon Mar 05 15:26:16 +0100 2007
-Subject: =?UTF-8?Q?Alexander_H=2e_F=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
+Subject: Alexander H=?UTF-8?Q?=2e_F=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"
@@ -158,6 +158,16 @@ class MessageFormatterTest < Test::Unit::TestCase
     m = create_message "Y<br /><br /><br /><br /><br />Z"
     assert_equal("Y\n\nZ", m.body)
   end    
+   
+  def test_sanitize_newlines_with_spaces
+    m = create_message "aa\n \n\t\n    \naa"
+    assert_equal("aa\n\naa", m.body)
+  end
+
+  def test_sanitize_newlines
+    m = create_message "aa\n\n\n\naa"
+    assert_equal("aa\n\naa", m.body)
+  end
   
   #
   # Italic

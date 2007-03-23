@@ -33,6 +33,12 @@ class TestRssImap < Test::Unit::TestCase
   def teardown
     File.open(STORE, "w").close
   end
+
+  def assert_has_messages(*messages) 
+    messages.each_with_index do |msg, index|
+      assert_equal(msg, @server.sent[index].first.body)
+    end
+  end
   
   def test_rssimap
     config = <<EOS
@@ -47,10 +53,9 @@ EOS
     #assert_equal("2 new messages", $log.debug_msg[2])
     
     assert_equal(2, @server.sent.length)
-    assert_equal("24 und Alias", @server.sent.first.first.body)
     assert_equal("INBOX.TestFolder", @server.sent.first.last)
-    assert_equal("Empty", @server.sent.last.first.body)
     assert_equal("INBOX.TestFolder", @server.sent.last.last)
+    assert_has_messages("24 und Alias", "Empty")
 
   end
 end
