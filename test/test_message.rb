@@ -86,7 +86,7 @@ EOF
     m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
     assert_equal(<<-EOF, m.format)
 Date: Mon Mar 05 15:26:16 +0100 2007
-Subject: Alexander H=?UTF-8?Q?=2e_F=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
+Subject: Alexander H. F=?UTF-8?Q?=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"

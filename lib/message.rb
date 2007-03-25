@@ -23,8 +23,15 @@ class Message
   # Quote characters in the string using ActionMailer's quote_if_necessary.
   #
   def quote(str)
-    str =~ /([\w\d ]*)(.*)/
-    $1 + quote_if_necessary($2, "UTF-8")
+    all_ascii = -1
+    str.split("").each do |char|
+      if(char[0].to_i > 31 && char[0].to_i < 128)
+        all_ascii += 1
+      else
+        break
+      end
+    end
+    (all_ascii > -1 ? str[0..all_ascii] : "")  + quote_if_necessary(str[all_ascii + 1..-1], "UTF-8")
   end
   
   # FIXME: @body.unpack("C*").pack("U*") ?
