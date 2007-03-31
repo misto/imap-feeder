@@ -66,6 +66,7 @@ EOF
     replace(doc, 'em')     {|em| "*#{em.innerHTML}*"}
     replace(doc, 'i')
     replace(doc, 'abr')
+    replace(doc, 'font')
     replace(doc, 'span')
     replace(doc, 'br')     {|br| "\n"}
     replace(doc, 'img')    {|img| img.attributes['alt'] || ""}

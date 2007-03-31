@@ -133,6 +133,11 @@ class MessageFormatterTest < Test::Unit::TestCase
     assert_equal("Y\n\nZ", m.body)
   end
   
+  def test_font
+    m = create_message "<font>Z</font>"
+    assert_equal("Z", m.body)
+  end
+  
   #
   # Linebreak
   #
