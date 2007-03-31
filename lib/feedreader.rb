@@ -19,7 +19,7 @@ class FeedReader
   # with special chars and different encodings
   def equal(left, right)
     if left and right
-      left.gsub(/[^\w\d]/, '') == right.gsub(/[^\w\d]/, '') 
+      left.gsub(/[^A-Za-z0-9]/, '') == right.gsub(/[^A-Za-z0-9]/, '') 
     else
       false
     end
