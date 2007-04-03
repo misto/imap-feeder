@@ -15,7 +15,7 @@ class RssImap
   end
 
   def run
-    $log.info "Starting"
+    $log.info "Starting #{Time.now.strftime "%Y.%m.%d %H:%M"}"
     feeds = YAML.load(@config)
 
     feeds.each do |feed|
@@ -55,7 +55,7 @@ class RssImap
       end
     end
 
-    $log.info "Finished"
+    $log.info "Finished #{Time.now.strftime "%Y.%m.%d %H:%M"}"
   end
   
   private
@@ -67,7 +67,7 @@ class RssImap
   
   def send_message msg, complete_path
     @server.send(msg, complete_path)
-    $log.info "Found new: #{msg.title}"
+    $log.info "Found in #{complete_path.split(".").last}: #{msg.title}"
   end
   
   def get_last path

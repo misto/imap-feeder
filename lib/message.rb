@@ -25,7 +25,7 @@ class Message
   def quote(str)
     all_ascii = -1
     str.split("").each do |char|
-      if(char[0].to_i > 31 && char[0].to_i < 128)
+      if(char[0].to_i > 31 && char[0].to_i < 127)
         all_ascii += 1
       else
         break

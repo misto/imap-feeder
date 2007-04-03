@@ -1,6 +1,9 @@
 require 'open-uri'
 require 'feed_tools'
 require 'htmlentities'
+require 'tidy'
+
+Tidy.path = "/usr/lib/libtidy.so"
 
 $KCODE="U"
 
@@ -25,6 +28,24 @@ class FeedReader
     end
   end
 
+  def tidy body
+    tidy_html = Tidy.open(:show_warnings=>true) do |tidy|
+      tidy.options.markup = true
+      tidy.options.wrap = 0
+      tidy.options.logical_emphasis = true
+      tidy.options.drop_font_tags = true
+      tidy.options.output_encoding = "utf8"
+      #tidy.options.input_encoding = "utf8"
+      tidy.options.doctype = "omit"
+      tidy.clean(body)
+    end
+    tidy_html.strip!
+    tidy_html.gsub!(/^<html>(.|\n)*<body>/, "")
+    tidy_html.gsub!(/<\/body>(.|\n)*<\/html>$/, "")
+    tidy_html.gsub!("\t", "  ")
+    tidy_html
+  end
+
   def get_newer_than(title)
     messages = []
     @feed.items.each do |item|
@@ -33,7 +54,7 @@ class FeedReader
       messages << Message.new(
         :title => dec(item.title),
         :time => item.published,
-        :body => dec(item.description),
+        :body => dec(tidy(item.description)),
         :from => dec(item.author && item.author.name),
         :url => item.link)
     end
