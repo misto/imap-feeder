@@ -1,6 +1,8 @@
 require 'lib/rssimap'
 require 'test/testlogger'
 
+$KCODE="U"
+
 class TestServer
   attr_reader :sent
   
@@ -55,7 +57,7 @@ EOS
     assert_equal(2, @server.sent.length)
     assert_equal("INBOX.TestFolder", @server.sent.first.last)
     assert_equal("INBOX.TestFolder", @server.sent.last.last)
-    assert_has_messages("24 und Alias", "Empty")
+    assert_has_messages("24 Ãnd Alias", "Empty")
 
   end
 end
