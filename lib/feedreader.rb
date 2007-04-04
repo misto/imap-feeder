@@ -35,7 +35,7 @@ class FeedReader
       tidy.options.logical_emphasis = true
       tidy.options.drop_font_tags = true
       tidy.options.output_encoding = "utf8"
-      #tidy.options.input_encoding = "utf8"
+      tidy.options.input_encoding = "utf8"
       tidy.options.doctype = "omit"
       tidy.clean(body)
     end
