@@ -11,11 +11,9 @@ class FeedReader
   attr_reader :messages
   def initialize(feed_url)
     @feed = FeedNormalizer::FeedNormalizer.parse(open(feed_url))
-#    @feed = FeedTools::Feed.open(feed_url, :entry_sorting_property => "time")
   end
 
   def dec str
-    #feedtools decode? reduce dependency
     HTMLEntities.decode_entities(str).strip if str
   end
 
