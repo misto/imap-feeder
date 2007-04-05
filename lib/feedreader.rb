@@ -16,7 +16,7 @@ class FeedReader
 
   def dec str
     #feedtools decode? reduce dependency
-    HTMLEntities.decode_entities(str) if str
+    HTMLEntities.decode_entities(str).strip if str
   end
 
   # we only compare \w\d characters to avoid problems 
@@ -48,6 +48,8 @@ class FeedReader
   end
 
   def get_newer_than(title)
+    return [] if not @feed
+
     messages = []
     @feed.entries.each do |item|
       break if equal(dec(item.title), title)
@@ -56,7 +58,7 @@ class FeedReader
         :title => dec(item.title),
         :time => item.date_published,
         :body => dec(tidy(item.description)),
-        :from => dec(item.authors.first),
+        :from => dec((item.authors.first || "").split("\n").first),
         :url => item.urls.first)
     end
     messages

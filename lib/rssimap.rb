@@ -33,15 +33,18 @@ class RssImap
         Thread.current[:last] = get_last(path)
         begin
           Thread.current[:reader] = FeedReader.new(url)
-        rescue FeedTools::FeedAccessError => e
+        rescue OpenURI::HTTPError => e
           $log.warn "Error retrieving #{url}: #{e.message}"
+        rescue Exception => e
+          $log.error "Unexpected error: #{e.message}"
         end
       end
     end
 
-    threads.each {|t| t.join }
-
     threads.each do |thread|
+
+      thread.join
+
       next if not thread[:reader]
       messages = thread[:reader].get_newer_than(thread[:last])[0..3]
       $log.debug "last message was #{thread[:last]}" if messages.size > 0
