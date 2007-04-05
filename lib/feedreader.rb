@@ -55,7 +55,7 @@ class FeedReader
       messages << Message.new(
         :title => dec(item.title),
         :time => item.date_published,
-        :body => dec(tidy(item.description)),
+        :body => dec(tidy(item.content || item.description)),
         :from => dec((item.authors.first || "").split("\n").first),
         :url => item.urls.first)
     end
