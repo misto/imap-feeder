@@ -1,6 +1,8 @@
 require 'lib/feedreader'
 require 'lib/message'
 
+#$KCODE="U"
+
 class TestFeedReader < Test::Unit::TestCase
   
   RSS20_ONE_ENTRY    = "#{File.dirname(__FILE__)}/data/rss20_one_entry.xml"
@@ -21,7 +23,7 @@ class TestFeedReader < Test::Unit::TestCase
     assert_equal(2, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages[0].time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages[0].title)
-    assert_equal("24 und Alias", messages[0].body)
+    assert_equal("24 \303\274nd Alias", messages[0].body)
     
     assert_equal(Time.parse("Monday 12 February 2007 17:09"), messages[1].time)
     assert_equal("Thomas Marti: Highlights 2006 (TV)", messages[1].title)

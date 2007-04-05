@@ -57,7 +57,7 @@ EOS
     assert_equal(2, @server.sent.length)
     assert_equal("INBOX.TestFolder", @server.sent.first.last)
     assert_equal("INBOX.TestFolder", @server.sent.last.last)
-    assert_has_messages("24 Ãnd Alias", "Empty")
+    assert_has_messages("24 ünd Alias", "Empty")
 
   end
 end
