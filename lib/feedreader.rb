@@ -1,5 +1,5 @@
 require 'open-uri'
-require 'feed_tools'
+require 'feed-normalizer'
 require 'htmlentities'
 require 'tidy'
 
@@ -10,7 +10,8 @@ $KCODE="U"
 class FeedReader
   attr_reader :messages
   def initialize(feed_url)
-    @feed = FeedTools::Feed.open(feed_url, :entry_sorting_property => "time")
+    @feed = FeedNormalizer::FeedNormalizer.parse(open(feed_url))
+#    @feed = FeedTools::Feed.open(feed_url, :entry_sorting_property => "time")
   end
 
   def dec str
@@ -48,15 +49,15 @@ class FeedReader
 
   def get_newer_than(title)
     messages = []
-    @feed.items.each do |item|
+    @feed.entries.each do |item|
       break if equal(dec(item.title), title)
 
       messages << Message.new(
         :title => dec(item.title),
-        :time => item.published,
+        :time => item.date_published,
         :body => dec(tidy(item.description)),
-        :from => dec(item.author && item.author.name),
-        :url => item.link)
+        :from => dec(item.authors.first),
+        :url => item.urls.first)
     end
     messages
   end
