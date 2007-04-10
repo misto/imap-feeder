@@ -1,7 +1,6 @@
+require 'tempfile'
 require 'lib/rssimap'
 require 'test/testlogger'
-
-$KCODE="U"
 
 class TestServer
   attr_reader :sent
@@ -24,40 +23,37 @@ end
 
 class TestRssImap < Test::Unit::TestCase
 
-  STORE = "#{File.dirname(__FILE__)}/data/messagestore.yaml"
+  TEST_FEEDS = "#{File.dirname(__FILE__)}/data"
 
   def setup
     $log = TestLogger.new
     @server = TestServer.new
-    @store = MessageStore.new(STORE)
-  end
-  
-  def teardown
-    File.open(STORE, "w").close
+    @store = MessageStore.new(Tempfile.new("message_store_temp").path)
   end
 
-  def assert_has_messages(*messages) 
-    messages.each_with_index do |msg, index|
-      assert_equal(msg, @server.sent[index].first.body)
-    end
+  def body(index)
+    @server.sent[index].first.body
   end
   
-  def test_rssimap
+  def folder(index)
+    @server.sent[index].last
+  end
+  
+  def test_simple_rss20
     config = <<EOS
 - feed:
-    url: "#{File.dirname(__FILE__)}/data/rss20_two_entries.xml"
+    url: "#{TEST_FEEDS}/rss20_two_entries.xml"
     path: INBOX.TestFolder 
 EOS
 
     RssImap.new(@server, @store, config).run
     assert_equal("Checking INBOX.TestFolder", $log.debug_msg[0])
-    #assert_equal("last message was ", $log.debug_msg[1])
-    #assert_equal("2 new messages", $log.debug_msg[2])
     
     assert_equal(2, @server.sent.length)
-    assert_equal("INBOX.TestFolder", @server.sent.first.last)
-    assert_equal("INBOX.TestFolder", @server.sent.last.last)
-    assert_has_messages("24 ünd Alias", "Empty")
+    assert_equal("INBOX.TestFolder", folder(0))
+    assert_equal("24 ünd Alias", body(0))
+    assert_equal("INBOX.TestFolder", folder(1))
+    assert_equal("Empty", body(1))
 
   end
 end
