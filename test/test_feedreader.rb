@@ -9,7 +9,7 @@ class TestFeedReader < Test::Unit::TestCase
   RSS20_TWO_ENTRIES  = "#{File.dirname(__FILE__)}/data/rss20_two_entries.xml"
   RSS20_WITH_AUTHORS = "#{File.dirname(__FILE__)}/data/rss20_with_authors.xml"
   RSS20_NO_BODY      = "#{File.dirname(__FILE__)}/data/rss20_no_body.xml"
-  
+ 
   def test_reading_first_feed
     messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than ""
     assert_equal(1, messages.size)

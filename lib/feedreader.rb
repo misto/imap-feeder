@@ -1,9 +1,6 @@
 require 'open-uri'
 require 'feed-normalizer'
 require 'htmlentities'
-require 'tidy'
-
-Tidy.path = "/usr/lib/libtidy.so"
 
 $KCODE="U"
 
@@ -27,24 +24,6 @@ class FeedReader
     end
   end
 
-  def tidy body
-    tidy_html = Tidy.open(:show_warnings=>true) do |tidy|
-      tidy.options.markup = true
-      tidy.options.wrap = 0
-      tidy.options.logical_emphasis = true
-      tidy.options.drop_font_tags = true
-      tidy.options.output_encoding = "utf8"
-      tidy.options.input_encoding = "utf8"
-      tidy.options.doctype = "omit"
-      tidy.clean(body)
-    end
-    tidy_html.strip!
-    tidy_html.gsub!(/^<html>(.|\n)*<body>/, "")
-    tidy_html.gsub!(/<\/body>(.|\n)*<\/html>$/, "")
-    tidy_html.gsub!("\t", "  ")
-    tidy_html
-  end
-
   def get_newer_than(title)
     return [] if not @feed
 
@@ -55,7 +34,7 @@ class FeedReader
       messages << Message.new(
         :title => dec(item.title),
         :time => item.date_published,
-        :body => dec(tidy(item.content || item.description)),
+        :body => dec(item.content || item.description),
         :from => dec((item.authors.first || "").split("\n").first),
         :url => item.urls.first)
     end

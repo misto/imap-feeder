@@ -67,7 +67,7 @@ EOF
   
   def test_format_multiline
     t = Time.parse("Mon, Mar 05 2007 15:26:49 +0100")
-    m = Message.new(:title => "title", :body => "body\nsecond", :time => t)
+    m = Message.new(:title => "title", :body => "<p>body</p>second", :time => t)
     assert_equal(<<EOF, m.format)
 Date: Mon Mar 05 15:26:49 +0100 2007
 Subject: title
@@ -77,13 +77,14 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 8bit
 
 body
+
 second
 EOF
   end
 
   def test_format_encoded
     t = Time.parse("Mon, Mar 05 2007 15:26:16 +0100")
-    m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "body\nsecond", :time => t)
+    m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "<p>body</p>second", :time => t)
     assert_equal(<<-EOF, m.format)
 Date: Mon Mar 05 15:26:16 +0100 2007
 Subject: Alexander H. F=?UTF-8?Q?=c3=a6r=c3=b8y=3a_Meeting_friends_for_the_first_time=e2=80=a6?=
@@ -93,6 +94,7 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 8bit
 
 body
+
 second
 EOF
   end
@@ -120,12 +122,12 @@ class MessageFormatterTest < Test::Unit::TestCase
   
   def test_one_p_in_the_middle
     m = create_message "X<p>Y</p>Z"
-    assert_equal("X\nY\nZ", m.body)
+    assert_equal("X\n\nY\n\nZ", m.body)
   end
   
   def test_p_with_spaces
     m = create_message "X<p >Y</p >Z"
-    assert_equal("X\nY\nZ", m.body)
+    assert_equal("X\n\nY\n\nZ", m.body)
   end
   
   def test_mutliple_p
@@ -143,17 +145,17 @@ class MessageFormatterTest < Test::Unit::TestCase
   #
   def test_br_html
     m = create_message "Y<br>Z"
-    assert_equal("Y\nZ", m.body)
+    assert_equal("Y\n\nZ", m.body)
   end
   
   def test_br_xhtml
     m = create_message "Y<br/>Z"
-    assert_equal("Y\nZ", m.body)
+    assert_equal("Y\n\nZ", m.body)
   end
   
   def test_br_with_space
     m = create_message "Y<br />Z"
-    assert_equal("Y\nZ", m.body)
+    assert_equal("Y\n\nZ", m.body)
   end
   
   #
@@ -165,12 +167,12 @@ class MessageFormatterTest < Test::Unit::TestCase
   end    
    
   def test_sanitize_newlines_with_spaces
-    m = create_message "aa\n \n\t\n    \naa"
+    m = create_message "<p>aa</p>\n \n\t\n    \n<p>aa</p>"
     assert_equal("aa\n\naa", m.body)
   end
 
   def test_sanitize_newlines
-    m = create_message "aa\n\n\n\naa"
+    m = create_message "<p>aa</p>\n\n\n\n<p>aa</p>"
     assert_equal("aa\n\naa", m.body)
   end
   
@@ -179,7 +181,7 @@ class MessageFormatterTest < Test::Unit::TestCase
   #
   def test_italic
     m = create_message "<i>yeah</i>"
-    assert_equal("yeah", m.body)
+    assert_equal("*yeah*", m.body)
   end
   
   #
@@ -214,11 +216,6 @@ class MessageFormatterTest < Test::Unit::TestCase
   def test_html_entity
     m = create_message "&#8230;"
     assert_equal("…", m.body)
-  end  
-  
-  def test_html_entity_title
-    m = Message.new :title => "&gt;01&lt;"
-    assert_equal(">01<", m.title)
   end  
   
   #

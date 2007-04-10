@@ -1,6 +1,9 @@
 require 'base64'
 require 'action_mailer'
 require 'hpricot'
+require 'tidy'
+
+Tidy.path = "/usr/lib/libtidy.so"
 
 $KCODE="U"
 
@@ -34,7 +37,6 @@ class Message
     (all_ascii > -1 ? str[0..all_ascii] : "")  + quote_if_necessary(str[all_ascii + 1..-1], "UTF-8")
   end
   
-  # FIXME: @body.unpack("C*").pack("U*") ?
   def format
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
@@ -56,8 +58,27 @@ EOF
     end
   end
   
+  def tidy body
+    tidy_html = Tidy.open(:show_warnings=>true) do |tidy|
+      tidy.options.markup = true
+      tidy.options.wrap = 0
+      tidy.options.logical_emphasis = true
+      tidy.options.drop_font_tags = true
+      tidy.options.output_encoding = "utf8"
+      tidy.options.input_encoding = "utf8"
+      tidy.options.doctype = "omit"
+      tidy.clean(body)
+    end
+    tidy_html.strip!
+    tidy_html.gsub!(/^<html>(.|\n)*<body>/, "")
+    tidy_html.gsub!(/<\/body>(.|\n)*<\/html>$/, "")
+    tidy_html.gsub!("\t", "  ")
+    tidy_html
+  end
+
   def strip_html(body)
 
+    body = tidy(body)
     doc = Hpricot(body)
     
     replace(doc, 'p')      {|paragraph| "\n#{paragraph.innerHTML}\n"}
