@@ -9,6 +9,7 @@ class TestFeedReader < Test::Unit::TestCase
   RSS20_TWO_ENTRIES  = "#{File.dirname(__FILE__)}/data/rss20_two_entries.xml"
   RSS20_WITH_AUTHORS = "#{File.dirname(__FILE__)}/data/rss20_with_authors.xml"
   RSS20_NO_BODY      = "#{File.dirname(__FILE__)}/data/rss20_no_body.xml"
+  SHOPBLOGGER        = "#{File.dirname(__FILE__)}/data/shopblogger.rss"
  
   def test_reading_first_feed
     messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than ""
@@ -72,5 +73,12 @@ class TestFeedReader < Test::Unit::TestCase
     messages = reader.messages
     new_messages = reader.get_newer_than(nil)
     assert_equal(2, new_messages.size)
+  end
+
+  def test_shopblogger
+    reader = FeedReader.new(SHOPBLOGGER)
+    messages = reader.messages
+    new_messages = reader.get_newer_than(nil)
+    assert_match(/^Oldschool\[1\] hat's heute Morgen.*/, new_messages.first.body)
   end
 end

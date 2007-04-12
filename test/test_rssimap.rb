@@ -31,6 +31,10 @@ class TestRssImap < Test::Unit::TestCase
     @store = MessageStore.new(Tempfile.new("message_store_temp").path)
   end
 
+  def title(index)
+    @server.sent[index].first.title
+  end
+
   def body(index)
     @server.sent[index].first.body
   end
@@ -52,8 +56,10 @@ EOS
     assert_equal(2, @server.sent.length)
     assert_equal("INBOX.TestFolder", folder(0))
     assert_equal("24 ünd Alias", body(0))
+    assert_equal("Mirko Stocker: KDE in Heroes!", title(0))
     assert_equal("INBOX.TestFolder", folder(1))
     assert_equal("Empty", body(1))
+    assert_equal("Thomas Marti: Highlights 2006 (TV)", title(1))
 
   end
 end

@@ -1,5 +1,5 @@
 require 'open-uri'
-require 'feed-normalizer'
+require 'simple-rss'
 require 'htmlentities'
 
 $KCODE="U"
@@ -7,14 +7,14 @@ $KCODE="U"
 class FeedReader
   attr_reader :messages
   def initialize(feed_url)
-    @feed = FeedNormalizer::FeedNormalizer.parse(open(feed_url))
+    @feed = SimpleRSS.parse(open(feed_url))
   end
 
   def dec str
     HTMLEntities.decode_entities(str).strip if str
   end
 
-  # we only compare \w\d characters to avoid problems 
+  # we only compare some characters to avoid problems 
   # with special chars and different encodings
   def equal(left, right)
     if left and right
@@ -33,11 +33,12 @@ class FeedReader
 
       messages << Message.new(
         :title => dec(item.title),
-        :time => item.date_published,
-        :body => dec(item.content || item.description),
-        :from => dec((item.authors.first || "").split("\n").first),
-        :url => item.urls.first)
+        :time => item.published || item.pubDate || item.date_published,
+        :body => dec(item.content_encoded || item.content || item.description),
+        :from => dec(item.author),
+        :url => item.link)
     end
+
     messages
   end
 end

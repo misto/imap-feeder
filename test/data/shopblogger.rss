@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<rss version="2.0" 
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:admin="http://webns.net/mvcb/"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+   xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+   xmlns:content="http://purl.org/rss/1.0/modules/content/"
+   >
+<channel>
+    <title>Der Shopblogger</title>
+    <link>http://www.shopblogger.de/blog/</link>
+    <description>Verrücktes und Bemerkenswertes aus dem Supermarkt...</description>
+    <dc:language>de</dc:language>
+    <generator>Serendipity 1.0.4 - http://www.s9y.org/</generator>
+    <pubDate>Thu, 12 Apr 2007 18:38:42 GMT</pubDate>
+
+    <image>
+        <url>http://www.shopblogger.de/blog/templates/default/img/s9y_banner_small.png</url>
+        <title>RSS: Der Shopblogger - Verrücktes und Bemerkenswertes aus dem Supermarkt...</title>
+        <link>http://www.shopblogger.de/blog/</link>
+        <width>100</width>
+        <height>21</height>
+    </image>
+
+<item>
+    <title>Demo gegen den Überwachungsstaat in Frankfurt</title>
+    <link>http://www.shopblogger.de/blog/archives/4923-Demo-gegen-den-UEberwachungsstaat-in-Frankfurt.html</link>
+            <category>News &amp; Recht</category>
+    
+    <comments>http://www.shopblogger.de/blog/archives/4923-Demo-gegen-den-UEberwachungsstaat-in-Frankfurt.html#comments</comments>
+    <wfw:comment>http://www.shopblogger.de/blog/wfwcomment.php?cid=4923</wfw:comment>
+
+    <slash:comments>4</slash:comments>
+    <wfw:commentRss>http://www.shopblogger.de/blog/rss.php?version=2.0&amp;type=comments&amp;cid=4923</wfw:commentRss>
+    
+
+    <author>nospam@example.com (Bjoern Harste)</author>
+    <content:encoded>
+    &lt;a href=&quot;http://oldschool.blogg.de/&quot; &gt;Oldschool&lt;/a&gt; hat&#039;s heute Morgen schon &lt;a href=&quot;http://oldschool.blogg.de/eintrag.php?id=372&quot; &gt;geschrieben&lt;/a&gt;. &lt;a href=&quot;http://www.spiegel.de/&quot; &gt;Spiegel-Online&lt;/a&gt; hat das Thema auch schon &lt;a href=&quot;http://www.spiegel.de/politik/deutschland/0,1518,476737,00.html&quot; &gt;aufgegriffen&lt;/a&gt; und nun möchte ich die E-Mail, die (nicht nur) ich bekommen habe, auch noch veröffentlichen:&lt;blockquote&gt;&lt;i&gt;Um Ihre knappe Zeit nicht über Gebühr zu beanspruchen, komme ich gleich zum Punkt:&lt;br /&gt;
+&lt;br /&gt;
+Diesen Samstag, 14.4.2007, findet in Frankfurt eine Demo gegen die ausufernden Überwachungspläne unserer Regierung statt.&lt;br /&gt;
+&lt;br /&gt;
+Um mir Schreib- und Formulierarbeit zu sparen, hier zwei kleine Links:&lt;br /&gt;
+&lt;a href=&quot;http://www.vorratsdatenspeicherung.de/?/content/view/98/55/&quot; &gt;&lt;br /&gt;
+http://www.vorratsdatenspeicherung.de/?/content/view/98/55/&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;http://www.vorratsdatenspeicherung.de/?/content/view/46/42/&quot; &gt;http://www.vorratsdatenspeicherung.de/?/content/view/46/42/&lt;/a&gt;&lt;br /&gt;
+&lt;br /&gt;
+In diesem Sinne dachte ich mir, was liegt näher, als auch die sog.&lt;br /&gt;
+Blogosphäre für &quot;die gute Sache&quot; einzuspannen &lt;img src=&quot;http://www.shopblogger.de/blog/templates/default/img/emoticons/smile.png&quot; alt=&quot;:-)&quot; style=&quot;display: inline; vertical-align: bottom;&quot; class=&quot;emoticon&quot; /&gt;&lt;br /&gt;
+&lt;br /&gt;
+Es wäre nett, wenn Sie vielleicht einen kleinen Blogeintrag zur Demo fabrizieren könnten, und evtl. auch &quot;Blog(roll)kollegen&quot; auf die Aktion hinweisen würden. Denn Datenschutz geht uns bekanntlich alle an. Auch und gerade die Blogger, von denen ja einige gerne lieber anonym arbeiten.&lt;br /&gt;
+&lt;br /&gt;
+Ich hoffe die eMail ist nicht zu dreist geworden, aber immerhin geht es wirklich um ein wichtiges Thema.&lt;br /&gt;
+&lt;br /&gt;
+Danke für Ihre Unterstützung!&lt;/i&gt;&lt;/blockquote&gt;Okay, der Blogeintrag ist fabriziert. &lt;img src=&quot;http://www.shopblogger.de/blog/templates/default/img/emoticons/smile.png&quot; alt=&quot;:-)&quot; style=&quot;display: inline; vertical-align: bottom;&quot; class=&quot;emoticon&quot; /&gt;&lt;br /&gt;
+ 
+    </content:encoded>
+
+    <pubDate>Thu, 12 Apr 2007 19:06:00 +0200</pubDate>
+    <guid isPermaLink="false">http://www.shopblogger.de/blog/archives/4923-guid.html</guid>
+    
+</item>
+</channel>
+</rss>
