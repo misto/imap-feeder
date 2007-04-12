@@ -10,10 +10,6 @@ class FeedReader
     @feed = SimpleRSS.parse(open(feed_url))
   end
 
-  def dec str
-    HTMLEntities.decode_entities(str).strip if str
-  end
-
   # we only compare some characters to avoid problems 
   # with special chars and different encodings
   def equal(left, right)
@@ -29,16 +25,15 @@ class FeedReader
 
     messages = []
     @feed.entries.each do |item|
-      break if equal(dec(item.title), title)
+      break if equal(HTMLEntities.decode_entities(item.title), title)
 
       messages << Message.new(
-        :title => dec(item.title),
+        :title => item.title,
         :time => item.published || item.pubDate || item.date_published,
-        :body => dec(item.content_encoded || item.content || item.description),
-        :from => dec(item.author),
+        :body => item.content_encoded || item.content || item.description,
+        :from => item.author,
         :url => item.link)
     end
-
     messages
   end
 end

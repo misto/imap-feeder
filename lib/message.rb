@@ -2,6 +2,7 @@ require 'base64'
 require 'action_mailer'
 require 'hpricot'
 require 'tidy'
+require 'htmlentities'
 
 Tidy.path = "/usr/lib/libtidy.so"
 
@@ -78,6 +79,7 @@ EOF
 
   def strip_html(body)
 
+    body = HTMLEntities.decode_entities(body).strip
     body = tidy(body)
     doc = Hpricot(body)
     
@@ -110,7 +112,8 @@ EOF
     
     #sanitize newlines
     body.gsub!(/(\n\s*){3,}/, "\n\n")
-    body.strip
+
+    HTMLEntities.decode_entities(body).strip
   end
   
   def gather_urls doc
