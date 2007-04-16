@@ -1,6 +1,7 @@
 require 'open-uri'
 require 'simple-rss'
 require 'htmlentities'
+require 'iconv'
 
 $KCODE="U"
 
@@ -20,19 +21,26 @@ class FeedReader
     end
   end
 
+  def conv(str)
+    Iconv.iconv("UTF-8", @from, str).first
+  end
+
   def get_newer_than(title)
     return [] if not @feed
 
+    match = @feed.source.match(/encoding="(.*?)"/)
+    @from = (match && match[1]) || "UTF-8"
+
     messages = []
     @feed.entries.each do |item|
-      break if equal(HTMLEntities.decode_entities(item.title), title)
 
+      break if equal(HTMLEntities.decode_entities(item.title), title)
       messages << Message.new(
-        :title => item.title,
+        :title => conv(item.title),
         :time => item.published || item.pubDate || item.date_published,
-        :body => item.content_encoded || item.content || item.description,
-        :from => item.author,
-        :url => item.link)
+        :body => conv(item.content_encoded || item.content || item.description),
+        :from => conv(item.author),
+        :url => conv(item.link))
     end
     messages
   end

@@ -15,8 +15,8 @@ class Message
   attr_reader :title, :body, :time, :id, :from
 
   def initialize(params)
-    @title = params[:title] || ""
-    @from  = params[:from]
+    @title = dec(params[:title]) || ""
+    @from  = dec(params[:from])
     @body  = strip_html(params[:body] || params[:url] || "")
     @id    = params[:id] || 0
     @time  = params[:time] || Time.now.gmtime
@@ -77,9 +77,13 @@ EOF
     tidy_html
   end
 
+  def dec html
+    HTMLEntities.decode_entities(html).strip if html
+  end
+
   def strip_html(body)
 
-    body = HTMLEntities.decode_entities(body).strip
+    body = dec(body)
     body = tidy(body)
     doc = Hpricot(body)
     
@@ -87,7 +91,10 @@ EOF
     replace(doc, 'strong') {|strong| "*#{strong.innerHTML}*"}
     replace(doc, 'b')      {|bold| "*#{bold.innerHTML}*"}
     replace(doc, 'em')     {|em| "*#{em.innerHTML}*"}
+    replace(doc, 'li')     {|li| "- #{li.innerHTML}"}
     replace(doc, 'i')
+    replace(doc, 'ol')
+    replace(doc, 'ul')
     replace(doc, 'abr')
     replace(doc, 'font')
     replace(doc, 'span')
@@ -113,7 +120,7 @@ EOF
     #sanitize newlines
     body.gsub!(/(\n\s*){3,}/, "\n\n")
 
-    HTMLEntities.decode_entities(body).strip
+    dec(body)
   end
   
   def gather_urls doc

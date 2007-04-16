@@ -75,7 +75,7 @@ class TestFeedReader < Test::Unit::TestCase
     assert_equal(2, new_messages.size)
   end
 
-  def test_shopblogger
+  def test_shopblogger_content_encoded
     reader = FeedReader.new(SHOPBLOGGER)
     messages = reader.messages
     new_messages = reader.get_newer_than(nil)
