@@ -20,11 +20,13 @@ spec = Gem::Specification.new do |s|
   s.files	= candidates.delete_if do |item|
   			item.include?(".svn")
 		  end
-  s.add_dependency('log4r', '>= 1.0.5')
-  s.add_dependency('feedtools', '>= 0.2.26')
+
   s.add_dependency('actionmailer', '>= 1.3.2')
-  s.add_dependency('hpricot', '>= 0.5')
+  s.add_dependency('hpricot',      '>= 0.5')
   s.add_dependency('htmlentities', '>= 3.0.1')
+  s.add_dependency('tidy',         '>= 1.1.2')
+  s.add_dependency('simple-rss',   '>= 1.1')
+
   s.has_rdoc	= false
   s.executables	= "rssimap"
 end

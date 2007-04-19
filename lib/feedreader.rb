@@ -23,6 +23,9 @@ class FeedReader
 
   def conv(str)
     Iconv.iconv("UTF-8", @from, str).first
+  rescue Iconv::IllegalSequence => e
+    $log.error "IllegalSequence #{e.message}"
+    return str
   end
 
   def get_newer_than(title)
@@ -34,11 +37,11 @@ class FeedReader
     messages = []
     @feed.entries.each do |item|
 
-      break if equal(HTMLEntities.decode_entities(item.title), title)
+      break if equal(HTMLEntities.decode_entities(conv(item.title)), title)
       messages << Message.new(
         :title => conv(item.title),
         :time => item.published || item.pubDate || item.date_published,
-        :body => conv(item.content_encoded || item.content || item.description),
+        :body => conv(item.content_encoded || item.content || item.summary || item.description),
         :from => conv(item.author),
         :url => conv(item.link))
     end

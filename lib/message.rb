@@ -42,7 +42,7 @@ class Message
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
 Subject: #{quote(@title)}
-From: #{quote((@from || "Unknown") + " <spam@example.org>")}
+From: #{quote((@from || "Unknown <spam@example.org>"))}
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit

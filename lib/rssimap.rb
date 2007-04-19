@@ -1,5 +1,3 @@
-require 'log4r'
-
 require 'lib/server'
 require 'lib/message'
 require 'lib/feedreader'
@@ -37,7 +35,7 @@ class RssImap
           $log.warn "Error retrieving #{url}: #{e.message}"
         rescue Exception => e
           $log.error "Unexpected error while retrieving #{path}: #{e}"
-          $log.debug e.backtrace
+          e.backtrace.each {|line| $log.debug line}
         end
       end
     end
@@ -47,7 +45,7 @@ class RssImap
       thread.join
 
       next if not thread[:reader]
-      messages = thread[:reader].get_newer_than(thread[:last])[0..3]
+      messages = thread[:reader].get_newer_than(thread[:last])[0..9]
       $log.debug "last message was #{thread[:last]}" if messages.size > 0
       $log.debug "#{messages.size} new messages" if messages.size > 0
 
