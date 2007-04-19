@@ -4,7 +4,11 @@ require 'hpricot'
 require 'tidy'
 require 'htmlentities'
 
-Tidy.path = "/usr/lib/libtidy.so"
+begin
+  Tidy.path = "/usr/lib/libtidy.so"
+rescue LoadError
+  
+end
 
 $KCODE="U"
 

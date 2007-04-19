@@ -18,7 +18,7 @@ if opts.create
 elsif opts.check
   $log.info "Checking configuration #{opts.check}"
   RssImapConfig.check(File.open(opts.check))
-elsif require ARGV.first
+elsif ARGV.first && require(ARGV.first)
   configuration = [$host, $user, $pass, $temp, $config]
   if not configuration.all?
     $stderr.print "Your settings are incomplete, please review settings.rb:\n#{configuration.inspect}\n"
