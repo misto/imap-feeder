@@ -4,11 +4,6 @@ require 'hpricot'
 require 'tidy'
 require 'htmlentities'
 
-begin
-  Tidy.path = "/usr/lib/libtidy.so"
-rescue LoadError
-  
-end
 
 $KCODE="U"
 
@@ -64,6 +59,14 @@ EOF
   end
   
   def tidy body
+
+    begin
+      Tidy.path = $tidy_path unless Tidy.path
+    rescue LoadError => e
+      $log.warning "Tidy not available: #{e.message}"
+      return body
+    end
+
     tidy_html = Tidy.open(:show_warnings=>true) do |tidy|
       tidy.options.markup = true
       tidy.options.wrap = 0

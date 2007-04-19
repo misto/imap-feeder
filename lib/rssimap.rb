@@ -34,8 +34,7 @@ class RssImap
         rescue OpenURI::HTTPError => e
           $log.warn "Error retrieving #{url}: #{e.message}"
         rescue Exception => e
-          $log.error "Unexpected error while retrieving #{path}: #{e}"
-          e.backtrace.each {|line| $log.debug line}
+          $log.error "Unexpected error while retrieving #{path}: #{e.message}"
         end
       end
     end
