@@ -52,7 +52,7 @@ class RssImap
         messages.each do |msg|
           send_message(msg, thread[:path])
         end
-        messages_sent(messages.first, thread[:path])
+        message_sent(messages.first, thread[:path])
       end
     end
 
@@ -61,7 +61,7 @@ class RssImap
   
   private
   
-  def messages_sent(message, path)
+  def message_sent(message, path)
     @store.add_new(path, message.title)
     @store.save
   end
