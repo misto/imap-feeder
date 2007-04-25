@@ -42,7 +42,7 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_latest_or_all
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    new_messages = reader.get_newer_than("Mirko Stocker: ")
+    new_messages = reader.get_newer_than(["Mirko Stocker: "])
     
     assert_equal(2, new_messages.size)
     assert_equal("Mirko Stocker: KDE in Heroes!", new_messages.first.title)
@@ -64,7 +64,7 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    new_messages = reader.get_newer_than("Mirko Stocker: KDE in Heroes!")
+    new_messages = reader.get_newer_than(["Mirko Stocker: KDE in Heroes!"])
     assert new_messages.empty?
   end
   

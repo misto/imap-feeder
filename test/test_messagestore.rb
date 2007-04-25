@@ -7,9 +7,9 @@ class TestingMessageStore < MessageStore
   def initialize(file)
     @file = file
     File.open(@file, "w") do |f|
-      YAML.dump({"INBOX.Planets.Planet KDE" => "Boudewijn Rempt (boud): New toy!", 
-                 "INBOX.Planets.Planet Gentoo" => "", 
-                 "INBOX.Blog.Mirko" => ""}, f)
+      YAML.dump({"INBOX.Planets.Planet KDE" => ["Boudewijn Rempt (boud): New toy!"], 
+                 "INBOX.Planets.Planet Gentoo" => [], 
+                 "INBOX.Blog.Mirko" => []}, f)
     end
     super
   end
@@ -33,17 +33,18 @@ class TestMessageStore < Test::Unit::TestCase
 
   def test_get_latest
     title = @store.get_latest "INBOX.Planets.Planet KDE"
-    assert_equal("Boudewijn Rempt (boud): New toy!", title)
+    assert_equal("Boudewijn Rempt (boud): New toy!", title.first)
   end
 
   def test_add_new
-    @store.add_new("INBOX.Planets.Planet KDE", "Mirko Stocker: RssImap")
+    @store.add_new("INBOX.Planets.Planet KDE", ["Erstes", "Zweites"])
     title = @store.get_latest "INBOX.Planets.Planet KDE"
-    assert_equal("Mirko Stocker: RssImap", title)
+    assert_equal("Erstes",  title[0])
+    assert_equal("Zweites", title[1])
   end
   
   def test_store_and_save
-    @store.add_new("INBOX.Planets.Planet KDE", "FAKE")
+    @store.add_new("INBOX.Planets.Planet KDE", ["FAKE"])
     title = @store.get_latest("INBOX.Planets.Planet KDE")
     @store.save
     saved_store = MessageStore.new(FILE_NAME)

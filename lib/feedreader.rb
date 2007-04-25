@@ -13,12 +13,13 @@ class FeedReader
 
   # we only compare some characters to avoid problems 
   # with special chars and different encodings
-  def equal(left, right)
-    if left and right
-      left.gsub(/[^A-Za-z0-9]/, '') == right.gsub(/[^A-Za-z0-9]/, '') 
-    else
-      false
+  def equal(titles, right)
+    if right
+      titles.each do |left|
+        return true if left == right
+      end
     end
+    false
   end
 
   def conv(str)
@@ -37,7 +38,7 @@ class FeedReader
     messages = []
     @feed.entries.each do |item|
 
-      break if equal(HTMLEntities.decode_entities(conv(item.title)), title)
+      break if title and equal(title, HTMLEntities.decode_entities(conv(item.title)))
       messages << Message.new(
         :title => conv(item.title),
         :time => item.published || item.pubDate || item.date_published,

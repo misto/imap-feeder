@@ -1,5 +1,7 @@
 require 'lib/message'
 
+$tidy_path = "/usr/lib/libtidy.so"
+
 class MessageTest < Test::Unit::TestCase
 
   def test_creation

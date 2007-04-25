@@ -12,12 +12,14 @@ class MessageStore
     end
   end
   
-  def add_new(folder, title)
-    @root[folder] = title
+  def add_new(folder, titles)
+    @root[folder] ||= []
+    @root[folder].unshift(titles).flatten!
+    @root[folder] = @root[folder].first(5)
   end
   
   def get_latest(folder)
-    @root[folder] || ""
+    @root[folder] || []
   end
   
   def save

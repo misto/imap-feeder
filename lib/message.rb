@@ -105,6 +105,7 @@ EOF
     replace(doc, 'abr')
     replace(doc, 'font')
     replace(doc, 'span')
+    replace(doc, 'div')
     replace(doc, 'br')     {|br| "\n"}
     replace(doc, 'img')    {|img| img.attributes['alt'] || ""}
     replace(doc, 'abbr')   {|abbr| abbr.innerHTML + (" (#{abbr.attributes['title']})" || "")}
