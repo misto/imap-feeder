@@ -1,16 +1,30 @@
-$log = Log4r::Logger.new 'rssimap'
-
 #
-# The outputter to be used for logging. Take a look at 
-# http://log4r.sourceforge.net/rdoc/files/log4r/outputter/outputter_rb.html
-# for more configuration options.
+# Configuration for the logger (from `ri Logger.new`):
 #
-$log.outputters = Log4r::Outputter.stdout
+#------------------------------------------------------------ Logger::new
+#     Logger::new(logdev, shift_age = 0, shift_size = 1048576)
+#------------------------------------------------------------------------
+#     Synopsis
+#       Logger.new(name, shift_age = 7, shift_size = 1048576)
+#       Logger.new(name, shift_age = 'weekly')
+#
+#     Args
+#     +logdev+:     The log device. This is a filename (String) or IO
+#                   object (typically +STDOUT+, +STDERR+, or an open
+#                   file).
+#
+#     +shift_age+:  Number of old log files to keep, *or* frequency of
+#                   rotation (+daily+, +weekly+ or +monthly+).
+#
+#     +shift_size+: Maximum logfile size (only applies when +shift_age+
+#                   is a number).
+#
+$log = Logger.new "/tmp/rssimap_log.txt", 10
 
 #
 # The level can be set to: DEBUG < INFO < WARN < ERROR < FATAL
 # 
-$log.level = Log4r::INFO
+$log.level = Logger::DEBUG
 
 #
 # IMAP connection settings. You shouldn't use an existing account 
@@ -24,9 +38,15 @@ $pass = ""
 # RssImap needs a file to store the last message for each feed 
 # so it doesn't fetch old entries. Where should that file be?
 #
-$temp = "processed_feeds.yaml"
+$temp = "/home/misto/rssimap/processed_feeds.yaml"
 
 #
 # The configuration file that was generated using rssimapconfig.rb
 #
-$config = "feeds.yml"
+$config = "/home/misto/rssimap/feeds.yml"
+
+#
+# We use html-tidy to improve the structure of the feed
+#
+$tidy_path = "/usr/lib/libtidy.so"
+
