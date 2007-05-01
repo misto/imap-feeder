@@ -10,7 +10,7 @@ require 'lib/rssimapconfig'
 opts = CreateConfigParser.parse(ARGV)
  
 $log = Logger.new(STDOUT)
-$log.level = Logger::INFO
+$log.level = Logger::DEBUG
 
 if opts.create
   $log.info "Creating new configuration from #{opts.create}"
