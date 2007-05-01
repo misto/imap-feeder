@@ -4,7 +4,6 @@ require 'hpricot'
 require 'tidy'
 require 'htmlentities'
 
-
 $KCODE="U"
 
 class Message
@@ -26,22 +25,14 @@ class Message
   # Quote characters in the string using ActionMailer's quote_if_necessary.
   #
   def quote(str)
-    all_ascii = -1
-    str.split("").each do |char|
-      if(char[0].to_i > 31 && char[0].to_i < 127)
-        all_ascii += 1
-      else
-        break
-      end
-    end
-    (all_ascii > -1 ? str[0..all_ascii] : "")  + quote_if_necessary(str[all_ascii + 1..-1], "UTF-8")
+    str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|match| quote_if_necessary(match, "UTF-8")}
   end
   
   def format
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
 Subject: #{quote(@title)}
-From: #{quote((@from || "Unknown <spam@example.org>"))}
+From: #{quote(@from || "Unknown <spam@example.org>")}
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit

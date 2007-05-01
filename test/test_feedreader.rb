@@ -59,7 +59,7 @@ class TestFeedReader < Test::Unit::TestCase
   def test_no_body
     messages = FeedReader.new(RSS20_NO_BODY).get_newer_than ""
     assert_equal(1, messages.size)
-    assert_equal("http://blog.misto.ch/archives/324", messages.first.body)
+    assert_equal("", messages.first.body)
   end
   
   def test_get_nothing
