@@ -1,21 +1,23 @@
-= Rssimap, feeds for your mailbox
+= rss-imap, feeds for your mailbox
 
-Rssimap is a script that checks your favorite RSS and Atom feeds and stores the items as emails to your IMAP server, so you can read it with your favorite mail reader or webmail.
+rss-imap is a program that checks your favorite RSS and Atom feeds and stores the new items as emails in your IMAP server, so you can read it with your favorite mail reader or a webmail client.
 
 == Prerequisites
 
-To use this software, you'll need a server to run the script in a certain interval and a compatible IMAP account.
+To use this software, you'll need a system to run the script in a certain interval and a compatible IMAP account.
 
 === Dependencies
 
 The following gems need to be installed on your system:
--
--
--
+- actionmailer
+- hpricot
+- htmlentities
+- tidy
+- simple-rss
 
 === Compatible IMAP Servers
 
-I use rssimap with Courier-IMAP. Others IMAP servers should work too, but I haven't tested them. If you can run it successfully with another server, please drop me a note so I can update this README.
+I use rssimap with Courier-IMAP. Others IMAP servers should work as well, but I haven't tested them. If you can run it successfully with another server, please drop me a note so I can update this README.
 
 == Installing Rssimap
 
@@ -23,10 +25,16 @@ You may get the latest stable version from Rubyforge:
 
   $ gem install rssimap
 
-After that, you should have the gem installed and you can copy the settings.rb.example file to a place from where you want to run the script. We'll need a configuration file, one to hold a list of all your feed's urls and a temporary file to hold state information about the feeds.
+After that, you should have the gem installed and you can copy the settings.rb.example file to a place from where you want to run the script. We'll need a configuration file, one to hold a list of all your feed's urls and a temporary file to hold state information about the feeds. Personally, I have an rssimap folder in my home directory that holds all these files.
 
-Please edit the settings file accordingly.
+Please edit the settings file now accordingly to the instructions in it.
 
-Next we need a list of all the urls you want rssimap to fetch. Run rssimap -c to create an empty file or with the name of an OPML file as argument from which we extract all URLs. You might want to edit the file afterwards to rename the folders.
+Next we need a list of all the urls you want rssimap to check. Run rssimap -c to create an empty file or with the name of an OPML file. You might want to edit the file afterwards to rename the folders. For example, this creates the "feeds.yaml" file with all the feeds from "feeds.opml" and uses the "feeds" folder in your inbox.
 
-After that, we can run rssimap with the settings.rb file as argument. I recommend to use an absolute path to avoid troubles. If everything works, the script should generate some folders on your IMAP server and fetch the first round of feed items. If you are happy with the results, you can run the script regularly with cron, for example.
+  $ rssimap -c feeds.opml -o feeds.yaml -r feeds
+
+After that, we can run rssimap with the settings.rb file as argument. 
+
+I recommend to use absolute paths to avoid troubles. If everything works, the script should generate some folders on your IMAP server and fetch the first round of feed items. If you are happy with the results, you can run the script regularly with cron, for example.
+
+Thank you for using rss-imap and don't forget to drop me an email if you have feature requests or bugs to report.
