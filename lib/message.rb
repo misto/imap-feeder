@@ -25,7 +25,7 @@ class Message
   # Quote characters in the string using ActionMailer's quote_if_necessary.
   #
   def quote(str)
-    str.gsub(/[^a-zA-Z0-9 -_:,\.\+]+/) {|match| quote_if_necessary(match, "UTF-8")}
+    str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|match| quote_if_necessary(match, "UTF-8")}
   end
   
   def format
