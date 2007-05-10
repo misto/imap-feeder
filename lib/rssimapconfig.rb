@@ -8,7 +8,11 @@ require 'lib/opmlreader'
 
 class RssImapConfig
   def self.create(opml_file, output)
-    items = process(OpmlReader.get(opml_file), "INBOX").flatten
+    if opml_file
+      items = process(OpmlReader.get(File.open(opml_file)), "INBOX").flatten
+    else
+      items = [{"feed" => {"url" => "http://..", "path" => "INBOX.feed"}}]
+    end
     YAML.dump(items, output)
   end
 

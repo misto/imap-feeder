@@ -9,12 +9,12 @@ require 'lib/rssimapconfig'
 
 opts = CreateConfigParser.parse(ARGV)
  
-$log = Logger.new(STDOUT)
+$log = Logger.new($stdout)
 $log.level = Logger::DEBUG
 
 if opts.create
-  $log.info "Creating new configuration from #{opts.create}"
-  RssImapConfig.create(File.open(opts.create), opts.out ? File.open(opts.out, "w") : $stdout)
+  $log.info "Creating new configuration"
+  RssImapConfig.create(opts.create_file, opts.out ? File.open(opts.out, "w") : $stdout)
 elsif opts.check
   $log.info "Checking configuration #{opts.check}"
   RssImapConfig.check(File.open(opts.check))
