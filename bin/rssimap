@@ -14,7 +14,7 @@ $log.level = Logger::DEBUG
 
 if opts.create
   $log.info "Creating new configuration"
-  RssImapConfig.create(opts.create_file, opts.out ? File.open(opts.out, "w") : $stdout)
+  RssImapConfig.create(opts.create_file, opts.out ? File.open(opts.out, "w") : $stdout, opts.folder)
 elsif opts.check
   $log.info "Checking configuration #{opts.check}"
   RssImapConfig.check(File.open(opts.check))

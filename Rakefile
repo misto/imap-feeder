@@ -9,7 +9,7 @@ file "pkg/rssimap-#{version}.gem" => [:prepare_gem]
 task :default => ["gem"]
 
 spec = Gem::Specification.new do |s|
-  s.name	= "RssImap"
+  s.name	= "rss-imap"
   s.version	= version
   s.author	= "Mirko Stocker"
   s.email	= "me@misto.ch"
