@@ -15,10 +15,13 @@ EOF
         options.check = file
       end  
   
-      opts.on("-n", "--new-config [OPML_FILE] [ROOT_FOLDER]", "Create a new configuration") do |file, folder|
+      opts.on("-r", "--imap-root [FOLDER]", "use this as the root folder for all feeds") do |folder|
+        options.folder = folder
+      end
+  
+      opts.on("-n", "--new-config [OPML_FILE]", "Create a new configuration") do |file|
         options.create = true
         options.create_file = file
-        options.folder = folder || "INBOX"
       end
   
       opts.on("-o", "--output [CONFIG_FILE]", "The location of the generated file") do |file|

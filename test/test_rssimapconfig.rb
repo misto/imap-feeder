@@ -11,9 +11,17 @@ class RssImapConfigTest < Test::Unit::TestCase
     $log = TestLogger.new
   end
   
+  def test_create_with_root
+    output = ""
+    RssImapConfig.create(OPML_FILE, output, "root")
+    result = YAML.load(output)
+
+    assert_equal("root.Planets.Planet KDE", result.first['feed']['path'])
+  end
+  
   def test_create
     output = ""
-    RssImapConfig.create(File.open(OPML_FILE), output)
+    RssImapConfig.create(OPML_FILE, output, "INBOX")
     result = YAML.load(output)
 
     assert_equal("http://planetkde.org/rss20.xml", result.first['feed']['url'])

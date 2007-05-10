@@ -8,10 +8,13 @@ require 'lib/opmlreader'
 
 class RssImapConfig
   def self.create(opml_file, output, root_folder)
+
+    root_folder = root_folder ? "INBOX.#{root_folder}" : "INBOX"
+
     if opml_file
-      items = process(OpmlReader.get(File.open(opml_file)), root_folder).flatten
+      items = process(OpmlReader.get(File.open(opml_file)), "#{root_folder}").flatten
     else
-      items = [{"feed" => {"url" => "http://..", "path" => "INBOX.feed"}}]
+      items = [{"feed" => {"url" => "http://blog.misto.ch/feed/", "path" => "#{root_folder}.feed"}}]
     end
     YAML.dump(items, output)
   end
@@ -46,7 +49,7 @@ class RssImapConfig
       uri.path = "/" if uri.path.empty?
       
       response = Net::HTTP.new(uri.host, uri.port).head(uri.path, nil)
-      if response.code =~ /^[45]\d/
+      if response.code =~ /^[^3]\d/
         $log.warn "Problem connecting to #{url}: #{response.message}"
       end
     rescue Exception => e
