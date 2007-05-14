@@ -27,7 +27,7 @@ spec = Gem::Specification.new do |s|
   s.add_dependency('tidy',         '>= 1.1.2')
   s.add_dependency('simple-rss',   '>= 1.1')
 
-  s.has_rdoc	= false
+  s.has_rdoc = true
   s.executables	= "rssimap"
 end
 
