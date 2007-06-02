@@ -49,4 +49,3 @@ $config = "/home/misto/rssimap/feeds.yml"
 # We use html-tidy to improve the structure of the feed
 #
 $tidy_path = "/usr/lib/libtidy.so"
-

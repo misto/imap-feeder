@@ -27,7 +27,7 @@ class TestFeedReader < Test::Unit::TestCase
     assert_equal("24 \303\274nd Alias", messages[0].body)
     
     assert_equal(Time.parse("Monday 12 February 2007 17:09"), messages[1].time)
-    assert_equal("Thomas Marti: Highlights 2006 (TV)", messages[1].title)
+    assert_equal("Thomas Marti: Highlights 2006 (TV) und C++!", messages[1].title)
     assert_equal("Empty", messages[1].body)
   end
   
@@ -46,7 +46,7 @@ class TestFeedReader < Test::Unit::TestCase
     
     assert_equal(2, new_messages.size)
     assert_equal("Mirko Stocker: KDE in Heroes!", new_messages.first.title)
-    assert_equal("Thomas Marti: Highlights 2006 (TV)", new_messages[1].title)
+    assert_equal("Thomas Marti: Highlights 2006 (TV) und C++!", new_messages[1].title)
   end
   
   def test_get_authors

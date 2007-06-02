@@ -8,7 +8,7 @@ require 'lib/createconfigparser'
 require 'lib/rssimapconfig'
 
 opts = CreateConfigParser.parse(ARGV)
- 
+
 $log = Logger.new($stdout)
 $log.level = Logger::DEBUG
 

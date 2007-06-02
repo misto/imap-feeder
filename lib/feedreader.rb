@@ -5,6 +5,12 @@ require 'iconv'
 
 $KCODE="U"
 
+class SimpleRSS
+  def unescape content
+    content.gsub(/(<!\[CDATA\[|\]\]>)/,'').strip
+  end
+end
+
 class FeedReader
   attr_reader :messages
   def initialize(feed_url)
