@@ -1,8 +1,8 @@
-= rssimap, feed your mailbox!
+= rssimap, don't ley your mailbox starve!
 
-Rssimap checks your favorite RSS and Atom feeds and stores new objects
-on your IMAP server, so you can read it with your favorite mail reader
-or a webmail client.
+Rssimap checks your favorite RSS and Atom feeds and stores new objects/messages/posts/ (?)
+on your IMAP server, so you can read it with your favourite mail reader
+or even a webmail client.
 
 == Prerequisites
 
@@ -32,27 +32,29 @@ You may get the latest stable version from Rubyforge:
 
 After that, you should have the gem installed and you can copy the
 settings.rb.example file from the installation directory to the place from
-where you want to run the script. We'll need a configuration file, another
-one to hold a list of all your feed's urls and a temporary file to hold
-state information about the feeds. Personally, I use a folder in my home
-directory that holds all these files.
+where you want to run the script. You'll need a configuration file, another
+one to contain a list of all your feed's urls and a temporary file to hold
+state information about the processed feeds.
 
 Please edit the settings file accordingly to the instructions in it.
 
 Next we need a list of all the urls you want rssimap to check. Run
-rssimap -c to create an empty file or with the name of an OPML file.  For
-example, this creates the "feeds.yaml" file with all the feeds from
+rssimap -c to create an empty file or with the name of an OPML file as argument. 
+For example, this creates the "feeds.yaml" file with all the feeds from
 "feeds.opml" and uses the "feeds" folder in your inbox to store them all.
 
-  $ rssimap -c feeds.opml -o feeds.yaml -r feeds
+  $ rssimap -n feeds.opml -o feeds.yaml -r feeds
 
-You might want to edit the file afterwards to rename the folders. After that,
-we can run rssimap with the settings.rb file as argument.
+You might want to edit the file afterwards to rename the folders. You can run
+rssimap -c feeds.yaml to verify the configuration. After that,we can run
+rssimap with the settings.rb file as argument.
+
+  $ rssimap /home/misto/rssimap/settings.rb
 
 I recommend to use absolute paths to avoid troubles. If everything works,
 the script should generate some folders on your IMAP server and fetch the
 first round of feeds. If you are happy with the results, you can run the
-script regularly. For example using cron.
+script regularly, for example using cron.
 
 Thank you for using rss-imap and don't forget to drop me an email if you
 have feature requests or bugs to report.
