@@ -16,7 +16,7 @@ IMAP_CHARS = "\\w:,\\-= "
 class OpmlReader
 
   #
-  # Entry point for the parsing process. Takes the filecontent as a string.
+  # Entry point for the parsing process. Takes the filecontent as a string and returns the root element.
   #
   def self.get(file)
     opml = REXML::Document.new(file)

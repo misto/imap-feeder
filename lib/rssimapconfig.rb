@@ -47,7 +47,7 @@ class RssImapConfig
     begin
       uri = URI.parse url
       uri.path = "/" if uri.path.empty?
-      
+
       response = Net::HTTP.new(uri.host, uri.port).head(uri.path, nil)
       if response.code =~ /^[^3]\d/
         $log.warn "Problem connecting to #{url}: #{response.message}"

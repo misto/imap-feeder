@@ -13,7 +13,7 @@ class RssImap
   end
 
   def run
-    $log.info "Starting #{Time.now.strftime "%Y.%m.%d %H:%M"}"
+    log_time_with_message "Started"
     feeds = YAML.load(@config)
 
     feeds.each do |feed|
@@ -56,10 +56,16 @@ class RssImap
       end
     end
 
-    $log.info "Finished #{Time.now.strftime "%Y.%m.%d %H:%M"}"
+    log_time_with_message "Finished"
   end
-  
+
+
   private
+
+  def log_time_with_message message
+    $log.info "#{message} #{Time.now.strftime "%Y.%m.%d %H:%M"}"
+  end
+
   
   def message_sent(messages, path)
     @store.add_new(path, messages.first(5).collect{|msg| msg.title })
