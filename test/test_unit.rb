@@ -1,5 +1,3 @@
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), ".."))
-
 require 'test/unit'
 
 require 'test/test_message'
