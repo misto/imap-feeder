@@ -16,10 +16,7 @@ spec = Gem::Specification.new do |s|
   s.homepage	= ""
   s.platform	= Gem::Platform::RUBY
   s.summary	= "RssImap publishes your favorite feeds to an IMAP server."
-  candidates	= Dir.glob("{test,lib}/**/*") + ["README", "COPYING", "settings.rb.example"]
-  s.files	= candidates.delete_if do |item|
-    item.include?(".svn")
-  end
+  s.files	= Dir.glob("{test,lib}/**/*") + ["README", "COPYING", "settings.rb.example"]
 
   s.add_dependency('actionmailer', '>= 1.3.2')
   s.add_dependency('hpricot',      '>= 0.5')
