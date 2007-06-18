@@ -45,8 +45,8 @@ class RssImap
 
       next if not thread[:reader]
       messages = thread[:reader].get_newer_than(thread[:last]).first(10)
-      $log.debug "last message was #{thread[:last].join("\n")}" if not messages.empty?
-      $log.debug "#{messages.size} new messages" if not messages.empty?
+      $log.info "last message was #{thread[:last].join("\n")}" if not messages.empty?
+      $log.info "#{messages.size} new messages" if not messages.empty?
 
       if not messages.empty?
         messages.each do |msg|
@@ -55,8 +55,9 @@ class RssImap
         message_sent(messages, thread[:path])
       end
     end
-
     log_time_with_message "Finished"
+  ensure
+    @store.save
   end
 
 
@@ -69,7 +70,7 @@ class RssImap
   
   def message_sent(messages, path)
     @store.add_new(path, messages.first(5).collect{|msg| msg.title })
-    @store.save
+    #@store.save
   end
   
   def send_message msg, complete_path

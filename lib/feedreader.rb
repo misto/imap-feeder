@@ -31,7 +31,7 @@ class FeedReader
   def conv(str)
     Iconv.iconv("UTF-8", @from, str).first
   rescue Iconv::IllegalSequence => e
-    $log.error "IllegalSequence #{e.message}"
+    $log.error "IConv reports an IllegalSequence: #{e.message} from 'str'"
     return str
   end
 
@@ -39,8 +39,11 @@ class FeedReader
     return [] if not @feed
 
     match = @feed.source.match(/encoding="(.*?)"/)
-    @from = (match && match[1]) || "UTF-8"
-
+    @from = (match && match[1]) 
+    if not @from
+      $log.warning "No encoding found for #{@feed.url}, defaulting to UTF-8."
+      @from = "UTF-8"
+    end
     messages = []
     @feed.entries.each do |item|
 
