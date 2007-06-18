@@ -14,6 +14,7 @@ end
 class FeedReader
   attr_reader :messages
   def initialize(feed_url)
+    @feed_url = feed_url
     @feed = SimpleRSS.parse(open(feed_url))
   end
 
@@ -38,10 +39,10 @@ class FeedReader
   def get_newer_than(title)
     return [] if not @feed
 
-    match = @feed.source.match(/encoding="(.*?)"/)
+    match = @feed.source.match(/encoding=["'](.*?)["']/)
     @from = (match && match[1]) 
     if not @from
-      $log.warning "No encoding found for #{@feed.url}, defaulting to UTF-8."
+      $log.warn"No encoding found for #{@feed_url}, defaulting to UTF-8."
       @from = "UTF-8"
     end
     messages = []

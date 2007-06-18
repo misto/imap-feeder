@@ -27,7 +27,7 @@ class Message
   def quote(str)
     str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|match| quote_if_necessary(match, "UTF-8")}
   end
-  
+
   def format
     return <<-EOF
 Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
@@ -40,15 +40,15 @@ Content-Transfer-Encoding: 8bit
 #{@body}#{"\n\n" + @url if @url}
 EOF
   end
-  
+
   private
-  
+
   def replace(doc, element)
     doc.search(element) do |found|
       found.swap( block_given? ? yield(found) : found.innerHTML)
     end
   end
-  
+
   def tidy body
 
     begin
