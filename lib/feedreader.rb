@@ -39,6 +39,10 @@ class FeedReader
 
   def get_newer_than(title)
     return [] if not @feed
+    if title =~ /\s*/
+      $log.warn "WARNING! title is empty, that should never happen! Aborting this feed.."
+      return []
+    end
 
     match = @feed.source.match(/encoding=["'](.*?)["']/)
     @from = (match && match[1]) 
