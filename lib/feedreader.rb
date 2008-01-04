@@ -1,3 +1,4 @@
+require 'tempfile'
 require 'open-uri'
 require 'simple-rss'
 require 'htmlentities'
