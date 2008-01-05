@@ -24,7 +24,7 @@ elsif ARGV.first && require(ARGV.first)
     $stderr.print "Your settings are incomplete, please review settings.rb:\n#{configuration.inspect}\n"
     exit 1
   end
-  server = Server.new :host => $host, :user => $user, :pass => $pass
+  server = Server.new(:host => $host, :user => $user, :pass => $pass, :port => $port || "143", :use_ssl => $use_ssl || false)
   store = MessageStore.new($temp)
   config = File.open($config)
   RssImap.new(server, store, config).run

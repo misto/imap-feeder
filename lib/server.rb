@@ -9,10 +9,10 @@ class Server
   attr_reader :connected
 
   def initialize(params)
-    @connected = false   
-    @connection = Net::IMAP.new params[:host] 
-    result = @connection.authenticate('LOGIN', params[:user], params[:pass])
-  rescue SocketError 
+    @connected = false
+    @connection = Net::IMAP.new(params[:host], params[:port], params[:use_ssl])
+    result = @connection.login(params[:user], params[:pass])
+  rescue SocketError
     throw :host_not_found
   rescue Net::IMAP::NoResponseError
     disconnect
@@ -20,16 +20,16 @@ class Server
   else
     @connected = result.name == "OK"
   end
-  
+
   def disconnect
     @connection.disconnect if @connection
   end
-  
+
   def send(message, folder = "INBOX")
     @connection.select folder
     @connection.append(folder, message.format.gsub(/\n/, "\r\n"), nil, Time.now)
   end
-  
+
   def retrieve(title, folder = "INBOX")
     @connection.examine folder
     found = @connection.search(["SUBJECT", title]).first || return
@@ -39,7 +39,7 @@ class Server
 
     Message.new(:title => base64decode(retr_title), :id => found)
   end
-  
+
   def base64decode subject
     if subject =~ /^=\?utf-8\?b\?(.*?)$/
       Base64.decode64($1)
@@ -48,19 +48,19 @@ class Server
     end
   end
   private :base64decode
-  
+
   def has?(title, folder)
     retrieve(title, folder) != nil
-  end  
-  
+  end
+
   def has_folder?(folder)
     @connection.examine(folder)
   rescue Net::IMAP::NoResponseError
     false
-  else 
+  else
     true
   end
-  
+
   def create_folder(folder)
     folder.split(/\./).inject("") do |last, cur|
       path = last + cur
@@ -70,7 +70,7 @@ class Server
   rescue Net::IMAP::NoResponseError
     throw :cannot_create
   end
-  
+
   def delete_folder(folder)
     #Switch to root so we can delete the folder
     @connection.examine("INBOX")
@@ -78,7 +78,7 @@ class Server
   rescue Net::IMAP::NoResponseError
     throw :cannot_delete
   end
-  
+
   def delete(message, folder = "INBOX")
     @connection.select(folder)
     @connection.store(message.id, "+FLAGS", [:Deleted])
