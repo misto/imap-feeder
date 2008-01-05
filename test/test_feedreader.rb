@@ -12,7 +12,7 @@ class TestFeedReader < Test::Unit::TestCase
   SHOPBLOGGER        = "#{File.dirname(__FILE__)}/data/shopblogger.rss"
  
   def test_reading_first_feed
-    messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than ""
+    messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than []
     assert_equal(1, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages.first.time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages.first.title)
@@ -20,7 +20,7 @@ class TestFeedReader < Test::Unit::TestCase
   end  
   
   def test_reading_second_feed
-    messages = FeedReader.new(RSS20_TWO_ENTRIES).get_newer_than ""
+    messages = FeedReader.new(RSS20_TWO_ENTRIES).get_newer_than []
     assert_equal(2, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages[0].time)
     assert_equal("Mirko Stocker: KDE in Heroes!", messages[0].title)
@@ -33,7 +33,8 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_latest
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    messages = reader.get_newer_than ""
+    messages = reader.get_newer_than []
+    p messages.last.title
     new_messages = reader.get_newer_than(messages.last.title)
     
     assert_equal(1, new_messages.size)
@@ -50,14 +51,14 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_authors
-    messages = FeedReader.new(RSS20_WITH_AUTHORS).get_newer_than ""
+    messages = FeedReader.new(RSS20_WITH_AUTHORS).get_newer_than []
     assert_equal(2, messages.size)
     assert_equal("PeterSommerlad", messages.first.from)
     assert_equal("MirkoStocker", messages.last.from)
   end  
   
   def test_no_body
-    messages = FeedReader.new(RSS20_NO_BODY).get_newer_than ""
+    messages = FeedReader.new(RSS20_NO_BODY).get_newer_than []
     assert_equal(1, messages.size)
     assert_equal("", messages.first.body)
   end
