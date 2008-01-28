@@ -6,6 +6,7 @@ require 'rubygems'
 require 'lib/rssimap'
 require 'lib/createconfigparser'
 require 'lib/rssimapconfig'
+require 'lib/fakeserver.rb'
 
 opts = CreateConfigParser.parse(ARGV)
 
@@ -24,9 +25,20 @@ elsif ARGV.first && require(ARGV.first)
     $stderr.print "Your settings are incomplete, please review settings.rb:\n#{configuration.inspect}\n"
     exit 1
   end
-  server = Server.new(:host => $host, :user => $user, :pass => $pass, :port => $port || "143", :use_ssl => $use_ssl || false)
+
   store = MessageStore.new($temp)
+
+  server_options = {:host => $host, :user => $user, :pass => $pass, :port => $port || "143", :use_ssl => $use_ssl || false}
+
+  if opts.pretend
+    @server = FakeServer.new server_options
+    def store.save() end
+    $log = Logger.new STDOUT
+  else
+    @server = Server.new server_options
+  end
+
   config = File.open($config)
-  RssImap.new(server, store, config).run
+  RssImap.new(@server, store, config).run
 end
 

@@ -48,7 +48,7 @@ class FeedReader
       end
 
       if already_processed
-        $log.warn "Already have #{item}, aborting this feed."
+        $log.warn "Already have #{item.title}, aborting this feed."
       end
 
       break if already_processed

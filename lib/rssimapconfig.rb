@@ -50,7 +50,7 @@ class RssImapConfig
 
       response = Net::HTTP.new(uri.host, uri.port).head(uri.path, nil)
       if response.code =~ /^[^2]\d/
-        $log.warn "Problem connecting to #{url}: #{response.message}"
+        $log.warn "Problem connecting to #{url}: #{response.message}, code: #{response.code}"
       end
     rescue Exception => e
       $log.warn "Exception while connecting to #{url}: #{e}."

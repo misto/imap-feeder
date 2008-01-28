@@ -27,6 +27,10 @@ EOF
       opts.on("-o", "--output [CONFIG_FILE]", "The location of the generated file") do |file|
         options.out = file
       end
+  
+      opts.on("-p", "--pretend", "Don't do anything, just pretend. Prints new items to the console.") do |pretend|
+        options.pretend = pretend
+      end
     end
     opts.parse!(args)
     
