@@ -34,7 +34,6 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_latest
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
     messages = reader.get_newer_than []
-    p messages.last.title
     new_messages = reader.get_newer_than(messages.last.title)
     
     assert_equal(1, new_messages.size)
