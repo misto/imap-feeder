@@ -19,8 +19,6 @@ class FeedReader
     @feed = SimpleRSS.parse(open(feed_url))
   end
 
-  # we only compare some characters to avoid problems 
-  # with special chars and different encodings
   def equal(titles, right)
     if right
       titles.each do |left|
@@ -39,21 +37,24 @@ class FeedReader
 
   def get_newer_than(title)
     return [] if not @feed
-    if title =~ /^\s*$/
+    if title == ""
       $log.warn "WARNING! title is empty, that should never happen! Aborting this feed.."
       return []
     end
 
     match = @feed.source.match(/encoding=["'](.*?)["']/)
-    @from = (match && match[1]) 
+    @from = (match && match[1])
     if not @from
-      $log.warn"No encoding found for #{@feed_url}, defaulting to UTF-8."
+      $log.warn "No encoding found for #{@feed_url}, defaulting to UTF-8."
       @from = "UTF-8"
     end
     messages = []
     @feed.entries.each do |item|
+      if title == HTMLEntities.decode_entities(conv(item.title))
+        $log.warn "Already have #{title}."
+        break
+      end
 
-      break if title and equal(title, HTMLEntities.decode_entities(conv(item.title)))
       messages << Message.new(
         :title => conv(item.title),
         :time => item.published || item.pubDate || item.date_published,
