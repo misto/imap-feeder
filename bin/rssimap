@@ -40,5 +40,7 @@ elsif ARGV.first && require(ARGV.first)
 
   config = File.open($config)
   RssImap.new(@server, store, config).run
+else
+  puts "No options given, maybe you need --help?"
 end
 

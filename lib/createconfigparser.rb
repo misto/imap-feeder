@@ -15,7 +15,7 @@ EOF
         options.check = file
       end  
   
-      opts.on("-r", "--imap-root [FOLDER]", "use this as the root folder for all feeds") do |folder|
+      opts.on("-r", "--imap-root [FOLDER]", "Use this as the root folder for all feeds") do |folder|
         options.folder = folder
       end
   

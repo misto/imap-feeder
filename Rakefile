@@ -2,6 +2,7 @@ require 'rubygems'
 Gem::manage_gems
 require 'rake/gempackagetask'
 require 'rake/testtask'
+require 'rake/rdoctask'
 
 version="0.1.0"
 
@@ -37,3 +38,14 @@ Rake::TestTask.new do |t|
   t.test_files = FileList['test/test_unit.rb']
   t.verbose = true
 end
+
+Rake::RDocTask.new("rdoc") { |rdoc|
+  rdoc.rdoc_dir = 'doc'
+  rdoc.title    = spec.name
+  rdoc.options << '--line-numbers' << '--inline-source' <<
+    '--main' << 'README' <<
+    '--title' <<  spec.name 
+  rdoc.rdoc_files.include('README')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+}
+

@@ -1,7 +1,7 @@
-= rssimap, don't ley your mailbox starve!
+= rssimap, don't let your mailbox starve!
 
 Rssimap checks your favorite RSS and Atom feeds and stores new objects/messages/posts/ (?)
-on your IMAP server, so you can read it with your favourite mail reader
+on your IMAP server, so you can read it with your favorite mail reader
 or even a webmail client.
 
 == Prerequisites
@@ -24,7 +24,7 @@ I use rssimap with Courier-IMAP and Dovecot. Other IMAP servers should work as w
 but I haven't tested them. If you can run it successfully with another
 server, please drop me a note so I can update this README.
 
-== Installing rss-imap
+== Installing rssimap
 
 You may get the latest stable version from Rubyforge:
 
