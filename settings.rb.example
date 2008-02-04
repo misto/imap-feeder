@@ -23,11 +23,11 @@ $log = Logger.new "/tmp/rssimap_log.txt", 10
 
 #
 # The level can be set to: DEBUG < INFO < WARN < ERROR < FATAL
-# 
+#
 $log.level = Logger::DEBUG
 
 #
-# IMAP connection settings. You shouldn't use an existing account 
+# IMAP connection settings. You shouldn't use an important account
 # because the script might overwrite existing emails.
 #
 $host = ""
@@ -42,7 +42,7 @@ $pass = ""
 #$use_ssl = true
 
 #
-# RssImap needs a file to store the last message for each feed 
+# RssImap needs a file to store the last message for each feed
 # so it doesn't fetch old entries. Where should that file be?
 #
 $temp = "/home/misto/rssimap/processed_feeds.yaml"
