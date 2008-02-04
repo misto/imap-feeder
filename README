@@ -1,6 +1,6 @@
-= rssimap
+= RssImap
 
-Rssimap checks your favorite RSS and Atom feeds and stores new objects/messages/posts/ (?)
+RssImap checks your favorite RSS and Atom feeds and stores new objects/messages/posts/ (?)
 on your IMAP server, so you can read it with your favorite mail reader
 or even a webmail client.
 
