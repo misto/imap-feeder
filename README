@@ -1,4 +1,4 @@
-= rssimap, don't let your mailbox starve!
+= rssimap
 
 Rssimap checks your favorite RSS and Atom feeds and stores new objects/messages/posts/ (?)
 on your IMAP server, so you can read it with your favorite mail reader
@@ -42,7 +42,9 @@ Next we need a list of all the urls you want rssimap to check. Run
 rssimap -n to create an empty file or with the name of an OPML file as argument.
 For example, this creates the "feeds.yaml" file with all the feeds from
 "feeds.opml" and uses the "feeds" folder as root in your inbox to store them
-all. Each feed will get its own folder under "feeds".
+all. Each feed will get its own folder under "feeds". (If you just want to
+evaluate rssimap I'd recommend to operate it on a dedicated mailbox, so you can
+easily get rid of it afterwards.)
 
   $ rssimap -n feeds.opml -o feeds.yaml -r feeds
 
