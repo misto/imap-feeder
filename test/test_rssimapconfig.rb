@@ -40,7 +40,7 @@ class RssImapConfigTest < Test::Unit::TestCase
 
     assert_equal("Invalid character found in 'INBOX.Planets.Planet KDE's': '", $log.error_msg.first)
     assert_equal("Exception while connecting to http://misto.chh: getaddrinfo: Name or service not known.", $log.warn_msg.first)
-    assert_equal("Problem connecting to http://misto.ch/invalid.html: Not Found", $log.warn_msg.last)
+    assert_equal("Problem connecting to http://misto.ch/invalid.html: Not Found, code: 404", $log.warn_msg.last)
   end
   
 end
