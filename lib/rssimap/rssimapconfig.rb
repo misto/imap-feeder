@@ -4,7 +4,7 @@ require 'yaml'
 require 'uri'
 require 'net/http'
 
-require 'lib/opmlreader'
+require 'rssimap/opmlreader'
 
 class RssImapConfig
   def self.create(opml_file, output, root_folder)

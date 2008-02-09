@@ -1,4 +1,4 @@
-require 'lib/rssimapconfig'
+require 'rssimap/rssimapconfig'
 require 'test/testlogger'
 
 

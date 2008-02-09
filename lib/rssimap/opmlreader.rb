@@ -2,7 +2,7 @@ require 'rexml/document'
 require 'rexml/parsers/sax2parser'
 require 'rexml/sax2listener'
 
-require 'lib/feedfolder'
+require 'rssimap/feedfolder'
 
 #
 # Defines the characters that cannot be used as part of an IMAP Folder

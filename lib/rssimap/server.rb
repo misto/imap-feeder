@@ -1,6 +1,6 @@
 require 'base64'
 require 'net/imap'
-require 'lib/message'
+require 'rssimap/message'
 
 $KCODE="U"
 

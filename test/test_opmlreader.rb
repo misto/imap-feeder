@@ -1,4 +1,4 @@
-require 'lib/opmlreader'
+require 'rssimap/opmlreader'
 
 class OpmlReaderTest < Test::Unit::TestCase
   

@@ -1,7 +1,7 @@
-require 'lib/server'
-require 'lib/message'
-require 'lib/feedreader'
-require 'lib/messagestore'
+require 'rssimap/server'
+require 'rssimap/message'
+require 'rssimap/feedreader'
+require 'rssimap/messagestore'
 
 $KCODE="U"
 

@@ -1,7 +1,5 @@
-require 'lib/feedreader'
-require 'lib/message'
-
-#$KCODE="U"
+require 'rssimap/feedreader'
+require 'rssimap/message'
 
 class TestFeedReader < Test::Unit::TestCase
   

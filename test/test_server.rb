@@ -1,5 +1,5 @@
-require 'lib/server'
-require 'lib/message'
+require 'rssimap/server'
+require 'rssimap/message'
 
 class ServerConnectionTest < Test::Unit::TestCase
   

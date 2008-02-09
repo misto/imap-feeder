@@ -1,4 +1,4 @@
-require 'lib/message'
+require 'rssimap/message'
 
 $tidy_path = "/usr/lib/libtidy.so"
 
