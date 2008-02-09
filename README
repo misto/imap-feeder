@@ -33,14 +33,14 @@ You may get the latest stable version from Rubyforge:
 After that, you should have the gem installed and you can copy the
 settings.rb.example file from the installation directory to the place from
 where you want to run the script. You'll need a configuration file, another
-one to hold a list of all your feed's urls and a temporary file to hold
+one to hold a list of all your feeds' urls and a temporary file to hold
 state information about the processed feeds.
 
 Please edit the settings file accordingly to the instructions in it.
 
 Next we need a list of all the urls you want rssimap to check. Run
 rssimap -n to create an empty file or with the name of an OPML file as argument.
-For example, this creates the "feeds.yaml" file with all the feeds from
+For example, the following creates the "feeds.yaml" file with all the feeds from
 "feeds.opml" and uses the "feeds" folder as root in your inbox to store them
 all. Each feed will get its own folder under "feeds". (If you just want to
 evaluate rssimap I'd recommend to operate it on a dedicated mailbox, so you can
@@ -49,7 +49,7 @@ easily get rid of it afterwards.)
   $ rssimap -n feeds.opml -o feeds.yaml -r feeds
 
 You might want to edit the file afterwards to rename the folders. You can run
-rssimap -c feeds.yaml to verify the configuration. After that, we can run
+rssimap -c feeds.yaml to check the configuration. After that, we can run
 rssimap with the settings.rb file as argument.
 
   $ rssimap /home/misto/rssimap/settings.rb

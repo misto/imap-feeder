@@ -45,11 +45,12 @@ EOF
 
   def replace(doc, element)
     doc.search(element) do |found|
-      found.swap( block_given? ? yield(found) : found.innerHTML)
+      replacement = block_given? ? yield(found) : found.innerHTML
+      found.swap(replacement)
     end
   end
 
-  def tidy body
+  def tidy(body)
 
     begin
       Tidy.path = $tidy_path unless Tidy.path
@@ -75,7 +76,7 @@ EOF
     tidy_html
   end
 
-  def dec html
+  def dec(html)
     HTMLEntities.decode_entities(html).strip if html
   end
 
@@ -122,14 +123,14 @@ EOF
     dec(body)
   end
   
-  def gather_urls doc
+  def gather_urls(doc)
     urls = []
     doc.search('a') do |link|
-      href = URI link.attributes['href'] rescue nil
+      href = URI(link.attributes['href']) rescue nil
       next if not href && href.host
       next if link.innerHTML.strip == href.to_s.strip
       urls << href
-      link.swap link.innerHTML.strip + "[#{urls.length}]"
+      link.swap(link.innerHTML.strip + "[#{urls.length}]")
     end
     urls
   end

@@ -10,7 +10,7 @@ class FakeServer
   def disconnect
   end
 
-  def send(message, folder = "INBOX")
+  def send(message, folder="INBOX")
     puts "Send message to folder #{folder}: #{message.title}"
   end
 
@@ -18,8 +18,8 @@ class FakeServer
     puts "Would create folder #{folder}"
   end
 
-  def has_folder? folder
-    puts "Would check for folter #{folder}."
+  def has_folder?(folder)
+    puts "Would check for folder #{folder}."
     false
   end
 end

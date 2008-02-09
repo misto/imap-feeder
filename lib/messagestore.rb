@@ -5,7 +5,7 @@ class MessageStore
   def initialize(file)
     @file = file
     @root = {}
-    if File.exists? @file
+    if File.exist? @file
       File.open(@file) do |f|
         @root = YAML.load(f) || {}
       end
@@ -14,7 +14,7 @@ class MessageStore
   
   def add_new(folder, titles)
     @root[folder] ||= []
-    @root[folder].unshift(titles).flatten!
+    @root[folder].unshift(*titles)
     @root[folder] = @root[folder].first(5)
   end
   

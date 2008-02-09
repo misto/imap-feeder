@@ -6,19 +6,20 @@ require 'iconv'
 
 $KCODE="U"
 
+# Overwrite SimpleRSS::unescape because of an open bug(#10852)
 class SimpleRSS
-  def unescape content
+  def unescape(content)
     content.gsub(/(<!\[CDATA\[|\]\]>)/,'').strip
   end
 end
 
 class FeedReader
   attr_reader :messages
+
   def initialize(feed_url)
     @feed = SimpleRSS.parse(open(feed_url))
 
-    match = @feed.source.match(/encoding=["'](.*?)["']/)
-    @encoding = (match && match[1])
+    @encoding = @feed.source[/encoding=["'](.*?)["']/, 1]
     if not @encoding
       $log.warn "No encoding found for #{feed_url}, defaulting to UTF-8."
       @encoding = "UTF-8"
@@ -35,7 +36,8 @@ class FeedReader
   def get_newer_than(titles)
     return [] if not @feed
 
-    if titles && titles.any? {|title| title  == "" }
+    titles ||= []
+    if titles.include?("")
       $log.warn "WARNING! title is empty, that should never happen! Aborting this feed.."
       return []
     end
@@ -43,23 +45,25 @@ class FeedReader
     messages = []
     @feed.entries.each do |item|
 
-      already_processed = titles && titles.any? do |title|
-        title == HTMLEntities.decode_entities(conv(item.title))
-      end
-
-      if already_processed
+      item_title = HTMLEntities.decode_entities(conv(item.title))
+      if titles.include?(item_title)
         $log.warn "Already have #{item.title}, aborting this feed."
+        break
       end
 
-      break if already_processed
-
-      messages << Message.new(
+      time = item.published || item.pubDate || item.date_published
+      body = conv(item.content_encoded || item.content ||
+                  item.summary || item.description)
+      message = Message.new(
         :title => conv(item.title),
-        :time => item.published || item.pubDate || item.date_published,
-        :body => conv(item.content_encoded || item.content || item.summary || item.description),
+        :time => time,
+        :body => body,
         :from => conv(item.author),
-        :url => conv(item.link))
+        :url => conv(item.link)
+      )
+      messages << message
     end
+
     messages
   end
 end

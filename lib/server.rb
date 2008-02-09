@@ -13,36 +13,41 @@ class Server
     @connection = Net::IMAP.new(params[:host], params[:port], params[:use_ssl])
     result = @connection.login(params[:user], params[:pass])
   rescue SocketError
+    # Willst du hier nicht "richtige" Exceptions nehmen?
     throw :host_not_found
   rescue Net::IMAP::NoResponseError
     disconnect
     throw :login_failed
   else
-    @connected = result.name == "OK"
+    @connected = (result.name == "OK")
   end
 
   def disconnect
     @connection.disconnect if @connection
   end
 
-  def send(message, folder = "INBOX")
-    @connection.select folder
-    @connection.append(folder, message.format.gsub(/\n/, "\r\n"), nil, Time.now)
+  def send(message, folder="INBOX")
+    @connection.select(folder)
+    message = message.format.gsub(/\n/, "\r\n")
+    @connection.append(folder, message, nil, Time.now)
   end
 
-  def retrieve(title, folder = "INBOX")
-    @connection.examine folder
-    found = @connection.search(["SUBJECT", title]).first || return
+  def retrieve(title, folder="INBOX")
+    @connection.examine(folder)
+    found = @connection.search(["SUBJECT", title]).first
+    return if not found
 
     imap_header = @connection.fetch([found], "BODY[HEADER.FIELDS (SUBJECT)]")
-    retr_title = imap_header.first.attr["BODY[HEADER.FIELDS (SUBJECT)]"].gsub(/(^Subject: )|[\n\r]/, "")
+    retr_title = imap_header.first.attr["BODY[HEADER.FIELDS (SUBJECT)]"]
+    retr_title.gsub!(/(^Subject: )|[\n\r]/, "")
 
     Message.new(:title => base64decode(retr_title), :id => found)
   end
 
-  def base64decode subject
-    if subject =~ /^=\?utf-8\?b\?(.*?)$/
-      Base64.decode64($1)
+  def base64decode(subject)
+    encoded = subject[/^=\?utf-8\?b\?(.*?)$/, 1]
+    if encoded
+      Base64.decode64(encoded)
     else
       subject
     end
@@ -55,17 +60,17 @@ class Server
 
   def has_folder?(folder)
     @connection.examine(folder)
+    true
   rescue Net::IMAP::NoResponseError
     false
-  else
-    true
   end
 
   def create_folder(folder)
-    folder.split(/\./).inject("") do |last, cur|
-      path = last + cur
+    path = ''
+    folder.split('.').each do |part|
+      path << part
       @connection.create(path) unless has_folder?(path)
-      path + '.'
+      path << '.'
     end
   rescue Net::IMAP::NoResponseError
     throw :cannot_create
@@ -79,7 +84,7 @@ class Server
     throw :cannot_delete
   end
 
-  def delete(message, folder = "INBOX")
+  def delete(message, folder="INBOX")
     @connection.select(folder)
     @connection.store(message.id, "+FLAGS", [:Deleted])
     @connection.expunge

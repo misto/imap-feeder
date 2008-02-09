@@ -3,6 +3,8 @@
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__), ".."))
 
 require 'rubygems'
+# Hmm, wieso chunnt da alles usem lib? Nachdem s Gem installiert isch muesst das doch alles underem Name rssimap erreichbar sii:
+# rssimap/rssimap, rssimap/createconfigparser, usw.
 require 'lib/rssimap'
 require 'lib/createconfigparser'
 require 'lib/rssimapconfig'
@@ -15,31 +17,43 @@ $log.level = Logger::DEBUG
 
 if opts.create
   $log.info "Creating new configuration"
-  RssImapConfig.create(opts.create_file, opts.out ? File.open(opts.out, "w") : $stdout, opts.folder)
+  out = opts.out ? File.open(opts.out, "w") : $stdout
+  RssImapConfig.create(opts.create_file, out, opts.folder)
+
 elsif opts.check
   $log.info "Checking configuration #{opts.check}"
   RssImapConfig.check(File.open(opts.check))
-elsif ARGV.first && require(ARGV.first)
+
+elsif ARGV.first and load(ARGV.first)
   configuration = [$host, $user, $pass, $temp, $config]
   if not configuration.all?
-    $stderr.print "Your settings are incomplete, please review settings.rb:\n#{configuration.inspect}\n"
+    $stderr.puts "Your settings are incomplete, please review settings.rb:"
+    $stderr.puts configuration.inspect
     exit 1
   end
 
   store = MessageStore.new($temp)
 
-  server_options = {:host => $host, :user => $user, :pass => $pass, :port => $port || "143", :use_ssl => $use_ssl || false}
+  server_options = {
+    :host => $host,
+    :user => $user,
+    :pass => $pass,
+    :port => $port || "143",
+    :use_ssl => $use_ssl || false
+  }
 
   if opts.pretend
-    @server = FakeServer.new server_options
-    def store.save() end
-    $log = Logger.new STDOUT
+    @server = FakeServer.new(server_options)
+    def store.save
+    end
+    $log = Logger.new(STDOUT)
   else
-    @server = Server.new server_options
+    @server = Server.new(server_options)
   end
 
   config = File.open($config)
-  RssImap.new(@server, store, config).run
+  rssimap = RssImap.new(@server, store, config)
+  rssimap.run
 else
   puts "No options given, maybe you need --help?"
 end
