@@ -13,7 +13,6 @@ class Server
     @connection = Net::IMAP.new(params[:host], params[:port], params[:use_ssl])
     result = @connection.login(params[:user], params[:pass])
   rescue SocketError
-    # Willst du hier nicht "richtige" Exceptions nehmen?
     throw :host_not_found
   rescue Net::IMAP::NoResponseError
     disconnect
