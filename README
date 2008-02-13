@@ -46,7 +46,7 @@ all. Each feed will get its own folder under "feeds". (If you just want to
 evaluate rssimap I'd recommend to operate it on a dedicated mailbox, so you can
 easily get rid of it afterwards.)
 
-  $ rssimap -n feeds.opml -o feeds.yaml -r feeds
+  $ rssimap -n feeds.opml -o -r feeds
 
 You might want to edit the file afterwards to rename the folders. You can run
 rssimap -c feeds.yaml to check the configuration. After that, we can run

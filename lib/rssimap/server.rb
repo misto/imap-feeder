@@ -6,19 +6,9 @@ $KCODE="U"
 
 class Server
 
-  attr_reader :connected
-
   def initialize(params)
-    @connected = false
     @connection = Net::IMAP.new(params[:host], params[:port], params[:use_ssl])
     result = @connection.login(params[:user], params[:pass])
-  rescue SocketError
-    throw :host_not_found
-  rescue Net::IMAP::NoResponseError
-    disconnect
-    throw :login_failed
-  else
-    @connected = (result.name == "OK")
   end
 
   def disconnect
@@ -71,16 +61,12 @@ class Server
       @connection.create(path) unless has_folder?(path)
       path << '.'
     end
-  rescue Net::IMAP::NoResponseError
-    throw :cannot_create
   end
 
   def delete_folder(folder)
     #Switch to root so we can delete the folder
     @connection.examine("INBOX")
     @connection.delete(folder)
-  rescue Net::IMAP::NoResponseError
-    throw :cannot_delete
   end
 
   def delete(message, folder="INBOX")
