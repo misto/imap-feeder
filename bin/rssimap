@@ -44,7 +44,11 @@ elsif ARGV.first and load(ARGV.first)
     end
     $log = Logger.new(STDOUT)
   else
-    @server = Server.new(server_options)
+    begin
+      @server = Server.new(server_options)
+    rescue Errno::ECONNRESET, Errno::ETIMEDOUT => e
+      $log.error "Could not open initial connection to server: #{e}"
+    end
   end
 
   config = File.open($config)
