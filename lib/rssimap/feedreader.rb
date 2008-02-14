@@ -38,7 +38,7 @@ class FeedReader
 
     titles ||= []
     if titles.include?("")
-      $log.warn "WARNING! title is empty, that should never happen! Aborting this feed.."
+      $log.warn "Title is empty, that should never happen! Aborting this feed.."
       return []
     end
 
@@ -47,7 +47,7 @@ class FeedReader
 
       item_title = HTMLEntities.decode_entities(conv(item.title))
       if titles.include?(item_title)
-        $log.warn "Already have #{item.title}, aborting this feed."
+        $log.info "Already have #{item.title}, aborting this feed."
         break
       end
 
