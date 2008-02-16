@@ -18,6 +18,11 @@ The following gems need to be installed on your system:
 - tidy
 - simple-rss
 
+The tidy gem doesn't contain libtidy, you need to install it separately using
+your package manager.
+Gentoo: emerge app-text/htmltidy
+Debian: aptitude install libtidy-ruby
+
 === Compatible IMAP Servers
 
 I use rssimap with Courier-IMAP and Dovecot. Other IMAP servers should work as well,
