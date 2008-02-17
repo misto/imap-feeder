@@ -11,7 +11,8 @@ interval and a compatible IMAP account.
 
 === Dependencies
 
-The following gems need to be installed on your system:
+XXX needs the following gems, if they are not already present on your system,
+they'll get installed:
 - actionmailer
 - hpricot
 - htmlentities

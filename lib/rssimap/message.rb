@@ -108,8 +108,11 @@ EOF
          
     unless urls.empty?
       body << "\n"
+      max_length = "[0]".length + Math.log10(urls.size).floor + 1
       urls.each_with_index do |url, i|
-        body << "\n[#{i + 1}] #{url}"
+        index = i + 1
+        str = "\n[#{index}]".ljust max_length
+        body << "#{str} #{url}"
       end
     end
 

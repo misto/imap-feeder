@@ -283,4 +283,25 @@ Kuck mal hier[1] und da[2]!
 EOS
   end
 
+  def test_lots_of_hrefs
+    str = "<a href=\"http://da.da\">link</a>\n" * 12
+
+    m = create_message str
+    assert_equal(<<EOS.chomp, m.body)
+link[1] link[2] link[3] link[4] link[5] link[6] link[7] link[8] link[9] link[10] link[11] link[12]
+
+[1]  http://da.da
+[2]  http://da.da
+[3]  http://da.da
+[4]  http://da.da
+[5]  http://da.da
+[6]  http://da.da
+[7]  http://da.da
+[8]  http://da.da
+[9]  http://da.da
+[10] http://da.da
+[11] http://da.da
+[12] http://da.da
+EOS
+  end
 end
