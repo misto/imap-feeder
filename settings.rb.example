@@ -22,7 +22,7 @@ $tidy_path = "/usr/lib/libtidy.so"
 
 # RssImap needs a file to store the last message for each feed
 # so it doesn't fetch old entries. Where should that file be?
-$temp = "#{BASEDIR}/processed_feeds.yaml"
+$temp = "#{BASEDIR}/processed_feeds.yml"
 
 # The configuration file that was generated
 $config = "#{BASEDIR}/feeds.yml"

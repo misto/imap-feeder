@@ -29,7 +29,7 @@ EOF
   
       opts.on("-o", "--output [CONFIG_FILE]",
               "The location of the generated file") do |file|
-        options.out = file || "feeds.yaml"
+        options.out = file || "feeds.yml"
       end
   
       opts.on("-p", "--pretend",
