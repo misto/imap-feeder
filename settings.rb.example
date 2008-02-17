@@ -1,8 +1,7 @@
 # Configuration for XXX
 
 
-# IMAP connection settings. You shouldn't use an important account
-# because the script might overwrite existing emails.
+# IMAP connection settings.
 $host = ""
 $user = ""
 $pass = ""
