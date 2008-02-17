@@ -37,7 +37,7 @@ class OpmlReader
   #
   def self.parse_opml(opml_node, folder = FeedFolder.new(""))
     opml_node.elements.each('outline') do |element|
-      if element.attributes['isOpen'] != nil
+      if element.attributes['isOpen'] != nil || element.attributes['type'] == "folder"
         child_folder = FeedFolder.new(replace_bad_chars(element.attributes['text']))
         folder.add_sub(child_folder)
         parse_opml(element, child_folder)
