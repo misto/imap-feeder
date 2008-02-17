@@ -43,7 +43,9 @@ class FeedReader
     end
 
     entries = @feed.entries.sort do |l, r|
-      time_from(r) <=> time_from(l)
+      r = time_from(r)
+      l = time_from(l)
+      r <=> l
     end
 
     messages = []
@@ -72,6 +74,6 @@ class FeedReader
   end
 
   def time_from item
-    item.published || item.pubDate || item.date_published
+    item.published || item.pubDate || item.date_published || 0
   end
 end

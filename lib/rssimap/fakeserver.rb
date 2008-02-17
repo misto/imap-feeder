@@ -15,11 +15,9 @@ class FakeServer
   end
 
   def create_folder(folder)
-    puts "Would create folder #{folder}"
   end
 
   def has_folder?(folder)
-    puts "Would check for folder #{folder}."
-    false
+    true
   end
 end
