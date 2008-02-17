@@ -53,7 +53,7 @@ class FeedReader
 
       item_title = HTMLEntities.decode_entities(conv(item.title))
       if titles.include?(item_title)
-        $log.info "Already have #{item.title}, aborting this feed."
+        $log.info "Already have #{item.title[0...10]}, aborting this feed."
         break
       end
 
@@ -74,6 +74,6 @@ class FeedReader
   end
 
   def time_from item
-    item.published || item.pubDate || item.date_published || 0
+    item.published || item.pubDate || item.date_published || Time.now.gmtime
   end
 end

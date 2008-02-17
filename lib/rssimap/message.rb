@@ -17,7 +17,7 @@ class Message
     @from  = dec(params[:from])
     @body  = strip_html(params[:body] || params[:url] || "")
     @id    = params[:id] || 0
-    @time  = params[:time] || Time.now.gmtime
+    @time  = params[:time]
     @url   = params[:url]
   end
 
