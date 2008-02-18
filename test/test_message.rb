@@ -101,10 +101,10 @@ EOF
 
   def test_format_encoded
     t = Time.parse("Mon, Mar 05 2007 15:26:16 +0100")
-    m = Message.new(:title => "Alexander H. Færøy: Meeting friends for the first time…", :body => "<p>body</p>second", :time => t)
+    m = Message.new(:title => "Xæxøx: …", :body => "<p>body</p>second", :time => t)
     assert_equal(<<-EOF, m.format)
 Date: Mon Mar 05 15:26:16 +0100 2007
-Subject: Alexander H. F=?UTF-8?Q?=c3=a6?=r=?UTF-8?Q?=c3=b8?=y: Meeting friends for the first time=?UTF-8?Q?=e2=80=a6?=
+Subject: X=?UTF-8?Q?=c3=a6?=x=?UTF-8?Q?=c3=b8?=x: =?UTF-8?Q?=e2=80=a6?=
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
   charset="utf-8"

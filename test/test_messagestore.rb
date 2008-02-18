@@ -7,13 +7,13 @@ class TestingMessageStore < MessageStore
   def initialize(file)
     @file = file
     File.open(@file, "w") do |f|
-      YAML.dump({"INBOX.Planets.Planet KDE" => ["Boudewijn Rempt (boud): New toy!"], 
-                 "INBOX.Planets.Planet Gentoo" => [], 
+      YAML.dump({"INBOX.Planets.Planet KDE" => ["Mirko: It works!"],
+                 "INBOX.Planets.Planet Gentoo" => [],
                  "INBOX.Blog.Mirko" => []}, f)
     end
     super
   end
-  
+
   def clean
     File.open(@file, "w").close
   end
@@ -26,14 +26,14 @@ class TestMessageStore < Test::Unit::TestCase
   def setup
     @store = TestingMessageStore.new(FILE_NAME)
   end
-  
+
   def teardown
     @store.clean
   end
 
   def test_get_latest
     title = @store.get_latest "INBOX.Planets.Planet KDE"
-    assert_equal("Boudewijn Rempt (boud): New toy!", title.first)
+    assert_equal("Mirko: It works!", title.first)
   end
 
   def test_add_new

@@ -2,15 +2,15 @@
 <rss version="2.0">
   <channel>
     <item>
-      <title>Mirko Stocker: KDE in Heroes!</title>
-      <link>http://blog.misto.ch/archives/324</link>
-      <description>24 &#252;nd Alias</description>
+      <title>title1</title>
+      <link>http://link1</link>
+      <description>description1</description>
       <pubDate>Wed, 15 Feb 2007 00:05 +0100</pubDate>
     </item>
     <item>
-      <title>Thomas Marti: Highlights 2006 (TV) und C++!</title>
-      <link>http://blog.zones.ch/2007_02_12-highlights-2006-tv</link>
-      <description>Empty</description>
+      <title>title2</title>
+      <link>http://link2</link>
+      <description>description2</description>
       <pubDate>Monday 12 February 2007 17:09</pubDate>
     </item>
   </channel>
