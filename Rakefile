@@ -17,7 +17,7 @@ spec = Gem::Specification.new do |s|
   s.email	= "me@misto.ch"
   s.homepage	= ""
   s.platform	= Gem::Platform::RUBY
-  s.summary	= "RssImap publishes your favorite feeds to an IMAP server."
+  s.summary	= "RssImap publishes your RSS and Atom feeds to an IMAP server."
   s.files	= Dir.glob("{test,lib}/**/*") + ["README", "COPYING", "settings.rb.example"]
   s.require_path = "lib"
 
