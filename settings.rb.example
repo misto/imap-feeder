@@ -26,6 +26,9 @@ $temp = "#{BASEDIR}/processed_feeds.yml"
 # The configuration file that was generated
 $config = "#{BASEDIR}/feeds.yml"
 
+# The file that contains information about the currently running instance
+$running_instance = "#{BASEDIR}/running_instance"
+
 # Configuration for the logger (from `ri Logger.new`):
 #
 #------------------------------------------------------------ Logger::new

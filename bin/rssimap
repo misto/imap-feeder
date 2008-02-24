@@ -27,6 +27,13 @@ elsif ARGV.first and load(ARGV.first)
     exit 1
   end
 
+  if File.exist? $running_instance
+    $log.error "Already running (#{$running_instance})! Aborting..."
+    exit 1
+  else
+    File.new($running_instance, "w")
+  end
+
   store = MessageStore.new($temp)
 
   server_options = {
@@ -45,7 +52,7 @@ elsif ARGV.first and load(ARGV.first)
   else
     begin
       @server = Server.new(server_options)
-    rescue Errno::ECONNRESET, Errno::ETIMEDOUT => e
+    rescue Exception => e
       $log.error "Could not open initial connection to server: #{e}"
     end
   end
@@ -53,6 +60,9 @@ elsif ARGV.first and load(ARGV.first)
   config = File.open($config)
   rssimap = RssImap.new(@server, store, config)
   rssimap.run
+
+  File.delete $running_instance
+
 else
   puts "No options given, maybe you need --help?"
 end
