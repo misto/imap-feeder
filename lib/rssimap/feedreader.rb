@@ -17,6 +17,7 @@ class FeedReader
   attr_reader :messages
 
   def initialize(feed_url)
+    @feed_url = feed_url
     @feed = SimpleRSS.parse(open(feed_url))
 
     @encoding = @feed.source[/encoding=["'](.*?)["']/, 1]
@@ -38,7 +39,7 @@ class FeedReader
 
     titles ||= []
     if titles.include?("")
-      $log.warn "Title is empty, that should never happen! Aborting this feed.."
+      $log.warn "Title is empty, that should never happen! Aborting #{@feed_url}."
       return []
     end
 

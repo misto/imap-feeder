@@ -60,6 +60,7 @@ elsif ARGV.first and load(ARGV.first)
   config = File.open($config)
   rssimap = RssImap.new(@server, store, config)
   rssimap.run
+  @server.disconnect
 
   File.delete $running_instance
 
