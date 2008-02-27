@@ -8,7 +8,7 @@ class CreateConfigParser
     opts = OptionParser.new do |opts|
       opts.banner = <<EOF
 Usage: #{$0} [options] to create or check your configuration
-or     #{$0} CONFIG_FILE to run the script
+or     #{$0} SETTINGS_FILE to run the script
 EOF
   
       opts.on("-c", "--check-config CONFIG_FILE",

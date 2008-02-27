@@ -3,3 +3,4 @@ Ideas for further development:
 * HTML-Mails (really?)
 * Custom 'fetch'-Modules for feeds that don't have any content in the feed
 * Use sqlite for the store?
+* make the position of the link to the original configurable
