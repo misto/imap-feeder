@@ -49,11 +49,8 @@ $running_instance = "#{BASEDIR}/running_instance"
 #     +shift_size+: Maximum logfile size (only applies when +shift_age+
 #                   is a number).
 #
-$log = Logger.new "#{BASEDIR}/rssimap_log.txt", 10
+$log = Logger.new "#{BASEDIR}/log.txt", 10
 
 # The level can be set to: DEBUG < INFO < WARN < ERROR < FATAL
 $log.level = Logger::WARN
 
-$log.formatter = proc { |severity, datetime, progname, msg|
-  "#{severity} (#{datetime}): #{msg}\n"
-}
