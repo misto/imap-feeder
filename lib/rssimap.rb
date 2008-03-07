@@ -56,7 +56,7 @@ class RssImap
   def message_sent(messages, path)
     titles = messages.collect do |msg|
       if msg.time
-        msg.title << "@#{msg.time}"
+        msg.title + "@#{msg.time}"
       else
         msg.title
       end

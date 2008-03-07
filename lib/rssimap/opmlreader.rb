@@ -5,7 +5,7 @@ require 'rexml/sax2listener'
 require 'rssimap/feedfolder'
 
 #
-# Defines the characters that cannot be used as part of an IMAP Folder
+# Defines the characters that canbe used as part of an IMAP Folder
 #
 IMAP_CHARS = "\\w:,\\-= "
 

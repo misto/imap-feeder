@@ -32,7 +32,7 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_latest
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
     messages = reader.get_newer_than []
-    new_messages = reader.get_newer_than([messages.last.title])
+    new_messages = reader.get_newer_than(["#{messages.last.title}@#{messages.last.time}"])
     
     assert_equal(1, new_messages.size)
     assert_equal("title1", new_messages.first.title)
@@ -62,7 +62,7 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    new_messages = reader.get_newer_than(["title1"])
+    new_messages = reader.get_newer_than(["title1@Thu Feb 15 00:05:00 +0100 2007", "title2@Mon Feb 12 17:09:00 +0100 2007"])
     assert new_messages.empty?
   end
   

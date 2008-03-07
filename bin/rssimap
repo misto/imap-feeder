@@ -7,16 +7,13 @@ require 'rssimap/fakeserver.rb'
 
 opts = CreateConfigParser.parse(ARGV)
 
-$log = Logger.new($stdout)
-$log.level = Logger::DEBUG
-
 if opts.create
-  $log.info "Creating new configuration"
+  $stdout.puts "Creating new configuration"
   out = opts.out ? File.open(opts.out, "w") : $stdout
   RssImapConfig.create(opts.create_file, out, opts.folder)
 
 elsif opts.check
-  $log.info "Checking configuration #{opts.check}"
+  $stdout.puts "Checking configuration #{opts.check}"
   RssImapConfig.check(File.open(opts.check))
 
 elsif ARGV.first and load(ARGV.first)
@@ -65,6 +62,6 @@ elsif ARGV.first and load(ARGV.first)
   File.delete $running_instance
 
 else
-  puts "No options given, maybe you need --help?"
+  $stdout.puts "No options given, maybe you need --help?"
 end
 
