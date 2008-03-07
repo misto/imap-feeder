@@ -2,6 +2,8 @@ require 'yaml'
 
 class MessageStore
 
+  MESSAGES_TO_STORE = 5
+
   def initialize(file)
     @file = file
     @root = {}
@@ -17,16 +19,16 @@ class MessageStore
   def add_new(folder, titles)
     @root[folder] ||= []
     @root[folder].unshift(*titles)
-    @root[folder] = @root[folder].first(5)
+    @root[folder].slice!(MESSAGES_TO_STORE..-1)
   end
-  
+
   def get_latest(folder)
     @root[folder] || []
   end
-  
+
   def save
     File.open(@file, "w") do |f|
       YAML.dump(@root, f)
     end
-  end  
+  end
 end
