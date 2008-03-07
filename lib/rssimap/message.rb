@@ -30,7 +30,7 @@ class Message
 
   def format
     return <<-EOF
-Date: #{@time.strftime("%a %b %d %H:%M:%S %z %Y")}
+Date: #{(@time || Time.now.gmtime).strftime("%a %b %d %H:%M:%S %z %Y")}
 Subject: #{quote(@title)}
 From: #{quote(@from || "Unknown <spam@example.org>")}
 Content-Type: text/plain;

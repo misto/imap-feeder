@@ -43,16 +43,15 @@ class FeedReader
       return []
     end
 
-    entries = @feed.entries.sort do |l, r|
-      r = time_from(r)
-      l = time_from(l)
-      r <=> l
-    end
-
     messages = []
-    entries.each do |item|
+    @feed.entries.each do |item|
 
       item_title = HTMLEntities.decode_entities(conv(item.title))
+      time = time_from(item)
+      if time
+        item_title << "@#{time}"
+      end
+
       if titles.include?(item_title)
         short_name = item.title[0..30]
         short_name << "…" if item.title.length > 30
@@ -60,7 +59,6 @@ class FeedReader
         next
       end
 
-      time = time_from(item)
       body = conv(item.content_encoded || item.content ||
                   item.summary || item.description)
       message = Message.new(
@@ -77,6 +75,7 @@ class FeedReader
   end
 
   def time_from item
-    item.published || item.pubDate || item.date_published || Time.now.gmtime
+    return nil if not item
+    item.published || item.pubDate || item.date_published || item.updated || nil
   end
 end
