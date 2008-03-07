@@ -54,8 +54,10 @@ class FeedReader
 
       item_title = HTMLEntities.decode_entities(conv(item.title))
       if titles.include?(item_title)
-        $log.info "Already have '#{item.title[0...10]}...', aborting this feed."
-        break
+        short_name = item.title[0..30]
+        short_name << "…" if item.title.length > 30
+        $log.debug "Already have '#{short_name}'."
+        next
       end
 
       time = time_from(item)

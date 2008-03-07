@@ -54,7 +54,7 @@ class RssImap
   private
 
   def message_sent(messages, path)
-    titles = messages.first(5).collect{ |msg| msg.title }
+    titles = messages.collect{ |msg| msg.title }
     @store.add_new(path, titles)
     @store.save
   end

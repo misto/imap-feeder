@@ -2,7 +2,7 @@ require 'yaml'
 
 class MessageStore
 
-  MESSAGES_TO_STORE = 5
+  MESSAGES_TO_STORE = 100
 
   def initialize(file)
     @file = file
@@ -20,6 +20,7 @@ class MessageStore
     @root[folder] ||= []
     @root[folder].unshift(*titles)
     @root[folder].slice!(MESSAGES_TO_STORE..-1)
+    @root[folder].compact!
   end
 
   def get_latest(folder)
