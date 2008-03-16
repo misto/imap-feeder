@@ -39,7 +39,7 @@ class MessageTest < Test::Unit::TestCase
     t = Time.parse("Mon, Mar 05 2007 15:24:12 +0100")
     m = Message.new(:title => "C/C++", :body => "body", :time => t)
     assert_equal(<<EOF, m.format)
-Date: Mon Mar 05 15:24:12 +0100 2007
+Date: Mon, 05 Mar 2007 15:24:12 +0100
 Subject: C/C++
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
@@ -54,7 +54,7 @@ EOF
     t = Time.parse("Mon, Mar 05 2007 15:24:12 +0100")
     m = Message.new(:title => "title", :body => "body", :time => t)
     assert_equal(<<EOF, m.format)
-Date: Mon Mar 05 15:24:12 +0100 2007
+Date: Mon, 05 Mar 2007 15:24:12 +0100
 Subject: title
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
@@ -69,7 +69,7 @@ EOF
     t = Time.parse("Mon, Mar 05 2007 15:26:49 +0100")
     m = Message.new(:title => "title", :body => "body", :time => t, :url => "http://www.misto.ch")
     assert_equal(<<EOF, m.format)
-Date: Mon Mar 05 15:26:49 +0100 2007
+Date: Mon, 05 Mar 2007 15:26:49 +0100
 Subject: title
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
@@ -86,7 +86,7 @@ EOF
     t = Time.parse("Mon, Mar 05 2007 15:26:49 +0100")
     m = Message.new(:title => "title", :body => "<p>body</p>second", :time => t)
     assert_equal(<<EOF, m.format)
-Date: Mon Mar 05 15:26:49 +0100 2007
+Date: Mon, 05 Mar 2007 15:26:49 +0100
 Subject: title
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
@@ -103,7 +103,7 @@ EOF
     t = Time.parse("Mon, Mar 05 2007 15:26:16 +0100")
     m = Message.new(:title => "Xæxøx: …", :body => "<p>body</p>second", :time => t)
     assert_equal(<<-EOF, m.format)
-Date: Mon Mar 05 15:26:16 +0100 2007
+Date: Mon, 05 Mar 2007 15:26:16 +0100
 Subject: X=?UTF-8?Q?=c3=a6?=x=?UTF-8?Q?=c3=b8?=x: =?UTF-8?Q?=e2=80=a6?=
 From: Unknown <spam@example.org>
 Content-Type: text/plain;
