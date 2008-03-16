@@ -1,4 +1,5 @@
 require 'base64'
+require 'time'
 require 'action_mailer'
 require 'hpricot'
 require 'tidy'
@@ -29,8 +30,9 @@ class Message
   end
 
   def format
+    time = (@time || Time.now.localtime).rfc2822
     return <<-EOF
-Date: #{(@time || Time.now.gmtime).strftime("%a %b %d %H:%M:%S %z %Y")}
+Date: #{time}
 Subject: #{quote(@title)}
 From: #{quote(@from || "Unknown <spam@example.org>")}
 Content-Type: text/plain;

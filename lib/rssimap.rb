@@ -38,7 +38,7 @@ class RssImap
       messages = reader.get_newer_than(latest)
 
       unless messages.empty?
-        $log.info "latest messages were: '#{latest.join("', '")}'"
+        $log.info "already processed messages: '#{latest.join("', '")}'"
         $log.info "#{messages.size} new messages"
 
         messages.each do |msg|
@@ -55,11 +55,7 @@ class RssImap
 
   def message_sent(messages, path)
     titles = messages.collect do |msg|
-      if msg.time
-        msg.title + "@#{msg.time}"
-      else
-        msg.title
-      end
+      title_with_time(msg)
     end
 
     @store.add_new(path, titles)
@@ -68,7 +64,7 @@ class RssImap
 
   def send_message(msg, complete_path)
     @server.send(msg, complete_path)
-    $log.info "Found in #{complete_path.split(".").last}: #{msg.title}"
+    $log.info "Found in #{complete_path.split(".").last}: #{title_with_time(msg)}"
   end
 
   def get_latest(path)
@@ -82,5 +78,13 @@ class RssImap
 
   def check_folder_exists(path)
     @server.has_folder? path
+  end
+
+  def title_with_time(msg)
+    if msg.time
+      msg.title + "@#{msg.time}"
+    else
+      msg.title
+    end
   end
 end

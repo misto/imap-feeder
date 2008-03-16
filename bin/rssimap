@@ -49,7 +49,7 @@ elsif ARGV.first and load(ARGV.first)
   else
     begin
       @server = Server.new(server_options)
-    rescue Exception => e
+    rescue Exception, Errno::ECONNRESET => e
       $log.error "Could not open initial connection to server: #{e}"
     end
   end

@@ -54,3 +54,6 @@ $log = Logger.new "#{BASEDIR}/log.txt", 10
 # The level can be set to: DEBUG < INFO < WARN < ERROR < FATAL
 $log.level = Logger::WARN
 
+$log.formatter = proc { |severity, datetime, progname, msg|
+  "#{severity} (#{datetime}): #{msg}\n"
+}
