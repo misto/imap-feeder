@@ -12,39 +12,46 @@ class Message
 
   include ActionMailer::Quoting
 
-  attr_reader :title, :body, :time, :id, :from
-
   def initialize(params)
-    @title = dec(params[:title]) || ""
-    @from  = dec(params[:from])
-    @body  = strip_html(params[:body] || params[:url] || "")
-    @id    = params[:id] || 0
-    @time  = params[:time]
-    @url   = params[:url]
+    @params = params
   end
 
-  #
-  # Quote characters in the string using ActionMailer's quote_if_necessary.
-  #
+  def title
+    @title ||= (dec(@params[:title]) || "")
+  end
+
+  def from
+    @from ||= (dec(@params[:from]) || "Unknown <spam@example.org>")
+  end
+
+  def body
+    @body ||= strip_html(@params[:body] || @params[:url] || "")
+  end
+
+  def time
+    @time ||= (@params[:time] || Time.now.localtime).rfc2822
+  end
+
   def quote(str)
-    str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|match| quote_if_necessary(match, "UTF-8")}
+    return "" if not str
+    str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|to_quote| quote_if_necessary(to_quote, "UTF-8")}
   end
 
   def generate_identifier
-    "#{title}##{Digest::MD5.hexdigest(body)}" 
+    @cached_identifier ||= "#{@params[:title]}##{Digest::MD5.hexdigest(@params[:body] + @params[:url])}"
   end
 
   def format
-    time = (@time || Time.now.localtime).rfc2822
+    url   = @params[:url]
     return <<-EOF
 Date: #{time}
-Subject: #{quote(@title)}
-From: #{quote(@from || "Unknown <spam@example.org>")}
+Subject: #{quote(title)}
+From: #{quote(from)}
 Content-Type: text/plain;
   charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-#{@body}#{"\n\n" + @url if @url}
+#{body}#{"\n\n" + url if url}
 EOF
   end
 
@@ -66,7 +73,7 @@ EOF
       return body
     end
 
-    tidy_html = Tidy.open(:show_warnings=>true) do |tidy|
+    tidy_html = Tidy.open(:show_warnings => true) do |tidy|
       tidy.options.markup = true
       tidy.options.wrap = 0
       tidy.options.logical_emphasis = true
@@ -89,10 +96,8 @@ EOF
 
   def strip_html(body)
 
-    body = dec(body)
-    body = tidy(body)
-    doc = Hpricot(body)
-    
+    doc = Hpricot(tidy(dec(body)))
+
     replace(doc, 'p')      {|paragraph| "\n#{paragraph.innerHTML}\n"}
     replace(doc, 'strong') {|strong| "*#{strong.innerHTML}*"}
     replace(doc, 'b')      {|bold| "*#{bold.innerHTML}*"}
@@ -112,7 +117,7 @@ EOF
     urls = gather_urls(doc)
 
     body = doc.to_html
-         
+
     unless urls.empty?
       body << "\n"
       max_length = "[0]".length + Math.log10(urls.size).floor + 1
@@ -126,13 +131,13 @@ EOF
     doc = Hpricot(body)
     replace(doc, 'a')
     body = doc.to_html
-    
+
     #sanitize newlines
     body.gsub!(/(\n\s*){3,}/, "\n\n")
 
     dec(body)
   end
-  
+
   def gather_urls(doc)
     urls = []
     doc.search('a') do |link|
@@ -144,5 +149,4 @@ EOF
     end
     urls
   end
-  
 end

@@ -19,7 +19,7 @@ class RssImap
 
     feeds.each do |feed|
       path = feed['feed']['path']
-      latest = get_latest(path)
+      $log.info "Starting #{path}"
 
       create_folder(path) unless check_folder_exists(path)
 
@@ -34,24 +34,27 @@ class RssImap
         next
       end
 
-      $log.info "Starting #{path}"
+      latest = get_latest(path)
       messages = reader.get_newer_than(latest)
 
       unless messages.empty?
         $log.info "already processed messages: '#{latest.join("', '")}'"
-        $log.info "#{messages.size} new message(s)"
-
-        messages.each do |msg|
-          send_message(msg, path)
-        end
-        message_sent(messages, path)
-      end
+        send_messages(messages, path)
     end
 
     $log.info "Finished"
   end
 
   private
+
+  def send_messages messages, path
+    $log.info "#{messages.size} new message(s)"
+    messages.each do |msg|
+      send_message(msg, path)
+    end
+    message_sent(messages, path)
+    end
+  end
 
   def message_sent(messages, path)
     titles = messages.collect do |msg|

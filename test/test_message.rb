@@ -1,4 +1,5 @@
 require 'rssimap/message'
+require 'time'
 
 $tidy_path = "/usr/lib/libtidy.so"
 
@@ -11,11 +12,11 @@ class MessageTest < Test::Unit::TestCase
   end
   
   def test_creation_with_time
-    t = Time.now
+    t = Time.now.localtime
     m = Message.new(:title => "title", :body => "body", :time => t)
     assert_equal("title", m.title)
     assert_equal("body", m.body)
-    assert_equal(t, m.time)
+    assert_equal(t.rfc2822, m.time)
   end
   
   def test_creation_title_only

@@ -12,7 +12,7 @@ class TestFeedReader < Test::Unit::TestCase
   def test_reading_first_feed
     messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than []
     assert_equal(1, messages.size)
-    assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages.first.time)
+    assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100").rfc2822, messages.first.time)
     assert_equal("title1", messages.first.title)
     assert_equal("description1", messages.first.body)
   end  
@@ -20,11 +20,11 @@ class TestFeedReader < Test::Unit::TestCase
   def test_reading_second_feed
     messages = FeedReader.new(RSS20_TWO_ENTRIES).get_newer_than []
     assert_equal(2, messages.size)
-    assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100"), messages[0].time)
+    assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100").rfc2822, messages[0].time)
     assert_equal("title1", messages[0].title)
     assert_equal("description1", messages[0].body)
     
-    assert_equal(Time.parse("Monday 12 February 2007 17:09"), messages[1].time)
+    assert_equal(Time.parse("Monday 12 February 2007 17:09").rfc2822, messages[1].time)
     assert_equal("title2", messages[1].title)
     assert_equal("description2", messages[1].body)
   end
@@ -63,7 +63,7 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
     msgs = reader.get_newer_than []
-    new_messages = reader.get_newer_than(["title1#2bae1a894c89827ed79702362bd5ac0c", "title2#026530e9f2ca7a5b20184025f0b354aa"])
+    new_messages = reader.get_newer_than(["title1#256cd6c21faf5125dd97aba4210a4bf8", "title2#857afddc83b46dc857ee7fe3fc96dcaf"])
     assert new_messages.empty?
   end
   

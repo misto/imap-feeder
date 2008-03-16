@@ -59,8 +59,8 @@ class FeedReader
       item_identifier = message.generate_identifier
 
       if titles.include? item_identifier
-        short_name = item.title[0..30]
-        short_name << "…" if item.title.length > 30
+        short_name = message.title[0..30]
+        short_name << "…" if message.title.length > 30
         $log.debug "Already have '#{short_name}'."
       else
         messages << message
