@@ -28,10 +28,10 @@ class RssImap
         reader = FeedReader.new(url)
       rescue OpenURI::HTTPError => e
         $log.warn "Error retrieving #{url}: #{e.message}"
-	next
+        next
       rescue Exception => e
         $log.error "Unexpected error while retrieving #{path}: #{e.message}"
-	next
+        next
       end
 
       $log.info "Starting #{path}"
@@ -39,7 +39,7 @@ class RssImap
 
       unless messages.empty?
         $log.info "already processed messages: '#{latest.join("', '")}'"
-        $log.info "#{messages.size} new messages"
+        $log.info "#{messages.size} new message(s)"
 
         messages.each do |msg|
           send_message(msg, path)
@@ -55,7 +55,7 @@ class RssImap
 
   def message_sent(messages, path)
     titles = messages.collect do |msg|
-      title_with_time(msg)
+      msg.generate_identifier
     end
 
     @store.add_new(path, titles)
@@ -64,7 +64,7 @@ class RssImap
 
   def send_message(msg, complete_path)
     @server.send(msg, complete_path)
-    $log.info "Found in #{complete_path.split(".").last}: #{title_with_time(msg)}"
+    $log.info "Found in #{complete_path.split(".").last}: #{msg.generate_identifier}"
   end
 
   def get_latest(path)
@@ -78,13 +78,5 @@ class RssImap
 
   def check_folder_exists(path)
     @server.has_folder? path
-  end
-
-  def title_with_time(msg)
-    if msg.time
-      msg.title + "@#{msg.time}"
-    else
-      msg.title
-    end
   end
 end

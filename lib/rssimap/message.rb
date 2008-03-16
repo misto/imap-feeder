@@ -4,6 +4,7 @@ require 'action_mailer'
 require 'hpricot'
 require 'tidy'
 require 'htmlentities'
+require 'digest/md5'
 
 $KCODE="U"
 
@@ -27,6 +28,10 @@ class Message
   #
   def quote(str)
     str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|match| quote_if_necessary(match, "UTF-8")}
+  end
+
+  def generate_identifier
+    "#{title}##{Digest::MD5.hexdigest(body)}" 
   end
 
   def format

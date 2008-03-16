@@ -46,29 +46,25 @@ class FeedReader
     messages = []
     @feed.entries.each do |item|
 
-      item_title = HTMLEntities.decode_entities(conv(item.title))
-      time = time_from(item)
-      if time
-        item_title << "@#{time}"
-      end
-
-      if titles.include?(item_title)
-        short_name = item.title[0..30]
-        short_name << "…" if item.title.length > 30
-        $log.debug "Already have '#{short_name}'."
-        next
-      end
-
       body = conv(item.content_encoded || item.content ||
                   item.summary || item.description)
       message = Message.new(
         :title => conv(item.title),
-        :time => time,
+        :time => time_from(item),
         :body => body,
         :from => conv(item.author),
         :url => conv(item.link)
       )
-      messages << message
+
+      item_identifier = message.generate_identifier
+
+      if titles.include? item_identifier
+        short_name = item.title[0..30]
+        short_name << "…" if item.title.length > 30
+        $log.debug "Already have '#{short_name}'."
+      else
+        messages << message
+      end
     end
 
     messages
