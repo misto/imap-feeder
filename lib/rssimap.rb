@@ -19,7 +19,7 @@ class RssImap
 
     feeds.each do |feed|
       path = feed['feed']['path']
-      $log.info "Starting #{path}"
+      $log.info "Processing #{path}"
 
       create_folder(path) unless check_folder_exists(path)
 
@@ -57,11 +57,11 @@ class RssImap
   end
 
   def message_sent(messages, path)
-    titles = messages.collect do |msg|
+    identifiers = messages.collect do |msg|
       msg.generate_identifier
     end
 
-    @store.add_new(path, titles)
+    @store.add_new(path, identifiers)
     @store.save
   end
 

@@ -52,7 +52,7 @@ EOS
 
     RssImap.new(@server, @store, config).run
     assert_equal("Started", $log.info_msg[0])
-    assert_equal("Starting INBOX.TestFolder", $log.info_msg[1])
+    assert_equal("Processing INBOX.TestFolder", $log.info_msg[1])
 
     assert_equal(2, @server.sent.length)
     assert_equal("INBOX.TestFolder", folder(0))

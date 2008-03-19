@@ -63,7 +63,8 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
     msgs = reader.get_new []
-    new_messages = reader.get_new(["title1#256cd6c21faf5125dd97aba4210a4bf8", "title2#857afddc83b46dc857ee7fe3fc96dcaf"])
+    identifiers = msgs.map {|msg| msg.generate_identifier}
+    new_messages = reader.get_new(identifiers)
     assert new_messages.empty?
   end
   
