@@ -38,7 +38,7 @@ class Message
   end
 
   def generate_identifier
-    @cached_identifier ||= "#{@params[:title]}##{Digest::MD5.hexdigest(@params[:body] + @params[:url])}"
+    @cached_identifier ||= "#{@params[:title]}##{Digest::MD5.hexdigest(@params[:body])}"
   end
 
   def format

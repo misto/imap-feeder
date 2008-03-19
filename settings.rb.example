@@ -12,7 +12,7 @@ $pass = ""
 #$use_ssl = true
 
 # Base directory for XXX
-BASEDIR="/home/misto/rssimap"
+BASEDIR="#{ENV['HOME']}/.rssimap"
 
 # We use html-tidy to improve the structure of the feed
 $tidy_path = "/usr/lib/libtidy.so"
