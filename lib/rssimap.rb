@@ -24,7 +24,7 @@ class RssImap
       create_folder(path) unless check_folder_exists(path)
 
       begin
-        url  = feed['feed']['url']
+        url = feed['feed']['url']
         reader = FeedReader.new(url)
       rescue OpenURI::HTTPError => e
         $log.warn "Error retrieving #{url}: #{e.message}"
@@ -34,12 +34,13 @@ class RssImap
         next
       end
 
-      latest = get_latest(path)
-      messages = reader.get_newer_than(latest)
+      archive = get_archived(path)
+      messages = reader.get_new(archive)
 
       unless messages.empty?
-        $log.info "already processed messages: '#{latest.join("', '")}'"
+        $log.debug "already processed messages: '#{archive.join("', '")}'"
         send_messages(messages, path)
+      end
     end
 
     $log.info "Finished"
@@ -53,7 +54,6 @@ class RssImap
       send_message(msg, path)
     end
     message_sent(messages, path)
-    end
   end
 
   def message_sent(messages, path)
@@ -70,8 +70,8 @@ class RssImap
     $log.info "Found in #{complete_path.split(".").last}: #{msg.generate_identifier}"
   end
 
-  def get_latest(path)
-    @store.get_latest path
+  def get_archived(path)
+    @store.get_archived path
   end
 
   def create_folder(path)

@@ -1,5 +1,5 @@
 require 'tempfile'
-require 'lib/rssimap'
+require 'rssimap'
 require 'test/testlogger'
 
 class TestServer

@@ -23,7 +23,7 @@ class MessageStore
     @root[folder].compact!
   end
 
-  def get_latest(folder)
+  def get_archived(folder)
     @root[folder] || []
   end
 

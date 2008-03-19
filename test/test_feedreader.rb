@@ -10,7 +10,7 @@ class TestFeedReader < Test::Unit::TestCase
   ENCODED_RSS        = "#{File.dirname(__FILE__)}/data/encoded.rss"
  
   def test_reading_first_feed
-    messages = FeedReader.new(RSS20_ONE_ENTRY).get_newer_than []
+    messages = FeedReader.new(RSS20_ONE_ENTRY).get_new []
     assert_equal(1, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100").rfc2822, messages.first.time)
     assert_equal("title1", messages.first.title)
@@ -18,7 +18,7 @@ class TestFeedReader < Test::Unit::TestCase
   end  
   
   def test_reading_second_feed
-    messages = FeedReader.new(RSS20_TWO_ENTRIES).get_newer_than []
+    messages = FeedReader.new(RSS20_TWO_ENTRIES).get_new []
     assert_equal(2, messages.size)
     assert_equal(Time.parse("Wed, 15 Feb 2007 00:05 +0100").rfc2822, messages[0].time)
     assert_equal("title1", messages[0].title)
@@ -31,8 +31,8 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_latest
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    messages = reader.get_newer_than []
-    new_messages = reader.get_newer_than([messages.last.generate_identifier])
+    messages = reader.get_new []
+    new_messages = reader.get_new([messages.last.generate_identifier])
     
     assert_equal(1, new_messages.size)
     assert_equal("title1", new_messages.first.title)
@@ -40,7 +40,7 @@ class TestFeedReader < Test::Unit::TestCase
   
   def test_get_latest_or_all
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    new_messages = reader.get_newer_than(["Mirko Stocker: "])
+    new_messages = reader.get_new(["Mirko Stocker: "])
     
     assert_equal(2, new_messages.size)
     assert_equal("title1", new_messages.first.title)
@@ -48,36 +48,36 @@ class TestFeedReader < Test::Unit::TestCase
   end
   
   def test_get_authors
-    messages = FeedReader.new(RSS20_WITH_AUTHORS).get_newer_than []
+    messages = FeedReader.new(RSS20_WITH_AUTHORS).get_new []
     assert_equal(2, messages.size)
     assert_equal("MaxMuster", messages.first.from)
     assert_equal("MirkoStocker", messages.last.from)
   end  
   
   def test_no_body
-    messages = FeedReader.new(RSS20_NO_BODY).get_newer_than []
+    messages = FeedReader.new(RSS20_NO_BODY).get_new []
     assert_equal(1, messages.size)
     assert_equal("", messages.first.body)
   end
   
   def test_get_nothing
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
-    msgs = reader.get_newer_than []
-    new_messages = reader.get_newer_than(["title1#256cd6c21faf5125dd97aba4210a4bf8", "title2#857afddc83b46dc857ee7fe3fc96dcaf"])
+    msgs = reader.get_new []
+    new_messages = reader.get_new(["title1#256cd6c21faf5125dd97aba4210a4bf8", "title2#857afddc83b46dc857ee7fe3fc96dcaf"])
     assert new_messages.empty?
   end
   
   def test_get_all
     reader = FeedReader.new(RSS20_TWO_ENTRIES)
     messages = reader.messages
-    new_messages = reader.get_newer_than(nil)
+    new_messages = reader.get_new(nil)
     assert_equal(2, new_messages.size)
   end
 
   def test__content_encoded
     reader = FeedReader.new(ENCODED_RSS)
     messages = reader.messages
-    new_messages = reader.get_newer_than(nil)
+    new_messages = reader.get_new(nil)
     assert_equal  "<\"ja!\" >", new_messages.first.body
   end
 end

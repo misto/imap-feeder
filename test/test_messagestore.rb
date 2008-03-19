@@ -31,24 +31,24 @@ class TestMessageStore < Test::Unit::TestCase
     @store.clean
   end
 
-  def test_get_latest
-    title = @store.get_latest "INBOX.Planets.Planet KDE"
+  def test_get_archived
+    title = @store.get_archived "INBOX.Planets.Planet KDE"
     assert_equal("Mirko: It works!", title.first)
   end
 
   def test_add_new
     @store.add_new("INBOX.Planets.Planet KDE", ["Erstes", "Zweites"])
-    title = @store.get_latest "INBOX.Planets.Planet KDE"
+    title = @store.get_archived "INBOX.Planets.Planet KDE"
     assert_equal("Erstes",  title[0])
     assert_equal("Zweites", title[1])
   end
   
   def test_store_and_save
     @store.add_new("INBOX.Planets.Planet KDE", ["FAKE"])
-    title = @store.get_latest("INBOX.Planets.Planet KDE")
+    title = @store.get_archived("INBOX.Planets.Planet KDE")
     @store.save
     saved_store = MessageStore.new(FILE_NAME)
-    saved_title = saved_store.get_latest("INBOX.Planets.Planet KDE")
+    saved_title = saved_store.get_archived("INBOX.Planets.Planet KDE")
     assert_equal(title, saved_title)
   end
 end

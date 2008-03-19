@@ -34,11 +34,11 @@ class FeedReader
     return str
   end
 
-  def get_newer_than(titles)
+  def get_new(archive)
     return [] if not @feed
 
-    titles ||= []
-    if titles.include?("")
+    archive ||= []
+    if archive.include?("")
       $log.warn "Title is empty, that should never happen! Aborting #{@feed_url}."
       return []
     end
@@ -58,7 +58,7 @@ class FeedReader
 
       item_identifier = message.generate_identifier
 
-      if titles.include? item_identifier
+      if archive.include? item_identifier
         short_name = message.title[0..30]
         short_name << "…" if message.title.length > 30
         $log.debug "Already have '#{short_name}'."
