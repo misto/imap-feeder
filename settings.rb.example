@@ -1,5 +1,4 @@
-# Configuration for XXX
-
+# Configuration for imap-feeder
 
 # IMAP connection settings.
 $host = ""
@@ -11,15 +10,15 @@ $pass = ""
 #$port = "993"
 #$use_ssl = true
 
-# Base directory for XXX
-BASEDIR="#{ENV['HOME']}/.rssimap"
+# Base directory for imap-feeder
+BASEDIR="#{ENV['HOME']}/.imap-feeder"
 
 # We use html-tidy to improve the structure of the feed
 $tidy_path = "/usr/lib/libtidy.so"
 
 
 
-# RssImap needs a file to store the last message for each feed
+# imap-feeder needs a file to store the last message for each feed
 # so it doesn't fetch old entries. Where should that file be?
 $temp = "#{BASEDIR}/processed_feeds.yml"
 
