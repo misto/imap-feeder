@@ -235,6 +235,10 @@ class MessageFormatterTest < Test::Unit::TestCase
     m = create_message "&#8230;"
     assert_equal("…", m.body)
   end  
+  def test_html_escaped
+    m = create_message "/lib &amp; /bin"
+    assert_equal("/lib & /bin", m.body)
+  end  
   
   #
   # Abbreviations

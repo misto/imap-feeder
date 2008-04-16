@@ -16,6 +16,14 @@ class TestFeedReader < Test::Unit::TestCase
     assert_equal("title1", messages.first.title)
     assert_equal("description1", messages.first.body)
   end  
+
+  def test_size_one
+    assert_equal(1, FeedReader.new(RSS20_ONE_ENTRY).number_of_entries)
+  end
+
+  def test_size_two
+    assert_equal(2, FeedReader.new(RSS20_TWO_ENTRIES).number_of_entries)
+  end
   
   def test_reading_second_feed
     messages = FeedReader.new(RSS20_TWO_ENTRIES).get_new []

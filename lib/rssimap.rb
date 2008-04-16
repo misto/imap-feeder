@@ -39,7 +39,7 @@ class RssImap
 
       unless messages.empty?
         $log.debug "already processed messages: '#{archive.join("', '")}'"
-        send_messages(messages, path)
+        send_messages(messages, path, reader.number_of_entries)
       end
     end
 
@@ -48,20 +48,20 @@ class RssImap
 
   private
 
-  def send_messages messages, path
+  def send_messages messages, path, number_of_entries
     $log.info "#{messages.size} new message(s)"
     messages.each do |msg|
       send_message(msg, path)
     end
-    message_sent(messages, path)
+    message_sent(messages, path, number_of_entries)
   end
 
-  def message_sent(messages, path)
+  def message_sent(messages, path, number_of_entries)
     identifiers = messages.collect do |msg|
       msg.generate_identifier
     end
 
-    @store.add_new(path, identifiers)
+    @store.add_new(path, identifiers, number_of_entries)
     @store.save
   end
 

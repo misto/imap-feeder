@@ -34,6 +34,10 @@ class FeedReader
     return str
   end
 
+  def number_of_entries
+    @feed.entries.size
+  end
+
   def get_new(archive)
     return [] if not @feed
 
