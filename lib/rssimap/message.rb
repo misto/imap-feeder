@@ -17,7 +17,7 @@ class Message
   end
 
   def title
-    @title ||= (dec(@params[:title]) || "")
+    @title ||= (dec(@params[:title].gsub(/(\r\n)|\r|\n/, " ")) || "")
   end
 
   def from
@@ -38,7 +38,7 @@ class Message
   end
 
   def generate_identifier
-    @cached_identifier ||= "#{@params[:title]}##{Digest::MD5.hexdigest(body())}"
+    @cached_identifier ||= "#{title}##{Digest::MD5.hexdigest(body())}"
   end
 
   def format
