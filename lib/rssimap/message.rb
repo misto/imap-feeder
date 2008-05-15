@@ -17,7 +17,7 @@ class Message
   end
 
   def title
-    @title ||= (dec(@params[:title].gsub(/(\r\n)|\r|\n/, " ")) || "")
+    @title ||= (dec( (@params[:title] || "").gsub(/(\r\n)|\r|\n/, " ")) || "")
   end
 
   def from

@@ -5,7 +5,7 @@ Manifest.txt
 README.txt
 Rakefile
 TODO.txt
-bin/rssimap
+bin/imap-feeder
 config/hoe.rb
 config/requirements.rb
 lib/imap-feeder.rb
