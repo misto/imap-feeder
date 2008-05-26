@@ -1,5 +1,5 @@
 require 'tempfile'
-require 'rssimap'
+require 'imap-feeder'
 require 'test/testlogger'
 
 class TestServer
@@ -21,7 +21,7 @@ class TestServer
   end
 end
 
-class TestRssImap < Test::Unit::TestCase
+class TestImapFeeder < Test::Unit::TestCase
 
   TEST_FEEDS = "#{File.dirname(__FILE__)}/data"
 
@@ -50,7 +50,7 @@ class TestRssImap < Test::Unit::TestCase
     path: INBOX.TestFolder
 EOS
 
-    RssImap.new(@server, @store, config).run
+    ImapFeeder.new(@server, @store, config).run
     assert_equal("Started", $log.info_msg[0])
     assert_equal("Processing INBOX.TestFolder", $log.info_msg[1])
 

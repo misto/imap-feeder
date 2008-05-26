@@ -1,4 +1,4 @@
-require 'rssimap/opmlreader'
+require 'imap-feeder/opmlreader'
 
 class OpmlReaderTest < Test::Unit::TestCase
   

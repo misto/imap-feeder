@@ -1,8 +1,8 @@
-require 'rssimap/rssimapconfig'
+require 'imap-feeder/config'
 require 'test/testlogger'
 
 
-class RssImapConfigTest < Test::Unit::TestCase
+class ConfigTest < Test::Unit::TestCase
   
   OPML_FILE = "#{File.dirname(__FILE__)}/data/simple.opml"
   ERRONEOUS_FILE = "#{File.dirname(__FILE__)}/data/erroneous.yml"
@@ -13,7 +13,7 @@ class RssImapConfigTest < Test::Unit::TestCase
   
   def test_create_with_root
     output = ""
-    RssImapConfig.create(OPML_FILE, output, "root")
+    ImapFeederConfig.create(OPML_FILE, output, "root")
     result = YAML.load(output)
 
     assert_equal("INBOX.root.Planets.Planet KDE", result.first['feed']['path'])
@@ -21,7 +21,7 @@ class RssImapConfigTest < Test::Unit::TestCase
   
   def test_create
     output = ""
-    RssImapConfig.create(OPML_FILE, output, nil)
+    ImapFeederConfig.create(OPML_FILE, output, nil)
     result = YAML.load(output)
 
     assert_equal("http://planetkde.org/rss20.xml", result.first['feed']['url'])
@@ -36,7 +36,7 @@ class RssImapConfigTest < Test::Unit::TestCase
   end
   
   def test_check
-    RssImapConfig.check(File.open(ERRONEOUS_FILE))
+    ImapFeederConfig.check(File.open(ERRONEOUS_FILE))
 
     assert_equal("Invalid character found in 'INBOX.Planets.Planet KDE's': '", $log.error_msg.first)
     assert_equal("Exception while connecting to http://misto.chh: getaddrinfo: Name or service not known.", $log.warn_msg.first)

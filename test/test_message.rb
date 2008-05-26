@@ -1,4 +1,4 @@
-require 'rssimap/message'
+require 'imap-feeder/message'
 require 'time'
 
 $tidy_path = "/usr/lib/libtidy.so"

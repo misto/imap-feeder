@@ -1,5 +1,5 @@
-require 'rssimap/feedreader'
-require 'rssimap/message'
+require 'imap-feeder/feedreader'
+require 'imap-feeder/message'
 
 class TestFeedReader < Test::Unit::TestCase
   

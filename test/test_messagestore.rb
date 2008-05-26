@@ -1,7 +1,7 @@
 require 'yaml'
 
-require 'rssimap/opmlreader'
-require 'rssimap/messagestore'
+require 'imap-feeder/opmlreader'
+require 'imap-feeder/messagestore'
 
 class TestingMessageStore < MessageStore
   def initialize(file)

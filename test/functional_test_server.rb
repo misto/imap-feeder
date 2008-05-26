@@ -1,5 +1,5 @@
-require 'rssimap/server'
-require 'rssimap/message'
+require 'imap-feeder/server'
+require 'imap-feeder/message'
 
 class ServerConnectionTest < Test::Unit::TestCase
   

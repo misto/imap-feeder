@@ -4,7 +4,7 @@ require 'net/http'
 
 require 'imap-feeder/opmlreader'
 
-class Config
+class ImapFeederConfig
   def self.create(opml_file, output, root_folder)
 
     root_folder = root_folder ? "INBOX.#{root_folder}" : "INBOX"

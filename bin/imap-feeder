@@ -1,20 +1,20 @@
 #!/usr/bin/env ruby
 
-require 'rssimap'
-require 'rssimap/createconfigparser'
-require 'rssimap/rssimapconfig'
-require 'rssimap/fakeserver.rb'
+require 'imap-feeder'
+require 'imap-feeder/createconfigparser'
+require 'imap-feeder/imapfeederconfig'
+require 'imap-feeder/fakeserver.rb'
 
 opts = CreateConfigParser.parse(ARGV)
 
 if opts.create
   $stdout.puts "Creating new configuration"
   out = opts.out ? File.open(opts.out, "w") : $stdout
-  RssImapConfig.create(opts.create_file, out, opts.folder)
+  ImapFeederConfig.create(opts.create_file, out, opts.folder)
 
 elsif opts.check
   $stdout.puts "Checking configuration #{opts.check}"
-  RssImapConfig.check(File.open(opts.check))
+  ImapFeederConfig.check(File.open(opts.check))
 
 elsif ARGV.first and load(ARGV.first)
   configuration = [$host, $user, $pass, $temp, $config]
@@ -55,8 +55,8 @@ elsif ARGV.first and load(ARGV.first)
   end
 
   config = File.open($config)
-  rssimap = RssImap.new(@server, store, config)
-  rssimap.run
+  imapfeeder = RssImap.new(@server, store, config)
+  imapfeeder.run
   @server.disconnect
 
   File.delete $running_instance
