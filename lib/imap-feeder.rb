@@ -7,7 +7,7 @@ require 'imap-feeder/messagestore'
 
 $KCODE="U"
 
-class RssImap
+class ImapFeeder
 
   def initialize(server, store, config)
     @server = server

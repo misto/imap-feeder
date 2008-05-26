@@ -1,4 +1,4 @@
-require 'imap-feeder/config'
+require 'imap-feeder/imapfeederconfig'
 require 'test/testlogger'
 
 

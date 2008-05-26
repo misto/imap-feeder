@@ -1,4 +1,4 @@
-module ImapFeeder #:nodoc:
+class ImapFeeder #:nodoc:
   module VERSION #:nodoc:
     MAJOR = 0
     MINOR = 1
