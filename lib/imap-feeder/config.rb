@@ -2,9 +2,9 @@ require 'yaml'
 require 'uri'
 require 'net/http'
 
-require 'rssimap/opmlreader'
+require 'imap-feeder/opmlreader'
 
-class RssImapConfig
+class Config
   def self.create(opml_file, output, root_folder)
 
     root_folder = root_folder ? "INBOX.#{root_folder}" : "INBOX"
