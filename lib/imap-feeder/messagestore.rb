@@ -12,7 +12,7 @@ class MessageStore
         @root = YAML.load(f) || {}
       end
     else
-      $log.error "#{file} does not exist!"
+      $log.warning "#{file} does not exist!"
     end
   end
 

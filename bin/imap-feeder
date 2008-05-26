@@ -55,7 +55,7 @@ elsif ARGV.first and load(ARGV.first)
   end
 
   config = File.open($config)
-  imapfeeder = RssImap.new(@server, store, config)
+  imapfeeder = ImapFeeder.new(@server, store, config)
   imapfeeder.run
   @server.disconnect
 

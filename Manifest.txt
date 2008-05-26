@@ -9,11 +9,11 @@ bin/imap-feeder
 config/hoe.rb
 config/requirements.rb
 lib/imap-feeder.rb
-lib/imap-feeder/config.rb
 lib/imap-feeder/createconfigparser.rb
 lib/imap-feeder/fakeserver.rb
 lib/imap-feeder/feedfolder.rb
 lib/imap-feeder/feedreader.rb
+lib/imap-feeder/imapfeederconfig.rb
 lib/imap-feeder/message.rb
 lib/imap-feeder/messagestore.rb
 lib/imap-feeder/opmlreader.rb
@@ -37,11 +37,11 @@ test/data/rss20_with_authors.xml
 test/data/simple.opml
 test/functional_test_server.rb
 test/test_feedreader.rb
+test/test_imap-feeder.rb
+test/test_imapfeederconfig.rb
 test/test_message.rb
 test/test_messagestore.rb
 test/test_opmlreader.rb
-test/test_rssimap.rb
-test/test_rssimapconfig.rb
 test/testlogger.rb
 website/index.html
 website/index.txt
