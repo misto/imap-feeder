@@ -1,5 +1,11 @@
 Ideas for further development:
 * Adding new feeds through rssimap, without manually editing the file.
 * HTML-Mails (really?)
-* Custom 'fetch'-Modules for feeds that don't have any content in the feed
 * make the position of the link to the original configurable
+* embed images (e.g. for dilbert)
+
+* user-hooks that can interact with the feed processing:
+ * to ignore items
+ * custom body, e.g. fetch content with hpricot
+ * code directly in the feedy.yml
+  * or an external file, with an ID to identify the feed
