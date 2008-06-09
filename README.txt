@@ -51,7 +51,7 @@ For example, the following creates the "feeds.yml" file with all the feeds from
 "feeds.opml" and uses the "feeds" folder as root in your inbox to store them
 all. Each feed will get its own folder under the "feeds" root. (If you just want to
 evaluate imap-feeder, I'd recommend to operate it on a dedicated mailbox, so you can
-easily get rid of it afterwards.)
+easily get rid of it afterwards if you don't like it.)
 
   $ imap-feeder -n feeds.opml -o -r feeds
 
@@ -65,6 +65,8 @@ I recommend to use absolute paths to avoid trouble. If everything works,
 the script should generate some folders on your IMAP server and fetch the
 first round of feeds. If you are happy with the results, you can run the
 script regularly, for example using cron.
+
+== Comments
 
 Thank you for using imap-feeder and don't forget to drop me an email if you
 have feature requests or bugs to report.

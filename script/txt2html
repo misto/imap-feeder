@@ -54,7 +54,7 @@ template = ERB.new(File.open(template).read)
 title = nil
 body = nil
 File.open(src) do |fsrc|
-  title_text = fsrc.readline
+  title_text = fsrc.readline.gsub(/^=/, "")
   body_text = fsrc.read
   syntax_items = []
   body_text.gsub!(%r!<(pre|code)[^>]*?syntax=['"]([^'"]+)[^>]*>(.*?)</\1>!m){
@@ -63,6 +63,9 @@ File.open(src) do |fsrc|
     syntax_items << "<#{element} class='syntax'>#{convert_syntax(syntax, source)}</#{element}>"
     "syntax-temp-#{ident}"
   }
+  body_text.gsub!(/^===/, "h3.")
+  body_text.gsub!(/^==/, "h2.")
+  body_text.gsub!(/^- /, "* ")
   title = RedCloth.new(title_text).to_html.gsub(%r!<.*?>!,'').strip
   body = RedCloth.new(body_text).to_html
   body.gsub!(%r!(?:<pre><code>)?syntax-temp-(\d+)(?:</code></pre>)?!){ syntax_items[$1.to_i] }
