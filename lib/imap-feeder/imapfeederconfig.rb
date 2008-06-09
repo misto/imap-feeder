@@ -19,8 +19,9 @@ class ImapFeederConfig
       ]
     end
 
-    feeds_file = File.open("#{Dir.pwd}/feeds.yml", "w+")
-    YAML.dump(items, feeds_file)
+    File.open("#{Dir.pwd}/feeds.yml", "w+") do |file|
+      YAML.dump(items, file)
+    end
 
     File.copy "#{File.dirname(__FILE__)}/../../settings.rb.example", "#{Dir.pwd}/settings.rb"
   end
