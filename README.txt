@@ -42,8 +42,7 @@ about the processed feeds.
 
 I personally put them all in a hidden directory in my home:
 
-  $ mkdir ~/.imap-feeder
-  $ cd ~/.imap-feeder
+  $ mkdir ~/.imap-feeder && cd !$
 
 Now we need a list of all the urls of the blogs you want imap-feeder to check. Run
 imap-feeder -n to create an empty file or with the name of an OPML file as argument.
