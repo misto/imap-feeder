@@ -36,16 +36,16 @@ You may get the latest stable version from Rubyforge:
 
   $ gem install imap-feeder
 
-After that, you should have the gem installed and you can copy the
-settings.rb.example file from the installation directory to the place from
-where you want to run the script. You'll need a configuration file, another
-one to hold a list of all your feeds' urls and a temporary file to hold
-state information about the processed feeds.
+To run imap-feeder, you'll need a configuration file, another one to hold a
+list of all your feeds' urls and a temporary file to hold state information
+about the processed feeds.
 
-Please edit the settings-file accordingly to the instructions in it. You have to
-change at least the imap connection strings and the directory.
+I personally put them all in a hidden directory in my home:
 
-Next we need a list of all the urls of the blogs you want imap-feeder to check. Run
+  $ mkdir ~/.imap-feeder
+  $ cd ~/.imap-feeder
+
+Now we need a list of all the urls of the blogs you want imap-feeder to check. Run
 imap-feeder -n to create an empty file or with the name of an OPML file as argument.
 For example, the following creates the "feeds.yml" file with all the feeds from
 "feeds.opml" and uses the "feeds" folder as root in your inbox to store them
@@ -53,10 +53,15 @@ all. Each feed will get its own folder under the "feeds" root. (If you just want
 evaluate imap-feeder, I'd recommend to operate it on a dedicated mailbox, so you can
 easily get rid of it afterwards if you don't like it.)
 
-  $ imap-feeder -n feeds.opml -o -r feeds
+  $ imap-feeder -n feeds.opml -r feeds
 
-You might want to edit the file afterwards to rename the folders. You can run
-imap-feeder -c feeds.yaml to check the configuration. After that, we can run
+If you omit the name of an opml-file, you'll get a sample file with two feeds in it
+and you can simply add your feeds by hand.
+
+Please edit the settings.rb-file now accordingly to the instructions in it. You have to
+change at least the imap connection strings and likely the BASEDIR constant too.
+
+You can now run imap-feeder -c feeds.yml to check the configuration. After that, we can run
 imap-feeder with the settings.rb file as argument.
 
   $ imap-feeder ~/.imap-feeder/settings.rb

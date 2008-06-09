@@ -1,20 +1,28 @@
 require 'yaml'
 require 'uri'
 require 'net/http'
+require 'ftools'
 
 require 'imap-feeder/opmlreader'
 
 class ImapFeederConfig
-  def self.create(opml_file, output, root_folder)
+  def self.create(opml_file, root_folder)
 
     root_folder = root_folder ? "INBOX.#{root_folder}" : "INBOX"
 
     if opml_file
       items = process(OpmlReader.get(File.open(opml_file)), "#{root_folder}").flatten
     else
-      items = [{"feed" => {"url" => "http://blog.misto.ch/feed/", "path" => "#{root_folder}.feed"}}]
+      items = [
+        {"feed" => {"url" => "http://rubyforge.org/export/rss_sfnews.php",    "path" => "#{root_folder}.rubyforge"}},
+        {"feed" => {"url" => "http://feeds.feedburner.com/DilbertDailyStrip", "path" => "#{root_folder}.dilbert"}}
+      ]
     end
-    YAML.dump(items, output)
+
+    feeds_file = File.open("#{Dir.pwd}/feeds.yml", "w+")
+    YAML.dump(items, feeds_file)
+
+    File.copy "#{File.dirname(__FILE__)}/../../settings.rb.example", "#{Dir.pwd}/settings.rb"
   end
 
   def self.check(configuration)
@@ -48,7 +56,9 @@ class ImapFeederConfig
 
       response = Net::HTTP.new(uri.host, uri.port).head(uri.path, nil)
       if response.code =~ /^[^2]\d/
-        $log.warn "Problem connecting to #{url}: #{response.message}, code: #{response.code}"
+        $log.info "Connecting to #{url}: #{response.message}, code: #{response.code}"
+      else
+        $log.info "Connecting to #{url}: OK"
       end
     rescue Exception => e
       $log.warn "Exception while connecting to #{url}: #{e}."

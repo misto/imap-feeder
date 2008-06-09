@@ -8,12 +8,13 @@ require 'imap-feeder/fakeserver.rb'
 opts = CreateConfigParser.parse(ARGV)
 
 if opts.create
-  $stdout.puts "Creating new configuration"
-  out = opts.out ? File.open(opts.out, "w") : $stdout
-  ImapFeederConfig.create(opts.create_file, out, opts.folder)
+  $stdout.puts "Creating new configuration."
+  ImapFeederConfig.create(opts.create_file, opts.folder)
+  $stdout.puts "Please edit your settings.rb file now."
 
 elsif opts.check
   $stdout.puts "Checking configuration #{opts.check}"
+  $log = Logger.new($stdout)
   ImapFeederConfig.check(File.open(opts.check))
 
 elsif ARGV.first and load(ARGV.first)
