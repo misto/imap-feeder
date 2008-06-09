@@ -1,7 +1,7 @@
 = imap-feeder
 
 imap-feeder tracks your favorite RSS and Atom feeds and stores new entries
-on your IMAP server, so you can read it with your favorite mail reader
+on your IMAP server, so you can read them with your favorite mail reader
 or even a webmail client.
 
 == Prerequisites
