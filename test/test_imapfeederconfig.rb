@@ -9,6 +9,7 @@ class ConfigTest < Test::Unit::TestCase
   OPML_FILE = "#{File.dirname(__FILE__)}/data/simple.opml"
   ERRONEOUS_FILE = "#{File.dirname(__FILE__)}/data/erroneous.yml"
   FEEDS_FILE = "#{Dir.pwd}/feeds.yml"
+  SETTINGS_FILE = "#{Dir.pwd}/settings.rb"
 
   def setup
     $log = TestLogger.new
@@ -20,6 +21,9 @@ class ConfigTest < Test::Unit::TestCase
     File.delete FEEDS_FILE
 
     assert_equal("INBOX.root.Planets.Planet KDE", result.first['feed']['path'])
+
+    assert File.exists?(SETTINGS_FILE)
+    File.delete SETTINGS_FILE
   end
 
   def test_create
@@ -36,6 +40,9 @@ class ConfigTest < Test::Unit::TestCase
     assert($log.error_msg.empty?)
     assert($log.warn_msg.empty?)
     assert_equal(2, $log.debug_msg.length)
+
+    assert File.exists?(SETTINGS_FILE)
+    File.delete SETTINGS_FILE
   end
 
   def test_check
