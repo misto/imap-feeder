@@ -46,34 +46,28 @@ class Message
   end
 
   def format
+    construct_message "plain", body
+  end
+
+  def as_html
+    construct_message "html", html_body
+  end
+
+  private
+
+  def construct_message(type, body)
     url   = @params[:url]
     return <<-EOF
 Date: #{time}
 Subject: #{quote(title)}
 From: #{quote(from)}
-Content-Type: text/plain;
+Content-Type: text/#{type};
   charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
 #{body}#{"\n\n" + url if url}
 EOF
   end
-
-  def as_html
-    url   = @params[:url]
-    return <<-EOF
-Date: #{time}
-Subject: #{quote(title)}
-From: #{quote(from)}
-Content-Type: text/html;
-  charset="utf-8"
-Content-Transfer-Encoding: 8bit
-
-#{html_body}#{"\n\n" + url if url}
-EOF
-  end
-
-  private
 
   def replace(doc, element)
     doc.search(element) do |found|
