@@ -1,8 +1,6 @@
 Ideas for further development:
 * Adding new feeds through rssimap, without manually editing the file.
-* HTML-Mails (really?)
 * make the position of the link to the original configurable
-* embed images (e.g. for dilbert)
 
 * user-hooks that can interact with the feed processing:
  * to ignore items
