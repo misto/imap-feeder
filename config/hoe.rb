@@ -2,7 +2,7 @@ require 'imap-feeder/version'
 
 AUTHOR = 'Mirko Stocker'  # can also be an array of Authors
 EMAIL = "me@misto.ch"
-DESCRIPTION = "Imap-feeder pushes your RSS and Atom feeds to an IMAP server."
+DESCRIPTION = "Imap-feeder pushes entries from RSS and Atom feeds to an IMAP server."
 GEM_NAME = 'imap-feeder' # what ppl will type to install your gem
 RUBYFORGE_PROJECT = 'imap-feeder' # The unix name for your project
 HOMEPATH = "http://#{RUBYFORGE_PROJECT}.rubyforge.org"
