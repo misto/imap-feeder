@@ -52,14 +52,15 @@ elsif ARGV.first and load(ARGV.first)
       @server = Server.new(server_options)
     rescue Exception, Errno::ECONNRESET => e
       $log.error "Could not open initial connection to server: #{e}"
-      exit 1
     end
   end
 
-  config = File.open($config)
-  imapfeeder = ImapFeeder.new(@server, store, config)
-  imapfeeder.run
-  @server.disconnect
+  if @server
+    config = File.open($config)
+    imapfeeder = ImapFeeder.new(@server, store, config)
+    imapfeeder.run
+    @server.disconnect
+  end
 
   File.delete $running_instance
 
