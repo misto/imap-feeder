@@ -17,6 +17,11 @@ BASEDIR="#{ENV['HOME']}/.imap-feeder"
 $tidy_path = "/usr/lib/libtidy.so"
 
 
+# Controls if the entries are sent as html or plain-text
+# Values are:
+#   :html
+#   :plain
+$format = :html
 
 # imap-feeder needs a file to store the last message for each feed
 # so it doesn't fetch old entries. Where should that file be?

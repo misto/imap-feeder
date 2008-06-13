@@ -28,6 +28,10 @@ class Message
     @body ||= strip_html(@params[:body] || @params[:url] || "")
   end
 
+  def html_body
+    dec(@params[:body])
+  end
+
   def time
     @time ||= (@params[:time] || Time.now.localtime).rfc2822
   end
@@ -52,6 +56,20 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 8bit
 
 #{body}#{"\n\n" + url if url}
+EOF
+  end
+
+  def as_html
+    url   = @params[:url]
+    return <<-EOF
+Date: #{time}
+Subject: #{quote(title)}
+From: #{quote(from)}
+Content-Type: text/html;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+#{html_body}#{"\n\n" + url if url}
 EOF
   end
 

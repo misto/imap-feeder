@@ -118,6 +118,24 @@ EOF
   end
 end
 
+class HtmlMessageTest < Test::Unit::TestCase
+
+  def test_bold_text
+    t = Time.parse("Mon, Mar 05 2007 15:26:16 +0100")
+    m = Message.new(:title => "something bold", :body => "<strong>body</strong>second", :time => t)
+    assert_equal(<<-EOF, m.as_html)
+Date: Mon, 05 Mar 2007 15:26:16 +0100
+Subject: something bold
+From: Unknown <spam@example.org>
+Content-Type: text/html;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+<strong>body</strong>second
+    EOF
+  end
+
+end
 
 class MessageFormatterTest < Test::Unit::TestCase
 

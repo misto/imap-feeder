@@ -9,6 +9,7 @@ class Server
   def initialize(params)
     @connection = Net::IMAP.new(params[:host], params[:port], params[:use_ssl])
     result = @connection.login(params[:user], params[:pass])
+    @format = params[:format]
   end
 
   def disconnect
@@ -17,7 +18,14 @@ class Server
 
   def send(message, folder="INBOX")
     @connection.select(folder)
-    message = message.format.gsub(/\n/, "\r\n")
+
+    if @format == :html
+      message = message.as_html
+    else
+      message = message.format
+    end
+
+    message.gsub!(/\n/, "\r\n")
     @connection.append(folder, message, nil, Time.now)
   end
 
