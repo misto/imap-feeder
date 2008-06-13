@@ -19,7 +19,7 @@ class MessageStore
   def add_new(folder, titles, number_of_entries = MESSAGES_TO_STORE)
     @root[folder] ||= []
     @root[folder].unshift(*titles)
-    @root[folder].slice!((number_of_entries * 2)..-1)
+    @root[folder].slice!((number_of_entries * 10)..-1)
     @root[folder].compact!
   end
 
