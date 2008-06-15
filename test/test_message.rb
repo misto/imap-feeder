@@ -135,6 +135,21 @@ Content-Transfer-Encoding: 8bit
     EOF
   end
 
+  def test_url
+    t = Time.parse("Mon, Mar 05 2007 15:26:16 +0100")
+    m = Message.new(:title => "with url", :body => "body", :time => t, :url => "http://url")
+    assert_equal(<<-EOF, m.as_html)
+Date: Mon, 05 Mar 2007 15:26:16 +0100
+Subject: with url
+From: Unknown <spam@example.org>
+Content-Type: text/html;
+  charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+body<br/><br/><a href='http://url'>http://url</a>
+    EOF
+  end
+
 end
 
 class MessageFormatterTest < Test::Unit::TestCase

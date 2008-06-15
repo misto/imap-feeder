@@ -36,6 +36,10 @@ class Message
     @time ||= (@params[:time] || Time.now.localtime).rfc2822
   end
 
+  def url
+    @url ||= @params[:url]
+  end
+
   def quote(str)
     return "" if not str
     str.gsub(/[^a-zA-Z0-9 -_:,\.]+/) {|to_quote| quote_if_necessary(to_quote, "UTF-8")}
@@ -46,17 +50,16 @@ class Message
   end
 
   def format
-    construct_message "plain", body
+    construct_message "plain", "#{body}" + (url ? "\n\n#{url}" : "")
   end
 
   def as_html
-    construct_message "html", html_body
+    construct_message "html", "#{html_body}" + (url ? "<br/><br/><a href='#{url}'>#{url}</a>" : "")
   end
 
   private
 
   def construct_message(type, body)
-    url   = @params[:url]
     return <<-EOF
 Date: #{time}
 Subject: #{quote(title)}
@@ -65,7 +68,7 @@ Content-Type: text/#{type};
   charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-#{body}#{"\n\n" + url if url}
+#{body}
 EOF
   end
 
