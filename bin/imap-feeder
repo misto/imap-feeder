@@ -40,7 +40,7 @@ elsif ARGV.first and load(ARGV.first)
     :pass => $pass,
     :port => $port || "143",
     :use_ssl => $use_ssl || false,
-    :format => $format || :html
+    :format => $format || :plain
   }
 
   if opts.pretend
