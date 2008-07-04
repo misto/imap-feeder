@@ -11,8 +11,8 @@ Usage: #{$0} [options] to create or check your configuration
 or     #{$0} SETTINGS_FILE to run the script
 EOF
 
-      opts.on("-c", "--check-settings SETTINGS_FILE",
-              "Check an existing configuration") do |file|
+      opts.on("-c", "--check-settings FEEDS_FILE",
+              "Check a feed file") do |file|
         options.check = file
       end
 

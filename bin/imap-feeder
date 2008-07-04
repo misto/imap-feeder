@@ -13,7 +13,7 @@ if opts.create
   $stdout.puts "Please edit your settings.rb file now."
 
 elsif opts.check
-  $stdout.puts "Checking configuration #{opts.check}"
+  $stdout.puts "Checking feeds #{opts.check}"
   $log = Logger.new($stdout)
   ImapFeederConfig.check(File.open(opts.check))
 
