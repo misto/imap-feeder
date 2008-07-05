@@ -1,3 +1,10 @@
+== 0.2.0 2008-07-5
+
+* 1 major enhancement:
+  * HTML support! The new default format is set to HTML, for old configurations,
+    set $format = :html.
+* Several bugfixes and improved documentation.
+
 == 0.1.0 2008-06-9
 
 * 1 major enhancement:

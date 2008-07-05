@@ -70,31 +70,31 @@ the script should generate some folders on your IMAP server and fetch the
 first round of feeds. If you are happy with the results, you can run the
 script regularly, for example using cron.
 
-== Check Configuration ==
+== Check Configuration
 
 Imap feeder can check your feeds file for validity with regards to IMAP folder
-names and connectivity to the webservers. Use the -c SETTINGS_FILE option to run
+names and connectivity to the webservers. Use the -c FEEDS_FILE option to run
 the check and watch the output for errors and warnings.
 
-== Troubleshooting ==
+== Troubleshooting
 
 This section hopefully helps dealing with common problems that you might
 encounter.
 
-=== Already running ===
+=== Already running
 
 If you're getting an error about imap-feeder "already running", this means that
 imap-feeder either really is still running or it crashed during the last run and
 couldn't clean up properly. In the last case, just remove the running_instance file
 and rerun it.
 
-=== OPML file ===
+=== OPML file
 
 The OPML import is not very well tested, it should certainly work with
 Akregator's OPML files. If it doesn't work for you, don't hesitate to contact me
 and send me your OPML file.
 
-=== Crashes ===
+=== Crashes
 
 If imap-feeder crashes with a stacktrace, take a look at the log file for more
 information. You might also want to raise the log level, see the settings file
