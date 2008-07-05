@@ -9,6 +9,7 @@ opts = CreateConfigParser.parse(ARGV)
 
 if opts.create
   $stdout.puts "Creating new configuration."
+  $log = Logger.new($stdout)
   ImapFeederConfig.create(opts.create_file, opts.folder)
   $stdout.puts "Please edit your settings.rb file now."
 
