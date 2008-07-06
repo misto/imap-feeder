@@ -16,19 +16,21 @@ end
 class FeedReader
   attr_reader :messages
 
+  DEFAULT_ENCODING = "UTF-8"
+
   def initialize(feed_url)
     @feed_url = feed_url
     @feed = SimpleRSS.parse(open(feed_url))
 
     @encoding = @feed.source[/encoding=["'](.*?)["']/, 1]
     if not @encoding
-      $log.warn "No encoding found for #{feed_url}, defaulting to UTF-8."
-      @encoding = "UTF-8"
+      $log.info "No encoding found for #{feed_url}, defaulting to #{DEFAULT_ENCODING}."
+      @encoding = DEFAULT_ENCODING
     end
   end
 
   def conv(str)
-    Iconv.iconv("UTF-8", @encoding, str).first
+    Iconv.iconv(DEFAULT_ENCODING, @encoding, str).first
   rescue Iconv::IllegalSequence => e
     $log.error "IConv reports an IllegalSequence: #{e.message} from #{str}"
     return str
