@@ -150,6 +150,12 @@ body<br/><br/><a href='http://url'>http://url</a>
     EOF
   end
 
+  def test_removes_googleads
+    m_with_ads = Message.new(:title => "with url", :body => 'Hello!<a href="http://feedads.googleadservices.com/~a/2cqltt2cam2gg6mnrvfr05h7gg/a"><img src="http://feedads.googleadservices.com/~a/2cqltt2cam2gg6mnrvfr05h7gg/i"></img></a>')
+    m_without_ads = Message.new(:title => "with url", :body => 'Hello!')
+    assert_equal(m_with_ads.generate_identifier, m_without_ads.generate_identifier)
+  end
+
 end
 
 class MessageFormatterTest < Test::Unit::TestCase

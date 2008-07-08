@@ -1,3 +1,8 @@
+== 0.2.1 2008-07-8
+
+* Workaround for feeds containing google-adword links, just filter them. This
+  fixes the problems with the Dilbert strip.
+
 == 0.2.0 2008-07-5
 
 * 1 major enhancement:

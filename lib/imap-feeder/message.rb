@@ -159,6 +159,10 @@ EOF
       href = URI(link.attributes['href']) rescue nil
       next if not href && href.host
       next if link.innerHTML.strip == href.to_s.strip
+      if href.to_s =~ /googleadservices/
+        link.swap ""
+        next
+      end
       urls << href
       link.swap(link.innerHTML.strip + "[#{urls.length}]")
     end
