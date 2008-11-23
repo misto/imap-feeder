@@ -58,8 +58,8 @@ class TestFeedReader < Test::Unit::TestCase
   def test_get_authors
     messages = FeedReader.new(RSS20_WITH_AUTHORS).get_new []
     assert_equal(2, messages.size)
-    assert_equal("MaxMuster", messages.first.from)
-    assert_equal("MirkoStocker", messages.last.from)
+    assert_equal("MaxMuster <spam@example.org>", messages.first.from)
+    assert_equal("MirkoStocker <spam@example.org>", messages.last.from)
   end  
   
   def test_no_body

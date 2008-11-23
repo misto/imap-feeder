@@ -33,7 +33,7 @@ class MessageTest < Test::Unit::TestCase
   
   def test_creation_name_with_url
     m = Message.new(:from => "Mirko Stocker", :url => "http://www.url.ch")
-    assert_equal("Mirko Stocker", m.from)
+    assert_equal("Mirko Stocker <spam@example.org>", m.from)
   end
   
   def test_format_with_plus

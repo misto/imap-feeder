@@ -21,7 +21,11 @@ class Message
   end
 
   def from
-    @from ||= (dec(@params[:from]) || "Unknown <spam@example.org>")
+    from = dec(@params[:from]) || "Unknown <spam@example.org>"
+    unless from =~ /@/
+      from << " <spam@example.org>"
+    end
+    @from ||= from
   end
 
   def body
