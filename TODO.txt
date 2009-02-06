@@ -1,3 +1,5 @@
+Migrate to Feedzirra (http://github.com/pauldix/feedzirra/tree/master)!
+
 Ideas for further development:
 * Adding new feeds through rssimap, without manually editing the file.
 * make the position of the link to the original configurable
